@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Top-Moving ASIN Keyword Report</title>
+<style>
+:root{
+  --bg:#f5f6f8;--surface:#ffffff;--surface-2:#f0f2f5;--border:#dde1e7;--text:#1b2230;--muted:#5d6878;
+  --accent:#2f5bd3;--accent-soft:#e7edfc;--good:#1c7c4d;--good-soft:#e3f4ea;--bad:#b3261e;--bad-soft:#fbe7e5;
+  --warn:#8a5a00;--warn-soft:#fdf1d8;--neutral-soft:#eceef2;--shadow:0 1px 2px rgba(20,30,50,.06),0 2px 8px rgba(20,30,50,.05);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#12151b;--surface:#1a1e26;--surface-2:#222733;--border:#2e3442;--text:#e6e9ef;--muted:#9aa4b5;
+  --accent:#7f9dff;--accent-soft:#232d4a;--good:#5fcf94;--good-soft:#173326;--bad:#ff8a80;--bad-soft:#3a1d1c;
+  --warn:#f0bf5a;--warn-soft:#382d15;--neutral-soft:#262b36;--shadow:none;}}
+:root[data-theme="dark"]{
+  --bg:#12151b;--surface:#1a1e26;--surface-2:#222733;--border:#2e3442;--text:#e6e9ef;--muted:#9aa4b5;
+  --accent:#7f9dff;--accent-soft:#232d4a;--good:#5fcf94;--good-soft:#173326;--bad:#ff8a80;--bad-soft:#3a1d1c;
+  --warn:#f0bf5a;--warn-soft:#382d15;--neutral-soft:#262b36;--shadow:none;}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+.wrap{max-width:1640px;margin:0 auto;padding:24px clamp(16px,2.5vw,40px) 64px}
+header.top{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between;margin-bottom:8px}
+h1{font-size:22px;line-height:1.25;margin:0;max-width:780px}
+.sub{color:var(--muted);margin:4px 0 0}
+.meta{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:4px 12px;font-size:12.5px;white-space:nowrap}
+.chip b{font-weight:600}
+nav.toc{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0 0;margin:12px 0 4px;border-bottom:1px solid var(--border);
+  display:flex;flex-wrap:wrap;gap:2px}
+nav.toc a{flex:0 0 auto;white-space:nowrap;color:var(--muted);text-decoration:none;font-size:13px;padding:8px 12px;border-radius:6px 6px 0 0;
+  border-bottom:2px solid transparent;margin-bottom:-1px}
+nav.toc a:hover{background:var(--surface-2);color:var(--text)}
+nav.toc a[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent);font-weight:600;background:var(--surface)}
+nav.toc a:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+section[role="tabpanel"]:not(.active){display:none}
+section{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px 18px 16px;margin:16px 0;box-shadow:var(--shadow)}
+section h2{font-size:16px;margin:0 0 4px;display:flex;gap:8px;align-items:baseline}
+section h2 .n{color:var(--muted);font-weight:500;font-size:13px}
+.lead{color:var(--muted);margin:0 0 12px;font-size:13px;max-width:980px}
+.callout{border-left:3px solid var(--accent);background:var(--accent-soft);padding:10px 12px;border-radius:0 8px 8px 0;margin:10px 0;font-size:13px}
+.callout.warn{border-color:var(--warn);background:var(--warn-soft)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.kpi{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:12px}
+.kpi .l{font-size:12px;color:var(--muted);min-height:32px}
+.kpi .v{font-size:24px;font-weight:650;margin-top:2px;font-variant-numeric:tabular-nums}
+.kpi .v.txt{font-size:15px;font-weight:600}
+.kpi .s{font-size:11.5px;color:var(--muted);margin-top:2px}
+.mix{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 10px}
+.tools input,.tools select{font:inherit;font-size:13px;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:6px 10px;min-width:0}
+.tools input{flex:1 1 220px;max-width:340px}
+.tools .count{color:var(--muted);font-size:12.5px;margin-left:auto}
+.tbl{overflow-x:auto;border:1px solid var(--border);border-radius:8px}
+table{border-collapse:collapse;width:auto;min-width:100%;font-size:13px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
+th{background:var(--surface-2);font-weight:600;font-size:12px;position:sticky;top:0;vertical-align:bottom;white-space:normal;min-width:72px}
+th.sort{cursor:pointer;user-select:none}
+th.sort:after{content:" \2195";color:var(--muted);font-weight:400}
+th.asc:after{content:" \2191";color:var(--accent)}
+th.desc:after{content:" \2193";color:var(--accent)}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover td{background:var(--surface-2)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+th.num{white-space:normal;max-width:92px}
+td.mono{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12.5px;white-space:nowrap}
+td.sku{white-space:normal;min-width:170px;max-width:200px;overflow-wrap:break-word}
+td.kw{min-width:280px;max-width:460px;font-size:12.5px}
+.up{color:var(--good)}.down{color:var(--bad)}.na{color:var(--muted)}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:550;white-space:nowrap;background:var(--neutral-soft)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}.pill.good{background:var(--good-soft);color:var(--good)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}.pill.info{background:var(--accent-soft);color:var(--accent)}
+del.rm{color:var(--bad);text-decoration:line-through;text-decoration-thickness:1px}
+details summary{cursor:pointer;color:var(--accent);font-size:12px;margin-top:4px}
+.empty{padding:18px;text-align:center;color:var(--muted)}
+.flow{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.step{border:1px solid var(--border);border-radius:8px;padding:10px;background:var(--surface-2)}
+.step .k{font-size:11.5px;color:var(--muted)}.step .t{font-weight:600}.step .o{font-size:12.5px;margin:4px 0 6px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:760px){.two{grid-template-columns:1fr}h1{font-size:19px}}
+td.nowrap{white-space:nowrap}
+.btn{font:inherit;font-size:13px;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:6px;padding:6px 12px;display:inline-block}
+.btn:hover{background:var(--surface-2)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:disabled{opacity:.45;cursor:not-allowed}
+.cr-edit{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.cr-edit input,.cr-edit select{font:inherit;font-size:13px;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:5px 8px;min-width:0}
+.cr-edit .btn{padding:5px 12px}
+.cr-state{font-size:11.5px;margin-top:4px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;color:var(--muted)}
+.cr-state .dirty{color:var(--warn);font-weight:600}.cr-state .saved{color:var(--good);font-weight:600}
+.cr-msg{font-size:12px;color:var(--bad);margin-top:4px}
+tr.is-dirty td{background:var(--warn-soft)}
+.sub2{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:11.5px;color:var(--muted);margin-top:2px;white-space:nowrap}
+.sub2.sub2-wrap{white-space:normal;min-width:160px;max-width:230px}
+@media (max-width:1199px){.tbl .sub2{white-space:normal;min-width:0;max-width:none}}
+/* Phones: tab strip swipes sideways (no visible scrollbar). */
+@media (max-width:760px){
+  nav.toc{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  nav.toc::-webkit-scrollbar{display:none}
+  section{padding:14px 12px}
+  .tools .count{margin-left:0;width:100%}
+  .tbl tbody{grid-template-columns:minmax(0,1fr)!important}
+}
+/* Below 1200px the tables no longer fit side-to-side, so every row becomes a labelled card
+   (2 per row on tablets/small laptops, 1 per row on phones): no horizontal scrollbar at any width. */
+@media (max-width:1199px){
+  .tbl{border:0;overflow:visible}
+  .tbl tbody{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .tbl tbody tr{margin:0!important}
+  .tbl table,.tbl tr,.tbl td{display:block;width:100%;min-width:0;max-width:none}
+  .tbl thead{display:none}
+  .tbl tr{border:1px solid var(--border);border-radius:8px;margin:0 0 10px;padding:4px 0;background:var(--surface)}
+  .tbl td{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;border-bottom:1px dashed var(--border);
+    padding:7px 12px;text-align:right;white-space:normal}
+  .tbl td:last-child{border-bottom:0}
+  .tbl td>*{min-width:0;overflow-wrap:anywhere}
+  .tbl .pill{white-space:normal;text-align:left}
+  .tbl td::before{content:attr(data-label);flex:0 0 42%;text-align:left;color:var(--muted);font-size:12px;font-weight:600;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+  .tbl td.kw{display:block;text-align:left;max-width:none}
+  .tbl td.kw::before{display:block;margin-bottom:4px}
+  .tbl td.empty{display:block;text-align:center;grid-column:1/-1}
+  .tbl tr:has(td.empty){grid-column:1/-1}
+  .tbl td.empty::before{content:none}
+  .tbl tbody tr:hover td{background:transparent}
+}
+ul.notes{margin:6px 0 0;padding-left:18px}ul.notes li{margin:4px 0}
+code{font-family:ui-monospace,Consolas,monospace;font-size:12.5px;background:var(--surface-2);padding:1px 5px;border-radius:4px;overflow-wrap:anywhere}
+.two>div,.callout,.lead{min-width:0;overflow-wrap:anywhere}
+footer{color:var(--muted);font-size:12px;margin-top:24px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <div>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+  </div>
+  <div class="meta" id="metaChips"></div>
+</header>
+<nav class="toc" aria-label="Sections">
+  <a href="#s1">1. Purpose</a><a href="#s2">2. Summary</a><a href="#s3">3. ASIN Comparison</a><a href="#s4">4. Keyword Analysis</a>
+  <a href="#s5">5. Keyword Changes</a><a href="#s6">6. Classification</a><a href="#s7">7. Change Record</a><a href="#s8">8. Monitoring</a>
+  <a href="#s9">9. Workflow</a><a href="#s10">10. Formulas</a><a href="#s11">11. Management</a><a href="#s12">Data notes</a>
+</nav>
+
+<section id="s1"><h2><span class="n">1.</span> Report Purpose</h2>
+  <p class="lead" style="margin-bottom:6px">Identify sudden performance declines among top-moving ASINs, compare the latest 7-day performance with the previous 7-day period, review backend search terms, remove duplicate or unnecessary keywords, and monitor each ASIN's performance after the keyword fine-tuning.</p>
+  <div class="callout warn" id="uploadCallout"></div>
+</section>
+
+<section id="s2"><h2><span class="n">2.</span> Weekly Performance Summary</h2>
+  <p class="lead">Every figure below is calculated in the page from the report rows, not typed in.</p>
+  <div class="kpis" id="kpis"></div>
+  <div class="mix" id="issueMix"></div>
+</section>
+
+<section id="s3"><h2><span class="n">3.</span> ASIN Performance Comparison</h2>
+  <p class="lead" id="s3lead"></p>
+  <div class="tools"><input type="search" id="q3" placeholder="Search ASIN or SKU" aria-label="Search ASIN or SKU">
+    <select id="f3" aria-label="Filter"><option value="drop">Performance drop only</option><option value="all">All top-moving ASINs</option></select>
+    <span class="count" id="c3"></span></div>
+  <div class="tbl"><table id="t3"></table></div>
+</section>
+
+<section id="s4"><h2><span class="n">4.</span> Backend Keyword Analysis</h2>
+  <p class="lead">Every drop ASIN's live UK listing rows. Content Status comes from Amazon's own listing-issue feed. Backend keywords are the current values of the listing's search-term field.</p>
+  <div class="tools"><input type="search" id="q4" placeholder="Search ASIN or SKU" aria-label="Search ASIN or SKU"><span class="count" id="c4"></span></div>
+  <div class="tbl"><table id="t4"></table></div>
+  <div class="callout"><b>Keyword Optimization Principle.</b> The objective is not to replace the entire keyword strategy. The existing relevant keywords are retained, while duplicate, repeated and unnecessary words are removed. Nothing is added, re-ordered, translated or rewritten.</div>
+</section>
+
+<section id="s5"><h2><span class="n">5.</span> Keyword Change Details</h2>
+  <p class="lead">Original Backend Keywords are kept for audit. Removed words are struck through in place, and the proposed cleaned field is shown under it. Every unique word from the original is kept.</p>
+  <div class="tools"><input type="search" id="q5" placeholder="Search ASIN, SKU or keyword" aria-label="Search keywords"><span class="count" id="c5"></span></div>
+  <div class="tbl"><table id="t5"></table></div>
+  <p class="lead" style="margin-top:10px">Note: the keyword changes are limited to backend search terms. No visible listing content is changed by this process.</p>
+</section>
+
+<section id="s6"><h2><span class="n">6.</span> Optimization Classification</h2>
+  <div class="tbl"><table id="t6"></table></div>
+</section>
+
+<section id="s7"><h2><span class="n">7.</span> Change Record</h2>
+  <p class="lead">When a backend keyword change has actually been made in Amazon, enter the real <b>Date Changed</b>, set <b>Status</b> to Monitoring and click <b>Save</b>. The saved date starts the 7-day monitoring in Section 8. Proposed records are never monitored.</p>
+  <div class="callout" id="storeNote"></div>
+  <div class="tools" id="t7tools">
+    <button type="button" class="btn" id="crExport">Export saved records (JSON)</button>
+    <label class="btn" for="crImport">Import records</label><input type="file" id="crImport" accept="application/json,.json" hidden>
+    <span class="count" id="c7"></span>
+  </div>
+  <div class="tbl"><table id="t7"></table></div>
+</section>
+
+<section id="s8"><h2><span class="n">8.</span> 7-Day Monitoring Report</h2>
+  <p class="lead" id="s8lead"></p>
+  <div class="tbl"><table id="t8"></table></div>
+  <p class="lead" style="margin-top:10px">Post-change figures are calculated only after all 7 post-change days are loaded. Until then they stay “—” and the Result shows how many of the 7 days are available.</p>
+</section>
+
+<section id="s9"><h2><span class="n">9.</span> Weekly Workflow</h2>
+  <div class="flow" id="flow"></div>
+</section>
+
+<section id="s10"><h2><span class="n">10.</span> KPI Formulas</h2>
+  <div class="tbl"><table id="t10"></table></div>
+</section>
+
+<section id="s11"><h2><span class="n">11.</span> Management Summary</h2>
+  <div class="tbl"><table id="t11"></table></div>
+  <div class="callout" id="mgmtNote"></div>
+</section>
+
+<section id="s12"><h2>Data &amp; Evidence Notes</h2>
+  <div class="two">
+    <div><b>Sources</b><ul class="notes" id="srcNotes"></ul></div>
+    <div><b>Rules used (derived rules need approval)</b><ul class="notes" id="ruleNotes"></ul></div>
+  </div>
+  <div style="margin-top:12px"><b>Known limitations</b><ul class="notes" id="limNotes"></ul></div>
+</section>
+<footer id="foot"></footer>
+</div>
+
+<script id="report-data" type="application/json">__REPORT_DATA__</script>
+<script>
+(function(){
+"use strict";
+var D = JSON.parse(document.getElementById("report-data").textContent);
+var M = D.meta, P = D.performance, K = D.keyword_analysis, CR = D.change_record, MD = D.monitoring_data;
+var DASH = "—";
+
+function el(tag, attrs, html){ var e=document.createElement(tag); if(attrs){for(var k in attrs){e.setAttribute(k, attrs[k]);}} if(html!=null){e.innerHTML=html;} return e; }
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function isNum(v){ return typeof v==="number" && isFinite(v); }
+function fmtInt(v){ return isNum(v) ? v.toLocaleString("en-GB") : '<span class="na">'+DASH+'</span>'; }
+function fmtRate(v){ return isNum(v) ? v.toFixed(2)+"%" : '<span class="na">'+DASH+'</span>'; }
+function fmtPct(v){ if(!isNum(v)) return '<span class="na">'+DASH+'</span>'; var c=v>0?"up":(v<0?"down":""); return '<span class="'+c+'">'+(v>0?"+":"")+v.toFixed(1)+"%</span>"; }
+function fmtDate(s){ var d=new Date(s+"T00:00:00Z"); return d.toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric",timeZone:"UTC"}); }
+function range(r){ return fmtDate(r[0])+" → "+fmtDate(r[1]); }
+function fmtSku(v){ return v==null ? '<span class="na">'+DASH+'</span>' : "<span>"+String(v).split(", ").map(esc).join("<br>")+"</span>"; }
+function issuePill(s){ var c = s==="No Drop" ? "good" : (s.indexOf("Order Drop")===0 ? "warn" : "bad"); return '<span class="pill '+c+'">'+esc(s)+"</span>"; }
+
+/* ---------- KPI summary: derived from the rows, not from stored numbers ---------- */
+var drops = P.filter(function(r){ return r.curr_orders < r.prev_orders; });
+var review = K.filter(function(k){ return k.needs_change; });
+var reviewAsins = {}; review.forEach(function(k){ reviewAsins[k.asin]=1; });
+var dupRemoved = review.reduce(function(a,k){ return a + k.duplicate_words_removed; }, 0);
+
+/* ---------- Change Record store ----------
+   Saved records live in this browser's localStorage (survives refresh / reopening the file).
+   Records exported to data/change_records.json are embedded by the next build (D.saved_change_records);
+   for the same key, the most recently saved version wins. */
+var STORE_KEY = "wtma.changeRecords.v1", STATUSES = ["Proposed","Monitoring","Completed"];
+var storageOk = (function(){ try{ var k="__wtma_probe"; localStorage.setItem(k,"1"); localStorage.removeItem(k); return true; }catch(e){ return false; } })();
+function readStore(){ if(!storageOk) return {}; try{ return JSON.parse(localStorage.getItem(STORE_KEY)||"{}")||{}; }catch(e){ return {}; } }
+var records = {};
+(D.saved_change_records||[]).forEach(function(r){ records[r.key]=r; });
+function mergeIn(map){ Object.keys(map).forEach(function(k){ var s=map[k]; if(s && s.key && (!records[k] || (s.saved_at||"") >= (records[k].saved_at||""))) records[k]=s; }); }
+mergeIn(readStore());
+function persist(){ if(!storageOk) throw new Error("Browser storage is not available"); localStorage.setItem(STORE_KEY, JSON.stringify(records)); }
+
+/* ---------- Monitoring calculation (pure) ----------
+   Change date D (user-saved, authoritative): Pre-change = D-7 .. D-1, Post-change = D+1 .. D+7.
+   A day counts only when both accounts' Business Report data is loaded for it (MD.available_dates).
+   Post-change metrics are produced only when all 7 post-change days are loaded. */
+var AVAIL = {}; MD.available_dates.forEach(function(d){ AVAIL[d]=1; });
+function addDays(iso, n){ var d=new Date(iso+"T00:00:00Z"); d.setUTCDate(d.getUTCDate()+n); return d.toISOString().slice(0,10); }
+function todayIso(){ var d=new Date(); return new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())).toISOString().slice(0,10); }
+function monitor(rec){
+  if(!rec || rec.status==="Proposed" || !rec.date_changed) return {active:false};
+  var d0 = rec.date_changed, pre=[], post=[], i;
+  for(i=7;i>=1;i--) pre.push(addDays(d0,-i));
+  for(i=1;i<=7;i++) post.push(addDays(d0,i));
+  var series = MD.orders[rec.asin];
+  function sum(ds){ return ds.reduce(function(a,d){ return a + (series[d]||0); }, 0); }
+  var m = {active:true, change_date:d0, pre_from:pre[0], pre_to:pre[6], post_from:post[0], post_to:post[6],
+           pre_days: pre.filter(function(d){ return AVAIL[d]; }).length,
+           post_days: post.filter(function(d){ return AVAIL[d]; }).length,
+           pre_orders:null, post_orders:null, order_chg:null,
+           pre_impressions:null, post_impressions:null, impression_chg:null,
+           impression_note:"Not available: Amazon impressions exist only as Sunday–Saturday weekly totals, not for a D±7-day window"};
+  if(!series){ m.reason = "No daily order data for this ASIN in this report build (export records and rebuild)"; }
+  else if(m.pre_days < 7){ m.reason = "Pre-change data incomplete: "+m.pre_days+"/7 days loaded (report data covers "+fmtDate(MD.daily_from)+" → "+fmtDate(MD.available_through)+")"; }
+  else { m.pre_orders = sum(pre); }
+  m.complete = !!series && m.pre_days===7 && m.post_days===7;
+  if(m.complete){
+    m.post_orders = sum(post);
+    m.order_chg = m.pre_orders>0 ? Math.round((m.post_orders-m.pre_orders)/m.pre_orders*1000)/10 : null;
+    m.result = m.post_orders>m.pre_orders ? "Orders improved" : (m.post_orders<m.pre_orders ? "Orders declined" : "Orders unchanged");
+  }
+  return m;
+}
+window.__wtma__ = {monitor:monitor, addDays:addDays, records:function(){ return records; }};  /* for automated tests */
+
+function allRows(){  /* Section 7 rows = this build's change records + any saved record not in this build */
+  var seen = {}, rows = CR.map(function(c){ seen[c.key]=1; return withRecord(c); });
+  Object.keys(records).forEach(function(k){ if(!seen[k]){ var r=records[k];
+    rows.push(withRecord({key:k, asin:r.asin, sku:r.sku, issue_detected:r.issue_detected, optimization_action:r.optimization_action,
+                          change_type:r.change_type||"Backend Keyword Fine-Tuning", carried_forward:true})); } });
+  return rows;
+}
+function withRecord(c){
+  var r = records[c.key], o = {}; for(var x in c){ o[x]=c[x]; }
+  o.status = r ? r.status : "Proposed"; o.date_changed = r ? (r.date_changed||null) : null; o.saved_at = r ? r.saved_at : null;
+  o.mon = monitor(o); return o;
+}
+function computeKPI(rows){
+  var applied = rows.filter(function(r){ return r.status!=="Proposed"; }), mon = {};
+  rows.forEach(function(r){ if(r.status==="Monitoring") mon[r.asin]=1; });
+  return { top_moving_reviewed: P.length, performance_drop: drops.length,
+    keyword_review_required: Object.keys(reviewAsins).length, finetune_proposed: review.length,
+    finetune_completed_verified: applied.length, visible_content_changed: 0,
+    duplicate_words_removed: dupRemoved, under_monitoring: Object.keys(mon).length,
+    completed: rows.filter(function(r){ return r.status==="Completed"; }).length };
+}
+var KPI = computeKPI(allRows());
+window.__REPORT_KPI__ = KPI;  /* exposed for the automated reconciliation check */
+
+document.getElementById("title").textContent = M.title;
+document.getElementById("subtitle").textContent = M.marketplace+" · "+M.accounts.join(" + ")+" · data extracted "+M.extracted_at.replace("T"," ");
+var chips = [["Current 7D", range(M.current_7d)], ["Previous 7D", range(M.previous_7d)], ["Top-moving basis", range([M.baseline_weeks[0], M.previous_7d[1]])]];
+chips.forEach(function(c){ document.getElementById("metaChips").appendChild(el("span",{"class":"chip"},"<b>"+c[0]+":</b> "+c[1])); });
+
+function renderSummary(){
+  var n = KPI.finetune_completed_verified;
+  document.getElementById("uploadCallout").innerHTML = "<b>Status of changes:</b> "+(n
+    ? n+" backend keyword change(s) confirmed by the user in Section 7 ("+KPI.under_monitoring+" ASIN(s) under monitoring, "+KPI.completed+" completed). All other fine-tuning actions remain <b>Proposed</b>."
+    : "no backend keyword change has been confirmed yet. Fine-tuning actions are <b>Proposed</b> until the user records the actual Date Changed in Section 7.")
+    +" Monitoring starts only from a user-saved Date Changed. Visible listing content (title, bullets, images, description) is not changed by this process.";
+  var cards = [
+    ["Top-Moving ASINs Reviewed", KPI.top_moving_reviewed, "Top "+M.top_moving_n+" of "+M.top_moving_candidates.toLocaleString("en-GB")+" UK ASINs with orders"],
+    ["ASINs Showing Performance Drop", KPI.performance_drop, "Current 7D orders < Previous 7D orders"],
+    ["ASINs Requiring Backend Keyword Review", KPI.keyword_review_required, "Drop ASINs with duplicate / repeated backend terms"],
+    ["Backend Keyword Fine-Tuning Completed", KPI.finetune_completed_verified, "Changes confirmed with a Date Changed (of "+KPI.finetune_proposed+" proposed)"],
+    ["Visible Listing Content Changed", KPI.visible_content_changed, "No visible-content change made by this process"],
+    ["Duplicate Keywords Removed", KPI.duplicate_words_removed, "Duplicate words removed from the proposed cleaned terms"],
+    ["ASINs Under Monitoring", KPI.under_monitoring, KPI.completed+" change(s) completed"],
+    ["Monitoring Period", "Next 7 Days", "D+1 → D+7 after the saved Date Changed", 1],
+    ["Next Review", "After 7 Days", "When all 7 post-change days are loaded", 1]
+  ];
+  var box = document.getElementById("kpis"); box.innerHTML = "";
+  cards.forEach(function(c){
+    var d = el("div",{"class":"kpi"}); d.appendChild(el("div",{"class":"l"},esc(c[0])));
+    d.appendChild(el("div",{"class":"v"+(c[3]?" txt":""),"data-kpi":c[0]}, isNum(c[1]) ? c[1].toLocaleString("en-GB") : esc(c[1])));
+    d.appendChild(el("div",{"class":"s"},esc(c[2]))); box.appendChild(d);
+  });
+}
+var mix = {}; drops.forEach(function(r){ mix[r.issue_detected]=(mix[r.issue_detected]||0)+1; });
+Object.keys(mix).sort(function(a,b){return mix[b]-mix[a];}).forEach(function(k){
+  document.getElementById("issueMix").appendChild(el("span",{"class":"chip"}, esc(k)+": <b>"+mix[k]+"</b>"));
+});
+
+/* ---------- generic sortable / filterable table ---------- */
+function Table(id, cols, rows, opts){
+  opts = opts || {};
+  var t = document.getElementById(id), state = {key:null, dir:1}, self=this;
+  t.innerHTML = "";  /* tables can be rebuilt after a Change Record save */
+  this.rows = rows; this.filtered = rows;
+  var thead = el("thead"), tr = el("tr");
+  cols.forEach(function(c){
+    var th = el("th", {"class":(c.num?"num ":"")+(c.sort!==false?"sort":""), "scope":"col"}, esc(c.label));
+    if(c.sort!==false){ th.addEventListener("click", function(){
+      state.dir = (state.key===c.key) ? -state.dir : (c.num?-1:1); state.key=c.key;
+      Array.prototype.forEach.call(tr.children,function(x){x.classList.remove("asc","desc");});
+      th.classList.add(state.dir>0?"asc":"desc"); self.render(); }); }
+    tr.appendChild(th);
+  });
+  thead.appendChild(tr); t.appendChild(thead);
+  var tbody = el("tbody"); t.appendChild(tbody);
+  this.render = function(){
+    var r = self.filtered.slice();
+    if(state.key){ r.sort(function(a,b){
+      var x=a[state.key], y=b[state.key], xn=(x==null), yn=(y==null);
+      if(xn&&yn) return 0; if(xn) return 1; if(yn) return -1;
+      return (x<y?-1:(x>y?1:0))*state.dir; }); }
+    tbody.innerHTML = "";
+    if(!r.length){ var e=el("tr"); e.appendChild(el("td",{"colspan":cols.length,"class":"empty"}, opts.empty||"No rows.")); tbody.appendChild(e); }
+    r.forEach(function(row){
+      var e = el("tr", opts.rowAttrs ? opts.rowAttrs(row) : null);
+      cols.forEach(function(c){ e.appendChild(el("td",{"class":(c.num?"num":"")+(c.cls?" "+c.cls:""),"data-label":c.label}, '<div class="cv">'+(c.fmt ? c.fmt(row[c.key], row) : (row[c.key]==null?'<span class="na">'+DASH+'</span>':esc(row[c.key])))+"</div>")); });
+      tbody.appendChild(e);
+    });
+    if(opts.counter){ document.getElementById(opts.counter).textContent = r.length+" of "+self.rows.length+" rows"; }
+  };
+  this.filter = function(fn){ self.filtered = self.rows.filter(fn); self.render(); };
+  this.render();
+}
+function bindSearch(inputId, table, fields, extra){
+  var inp = document.getElementById(inputId);
+  function run(){ var q = inp.value.trim().toLowerCase();
+    table.filter(function(r){ if(extra && !extra(r)) return false; if(!q) return true;
+      return fields.some(function(f){ return r[f]!=null && String(r[f]).toLowerCase().indexOf(q)>=0; }); }); }
+  inp.addEventListener("input", run); return run;
+}
+
+/* ---------- 3. ASIN Performance Comparison ---------- */
+document.getElementById("s3lead").innerHTML = "Current 7D <b>"+range(M.current_7d)+"</b> vs Previous 7D <b>"+range(M.previous_7d)+"</b> (Sunday to Saturday, the Amazon Search Catalog Performance week). Orders are Amazon Business Report order items summed across both UK accounts. Impressions and clicks are the ASIN's Amazon search-results figures. The small grey line under each change % shows Previous 7D → Current 7D (impressions, clicks, CTR, CVR). “"+DASH+"” means the value cannot be calculated (for example, previous value 0 or no catalog row).";
+/* Only the 10 required columns. Supporting figures sit as a small second line in the same cell
+   (Previous → Current), so all data is visible without horizontal scrolling. */
+function sub(html){ return '<div class="sub2">'+html+"</div>"; }
+function chgWithBase(prevKey, currKey, f){ return function(v,row){ return fmtPct(v)+sub(f(row[prevKey])+" → "+f(row[currKey])); }; }
+var t3 = new Table("t3", [
+  {key:"asin",label:"ASIN",cls:"mono",fmt:function(v,row){ return esc(v)+sub("Rank #"+row.rank); }},
+  {key:"sku",label:"SKU",cls:"mono sku",fmt:function(v,row){ return fmtSku(v)+sub(esc(String(row.account||"").replace(/amazon /g,""))); }},
+  {key:"prev_orders",label:"Previous 7D Orders",num:1,fmt:fmtInt}, {key:"curr_orders",label:"Current 7D Orders",num:1,fmt:fmtInt},
+  {key:"order_chg",label:"Order Change %",num:1,fmt:fmtPct},
+  {key:"impression_chg",label:"Impression Change %",num:1,fmt:chgWithBase("prev_impressions","curr_impressions",fmtInt)},
+  {key:"click_chg",label:"Click Change %",num:1,fmt:chgWithBase("prev_clicks","curr_clicks",fmtInt)},
+  {key:"ctr_chg",label:"CTR Change %",num:1,fmt:chgWithBase("prev_ctr","curr_ctr",fmtRate)},
+  {key:"cvr_chg",label:"CVR Change %",num:1,fmt:chgWithBase("prev_cvr","curr_cvr",fmtRate)},
+  {key:"issue_detected",label:"Issue Detected",fmt:function(v){return issuePill(v);}}
+], P, {counter:"c3"});
+var f3 = document.getElementById("f3");
+var run3 = bindSearch("q3", t3, ["asin","sku"], function(r){ return f3.value==="all" || r.curr_orders < r.prev_orders; });
+f3.addEventListener("change", run3); run3();
+
+/* ---------- 4. Backend Keyword Analysis ---------- */
+function kwStatus(v){ var c = v==="Requires Review" ? "warn" : (v==="No Duplicates Found" ? "good" : ""); return '<span class="pill '+c+'">'+esc(v)+"</span>"; }
+var t4 = new Table("t4", [
+  {key:"asin",label:"ASIN",cls:"mono"}, {key:"sku",label:"SKU",cls:"mono sku",fmt:fmtSku},
+  {key:"content_status",label:"Content Status"}, {key:"backend_keyword_status",label:"Backend Keyword Status",fmt:kwStatus},
+  {key:"issue_found",label:"Issue Found"}, {key:"action_taken",label:"Action Taken"},
+  {key:"duplicate_words_removed",label:"Duplicate Words",num:1,fmt:fmtInt}
+], K, {counter:"c4"});
+bindSearch("q4", t4, ["asin","sku"]);
+
+/* ---------- 5. Keyword Change Details ---------- */
+function markRemoved(orig, row){
+  if(!orig) return '<span class="na">'+DASH+'</span>';
+  var removed = (row.removed_words||[]).slice(), seen = {}, out = [];
+  orig.split(/\s+/).forEach(function(w){
+    var n = w.replace(/^[^\p{L}\p{N}_]+|[^\p{L}\p{N}_]+$/gu, "").toLowerCase();
+    if(n && seen[n]){ out.push('<del class="rm">'+esc(w)+"</del>"); } else { if(n) seen[n]=1; out.push(esc(w)); }
+  });
+  return out.join(" ");
+}
+function kwCell(v,row){
+  if(!row.original) return '<span class="na">No backend keywords on record</span>';
+  return markRemoved(row.original,row)+'<details><summary>Proposed cleaned terms ('+row.cleaned_word_count+" words, "+row.cleaned_bytes+" bytes)</summary>"+esc(row.cleaned)+"</details>";
+}
+function finalStatus(k){
+  if(!k.needs_change) return "No change required";
+  var r = records[k.asin+"|"+k.sku];
+  return (r && r.status!=="Proposed" && r.date_changed) ? "Uploaded (user-confirmed "+fmtDate(r.date_changed)+")" : "Proposed – upload not confirmed";
+}
+var K5 = K.map(function(k){ var o={}; for(var x in k){o[x]=k[x];} o.final_status = finalStatus(k); return o; });
+var t5 = new Table("t5", [
+  {key:"asin",label:"ASIN",cls:"mono"}, {key:"sku",label:"SKU",cls:"mono sku",fmt:fmtSku},
+  {key:"original",label:"Original Backend Keywords",cls:"kw",sort:false,fmt:kwCell},
+  {key:"issue_found",label:"Issue"}, {key:"action_taken",label:"Fine-Tuning Action"},
+  {key:"final_status",label:"Final Status",fmt:function(v){ return '<span class="pill '+(v.indexOf("Proposed")===0?"info":"good")+'">'+esc(v)+"</span>"; }},
+  {key:"original_word_count",label:"Words Before",num:1,fmt:fmtInt}, {key:"cleaned_word_count",label:"Words After",num:1,fmt:fmtInt}
+], K5, {counter:"c5"});
+bindSearch("q5", t5, ["asin","sku","original"]);
+
+/* ---------- 6. Optimization Classification ---------- */
+function renderClassification(){
+var anyProposed = review.length>0, applied = KPI.finetune_completed_verified;
+new Table("t6", [{key:"t",label:"Change Type",sort:false},{key:"a",label:"Applied?",sort:false,fmt:function(v){
+    var c = v.indexOf("Yes")===0 ? "good" : (v.indexOf("Proposed")===0 ? "info" : ""); return '<span class="pill '+c+'">'+esc(v)+"</span>"; }},
+  {key:"d",label:"Description",sort:false}], [
+  {t:"Backend Keyword Fine-Tuning", a: applied ? "Yes ("+applied+" user-confirmed)" : (anyProposed ? "Proposed (not yet confirmed)" : "No"), d:"Remove duplicate/repeated keywords and refine existing search terms"},
+  {t:"Title Optimization", a:"No", d:"Title not changed by this process"},
+  {t:"Bullet Optimization", a:"No", d:"Bullets not changed by this process"},
+  {t:"Image Optimization", a:"No", d:"Images not changed by this process"},
+  {t:"Description Optimization", a:"No", d:"Description not changed by this process"},
+  {t:"A+ Content Change", a:"No", d:"No change made"},
+  {t:"Price Change", a:"No", d:"Not part of this task"},
+  {t:"Buy Box Change", a:"No", d:"Not part of this task"},
+  {t:"Major Listing Change", a:"No", d:"No major listing modification made"}
+]);
+}
+
+/* ---------- 7. Change Record (user-driven, persisted) ---------- */
+var drafts = {};   /* key -> {date, status} typed but not yet saved */
+var messages = {}; /* key -> {text, ok} last save result */
+function savedOf(row){ var r = records[row.key]; return {date: r ? (r.date_changed||"") : "", status: r ? r.status : "Proposed"}; }
+function draftOf(row){ return drafts[row.key] || savedOf(row); }
+function isDirty(row){ var d = drafts[row.key], s = savedOf(row); return !!d && (d.date!==s.date || d.status!==s.status); }
+function monState(m, status){
+  if(!m.active) return "Not monitored (Proposed)";
+  if(status==="Completed") return "Completed · Monitoring period "+fmtDate(m.post_from)+" → "+fmtDate(m.post_to);
+  if(m.complete) return "7/7 days loaded (" + fmtDate(m.post_from)+" → "+fmtDate(m.post_to)+") · ready to mark Completed";
+  return "Monitoring: Day "+m.post_days+" of 7 ("+fmtDate(m.post_from)+" → "+fmtDate(m.post_to)+")";
+}
+function crDateCell(v, row){
+  var d = draftOf(row);
+  return '<div class="cr-edit"><input type="date" class="cr-date" data-key="'+esc(row.key)+'" value="'+esc(d.date)+'" max="'+todayIso()+'" aria-label="Date Changed for '+esc(row.asin)+'"></div>';
+}
+function crStatusCell(v, row){
+  var d = draftOf(row), m = monitor({asin:row.asin, status:"Monitoring", date_changed:d.date||null});
+  var opts = STATUSES.map(function(s){
+    var dis = (s==="Completed" && !(m.active && m.complete)) ? " disabled" : "";
+    return '<option value="'+s+'"'+(s===d.status?" selected":"")+dis+">"+s+(dis?" (after 7/7 days)":"")+"</option>"; }).join("");
+  var saved = savedOf(row), dirty = isDirty(row), msg = messages[row.key];
+  var info = saved.status==="Proposed" ? "Not monitored"
+           : "Status: "+saved.status+" · Change Date: "+fmtDate(saved.date)+" · "+monState(row.mon, saved.status);
+  return '<div class="cr-edit"><select class="cr-status" data-key="'+esc(row.key)+'" aria-label="Status for '+esc(row.asin)+'">'+opts+'</select>'
+    +'<button type="button" class="btn primary cr-save" data-key="'+esc(row.key)+'"'+(dirty?"":" disabled")+'>Save</button></div>'
+    +'<div class="cr-state">'+(dirty ? '<span class="dirty">● Unsaved changes</span>' : (row.saved_at ? '<span class="saved">✓ Saved '+esc(new Date(row.saved_at).toLocaleString("en-GB",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}))+'</span>' : ""))
+    +'<span>'+esc(info)+'</span></div>'
+    +(msg ? '<div class="cr-msg"'+(msg.ok?' style="color:var(--good)"':"")+'>'+esc(msg.text)+'</div>' : "");
+}
+var t7;
+function renderChangeRecord(){
+  var rows = allRows();
+  t7 = new Table("t7", [
+    {key:"asin",label:"ASIN",cls:"mono",fmt:function(v,row){ return esc(v)+(row.carried_forward?sub("From an earlier report"):""); }},
+    {key:"sku",label:"SKU",cls:"mono sku",fmt:fmtSku}, {key:"issue_detected",label:"Issue Detected"},
+    {key:"optimization_action",label:"Optimization Action"}, {key:"change_type",label:"Change Type"},
+    {key:"date_changed",label:"Date Changed",fmt:crDateCell},
+    {key:"status",label:"Status",fmt:crStatusCell}
+  ], rows, {empty:"No keyword changes proposed.", rowAttrs:function(r){ return {"data-key":r.key, "class":isDirty(r)?"is-dirty":""}; }});
+  document.getElementById("c7").textContent = rows.filter(function(r){ return r.status!=="Proposed"; }).length+" confirmed of "+rows.length+" records";
+  document.getElementById("storeNote").innerHTML = storageOk
+    ? "<b>Where saves are kept:</b> in this browser on this computer (browser storage for this report file). They survive refresh and reopening the file. To keep them in the next weekly build or move them to another computer, use <b>Export saved records</b> and place the file at <code>data/change_records.json</code>."
+    : "<b>Browser storage is blocked</b> (private window or storage disabled), so saves cannot be kept here. Use <b>Import records</b> with an exported file, or open the report in a normal browser window.";
+}
+function rowByKey(key){ var rows = allRows(); for(var i=0;i<rows.length;i++){ if(rows[i].key===key) return rows[i]; } return null; }
+function refreshRow(key){  /* update one row in place so typing in other rows is not disturbed */
+  var row = rowByKey(key), tr = Array.prototype.filter.call(document.querySelectorAll("#t7 tbody tr"), function(x){ return x.getAttribute("data-key")===key; })[0];
+  if(!row || !tr) return;
+  var cell = tr.querySelector('td[data-label="Status"] .cv');
+  var focused = document.activeElement && document.activeElement.classList.contains("cr-status");
+  cell.innerHTML = crStatusCell(null, row);
+  if(focused){ cell.querySelector(".cr-status").focus(); }
+  tr.classList.toggle("is-dirty", isDirty(row));
+}
+function validateDraft(row, d){
+  if(STATUSES.indexOf(d.status)<0) return "Choose a status.";
+  if(d.status==="Proposed"){ return d.date ? "A Proposed change has no Date Changed. Set Status to Monitoring to record an applied change, or clear the date." : null; }
+  if(!d.date) return "Enter the actual Date Changed before setting Status to "+d.status+".";
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(d.date) || isNaN(Date.parse(d.date+"T00:00:00Z"))) return "Date Changed is not a valid date.";
+  if(d.date > todayIso()) return "Date Changed cannot be in the future.";
+  if(d.status==="Completed"){
+    var m = monitor({asin:row.asin, status:"Completed", date_changed:d.date});
+    if(!m.complete) return "Completed is allowed only after all 7 post-change days ("+fmtDate(m.post_from)+" → "+fmtDate(m.post_to)+") are loaded. "+(m.reason||"Loaded: "+m.post_days+"/7 days.");
+  }
+  return null;
+}
+function saveRow(key){
+  var row = rowByKey(key), d = draftOf(row), err = validateDraft(row, d);
+  if(err){ messages[key] = {text:err, ok:false}; refreshRow(key); return false; }
+  var prev = records[key];
+  records[key] = {key:key, asin:row.asin, sku:row.sku, issue_detected:row.issue_detected, optimization_action:row.optimization_action,
+                  change_type:row.change_type, date_changed: d.status==="Proposed" ? null : d.date, status:d.status,
+                  saved_at:new Date().toISOString()};
+  try{ persist(); }
+  catch(e){ if(prev){ records[key]=prev; } else { delete records[key]; } messages[key] = {text:"Not saved: "+e.message, ok:false}; refreshRow(key); return false; }
+  delete drafts[key]; messages[key] = {text:"Saved.", ok:true};
+  renderDynamic();
+  return true;
+}
+var t7box = document.getElementById("t7");
+function onEdit(e){
+  var t = e.target, key = t.getAttribute && t.getAttribute("data-key"); if(!key) return;
+  if(!t.classList.contains("cr-date") && !t.classList.contains("cr-status")) return;
+  var row = rowByKey(key), d = draftOf(row), nd = {date:d.date, status:d.status};
+  if(t.classList.contains("cr-date")){ nd.date = t.value; }
+  else { nd.status = t.value; }
+  drafts[key] = nd; delete messages[key]; refreshRow(key);
+}
+t7box.addEventListener("input", onEdit); t7box.addEventListener("change", onEdit);
+t7box.addEventListener("click", function(e){ var b = e.target.closest && e.target.closest(".cr-save"); if(b){ saveRow(b.getAttribute("data-key")); } });
+window.addEventListener("beforeunload", function(e){
+  if(allRows().some(isDirty)){ e.preventDefault(); e.returnValue = ""; return ""; }
+});
+document.getElementById("crExport").addEventListener("click", function(){
+  var list = Object.keys(records).map(function(k){ return records[k]; });
+  var blob = new Blob([JSON.stringify({exported_at:new Date().toISOString(), report_extracted_at:M.extracted_at, records:list}, null, 1)], {type:"application/json"});
+  var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "change_records.json";
+  document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 0);
+});
+document.getElementById("crImport").addEventListener("change", function(e){
+  var f = e.target.files && e.target.files[0]; if(!f) return;
+  f.text().then(function(txt){
+    var data = JSON.parse(txt), list = Array.isArray(data) ? data : (data.records||[]), map = {};
+    list.forEach(function(r){ if(r && r.key && STATUSES.indexOf(r.status)>=0 && (r.status==="Proposed" || /^\d{4}-\d{2}-\d{2}$/.test(r.date_changed||""))) map[r.key]=r; });
+    mergeIn(map); try{ persist(); }catch(err){}
+    renderDynamic(); alert(Object.keys(map).length+" record(s) imported.");
+  }).catch(function(err){ alert("Import failed: "+err.message); });
+  e.target.value = "";
+});
+
+/* ---------- 8. 7-Day Monitoring Report (from saved Change Records) ---------- */
+function renderMonitoring(rows){
+  document.getElementById("s8lead").innerHTML = "One row per change saved as Monitoring or Completed in Section 7. For a saved Date Changed <b>D</b>: Pre-Change = <b>D−7 → D−1</b>, Post-Change = <b>D+1 → D+7</b>. Orders are ASIN-level daily Business Report orders (both accounts). Daily data in this build: "+fmtDate(MD.daily_from)+" → <b>"+fmtDate(MD.available_through)+"</b>.";
+  var mrows = rows.filter(function(r){ return r.status!=="Proposed" && r.date_changed; }).map(function(r){
+    var m = r.mon; return {key:r.key, asin:r.asin, sku:r.sku, status:r.status, date_changed:r.date_changed, m:m,
+      pre_orders:m.pre_orders, post_orders:m.post_orders, order_chg:m.order_chg,
+      pre_impressions:m.pre_impressions, post_impressions:m.post_impressions, impression_chg:m.impression_chg,
+      result: m.complete ? m.result : "Monitoring — "+m.post_days+"/7 days"}; });
+  function impCell(){ return '<span class="na">'+DASH+'</span>'+sub("weekly data only"); }
+  new Table("t8", [
+    {key:"asin",label:"ASIN",cls:"mono",fmt:function(v,r){ return esc(v)+sub(esc(r.sku)+" · changed "+fmtDate(r.date_changed)); }},
+    {key:"pre_orders",label:"Pre-Change Orders",num:1,fmt:function(v,r){ return fmtInt(v)+sub(fmtDate(r.m.pre_from)+" → "+fmtDate(r.m.pre_to)); }},
+    {key:"post_orders",label:"Post-Change Orders",num:1,fmt:function(v,r){ return fmtInt(v)+sub(fmtDate(r.m.post_from)+" → "+fmtDate(r.m.post_to)); }},
+    {key:"order_chg",label:"Order Change %",num:1,fmt:function(v,r){ return fmtPct(v)+(r.m.complete && r.pre_orders===0 ? sub("pre-change orders = 0") : ""); }},
+    {key:"pre_impressions",label:"Pre-Change Impressions",num:1,fmt:impCell},
+    {key:"post_impressions",label:"Post-Change Impressions",num:1,fmt:impCell},
+    {key:"impression_chg",label:"Impression Change %",num:1,fmt:impCell},
+    {key:"result",label:"Result",fmt:function(v,r){
+      var c = !r.m.complete ? "warn" : (r.m.result==="Orders improved" ? "good" : (r.m.result==="Orders declined" ? "bad" : ""));
+      var note = !r.m.complete ? (r.m.reason || "Post-change figures appear when all 7 days are loaded")
+               : (r.status==="Completed" ? "Completed" : "7/7 days loaded · mark Completed in Section 7");
+      return '<span class="pill '+c+'">'+esc(v)+'</span><div class="sub2 sub2-wrap">'+esc(note)+"</div>"; }}
+  ], mrows, {empty:"No confirmed keyword changes yet. Record the actual Date Changed in Section 7 (Status = Monitoring) to start monitoring."});
+}
+
+/* ---------- 9. Weekly Workflow ---------- */
+function renderWorkflow(){
+var box = document.getElementById("flow"); box.innerHTML = "";
+var ap = KPI.finetune_completed_verified;
+[["Detect","Identify sudden ASIN performance drops","Done",drops.length+" drop ASINs"],
+ ["Compare","Compare current 7D vs previous 7D","Done",P.length+" ASINs compared"],
+ ["Check Content","Confirm visible listing content is correct","Done","Amazon listing-issue feed checked"],
+ ["Review Keywords","Identify duplicate/repeated backend terms","Done",K.length+" listing rows reviewed"],
+ ["Fine-Tune","Remove unnecessary duplication","Proposed",review.length+" cleaned fields proposed"],
+ ["Upload","Upload refined backend search terms", ap?"Done":"Pending", ap ? ap+" change(s) confirmed in Section 7" : "Confirm in Section 7"],
+ ["Monitor","Track next 7-day performance", KPI.under_monitoring?"Proposed":(ap?"Done":"Pending"), KPI.under_monitoring+" ASIN(s) under monitoring"],
+ ["Measure","Compare post-change results", KPI.completed?"Done":"Pending", KPI.completed+" change(s) completed"]].forEach(function(s,i){
+  var c = s[2]==="Done"?"good":(s[2]==="Proposed"?"info":"warn"), label = (i===6 && s[2]==="Proposed") ? "In progress" : s[2];
+  box.appendChild(el("div",{"class":"step"},
+    '<div class="k">Step '+(i+1)+'</div><div class="t">'+s[0]+'</div><div class="o">'+s[1]+'</div><span class="pill '+c+'">'+label+'</span> <span class="k">'+esc(s[3])+"</span>"));
+});
+}
+
+/* ---------- 10. KPI Formulas ---------- */
+new Table("t10", [{key:"k",label:"KPI",sort:false},{key:"f",label:"Formula",sort:false}], [
+  {k:"Order Change %", f:"(Current 7D Orders − Previous 7D Orders) ÷ Previous 7D Orders × 100"},
+  {k:"Impression Change %", f:"(Current 7D Impressions − Previous 7D Impressions) ÷ Previous 7D Impressions × 100"},
+  {k:"Click Change %", f:"(Current 7D Clicks − Previous 7D Clicks) ÷ Previous 7D Clicks × 100"},
+  {k:"CTR", f:"Clicks ÷ Impressions × 100"},
+  {k:"CVR", f:"Orders ÷ Clicks × 100"},
+  {k:"CTR Change % / CVR Change %", f:"(Current 7D rate − Previous 7D rate) ÷ Previous 7D rate × 100 (relative change, same form as the formulas above)"},
+  {k:"Division by zero", f:"If the Previous 7D value (or the denominator) is 0 or missing, the result is shown as “"+DASH+"”, never as 0 or an error value"}
+]);
+
+/* ---------- 11. Management Summary ---------- */
+function renderManagement(){
+new Table("t11", [{key:"a",label:"Area",sort:false},{key:"s",label:"Summary",sort:false}], [
+  {a:"Problem Identified", s: KPI.performance_drop+" of "+KPI.top_moving_reviewed+" top-moving UK ASINs had fewer orders in "+range(M.current_7d)+" than in "+range(M.previous_7d)+"."},
+  {a:"Listing Content", s:"Amazon listing-issue feed checked for each drop ASIN. Visible content is not changed by this task."},
+  {a:"Main Action", s:"Backend keyword review and fine-tuning"},
+  {a:"Keyword Action", s:"Duplicate/repeated words removed from "+KPI.finetune_proposed+" backend keyword field(s), "+KPI.duplicate_words_removed+" duplicate words in total. All unique words kept."},
+  {a:"Visible Content Changes", s:"None"},
+  {a:"Change Level", s:"Minor / Fine-Tuning"},
+  {a:"Monitoring Period", s:"7 Days: D+1 → D+7 after the user-saved Date Changed (baseline D−7 → D−1)"},
+  {a:"Success Measurement", s:"Compare post-change performance against the Pre-Change 7-day baseline"},
+  {a:"Current Status", s: KPI.finetune_completed_verified+" of "+KPI.finetune_proposed+" proposed changes confirmed by the user · "+KPI.under_monitoring+" ASIN(s) under monitoring · "+KPI.completed+" completed."}
+]);
+}
+document.getElementById("mgmtNote").innerHTML = "<b>Management Note.</b> The objective is to recover potential search performance without unnecessarily changing a correctly optimized listing. When a sudden decline is detected, the existing backend search terms are reviewed and cleaned by removing duplicate or unnecessary words. The refined keywords are uploaded, and the ASIN is monitored for the following 7 days to measure the impact of the fine-tuning.";
+
+/* ---------- Data notes ---------- */
+function list(id, items){ items.forEach(function(s){ document.getElementById(id).appendChild(el("li",null,s)); }); }
+list("srcNotes", [
+  "Orders: <code>business_reports.amz_sales_and_traffic_by_asin.total_order_items</code> (ledsone), by <code>child_asin</code>, UK (<code>market_place=23</code>), accounts amazon Dcvoltage (6) + amazon Ledsone (8), summed per ASIN.",
+  "Impressions / Clicks: <code>business_reports.amz_catalog_performance_data</code> (<code>impression_count</code>, <code>click_count</code>), weekly Sunday–Saturday rows, one row per ASIN-week (verified).",
+  "SKU / listing rows: <code>listings.amazon_listings</code> (UK, not ended, prefer child rows and <code>wrong_sku=0</code>).",
+  "Backend keywords: <code>listings.amazon_listing_search_engine_keywords</code> (joined on <code>product_id = amazon_listings.id</code>, ordered by <code>view_order</code>).",
+  "Content Status: <code>listings.amazon_listing_issues</code> (UK marketplace A1F83G8C2ARO7P)."
+]);
+list("ruleNotes", [
+  "<b>Top-moving (derived):</b> top "+M.top_moving_n+" UK ASINs by total orders over "+range([M.baseline_weeks[0], M.previous_7d[1]])+" (the "+M.baseline_weeks.length+" weeks before Current 7D). No documented Amazon top-moving rule exists. The “50” is from the requirement's example.",
+  "<b>Performance drop:</b> Current 7D Orders &lt; Previous 7D Orders (no invented threshold). All "+M.drop_sensitivity["order_change_lt_0"]+" drops are also ≤ −10%, so the result does not change under the existing WLPAF (−10%) or Before/After (−5%) conventions.",
+  "<b>Issue Detected (derived):</b> “Overall Performance Drop” when Impression, CTR and CVR all fell. Otherwise the most negative of Impression / CTR / CVR change (Orders = Impressions × CTR × CVR).",
+  "<b>Keyword fine-tuning:</b> remove a word already used earlier in the same field (case-insensitive) and whole repeated entries. Everything else is kept in original order. No stop-word, byte-limit or relevance pruning (no documented rule)."
+]);
+list("limNotes", [
+  "No backend-keyword upload / change log is readable (<code>listing_generator.*</code>, <code>staging_ai.*</code> deny access), so Date Changed and Status come only from what the user saves in Section 7. They are not verified against Amazon.",
+  "Saved Change Records are kept in this browser's storage for this report file. They are not shared with other people or computers. Clearing browser data removes them. Export them to <code>data/change_records.json</code> to keep them in the next weekly build.",
+  "Pre/Post-Change Impressions cannot be calculated: Amazon impressions exist only as Sunday–Saturday weekly totals, and D−7→D−1 / D+1→D+7 never both align with those weeks. They are shown as “"+DASH+"”, not estimated.",
+  "Monitoring days count only after Amazon Business Report data is loaded for both accounts (usually 1–2 days behind). Amazon can revise recent days afterwards.",
+  "amazon Dcvoltage had zero UK orders and sessions on 03–06 Sep 2026 (confirmed in both the Business Report and the order table). This lowers its Previous 7D baseline (06–12 Sep).",
+  "Weekly order counts per ASIN are small (top-moving cut-off: "+P[P.length-1].baseline_orders+" orders over "+M.baseline_weeks.length+" weeks), so single-order swings move percentages sharply.",
+  "Impressions/clicks are Amazon search-results figures only. Orders include all traffic sources, so CVR can exceed 100% for low-click ASINs.",
+  "Amazon SRM (account 9) and non-UK marketplaces are out of scope: the Search Catalog Performance source has no rows for them in UK."
+]);
+/* ---------- Tabs: one section visible at a time (no page scrolling) ---------- */
+var nav = document.querySelector("nav.toc"), tabs = Array.prototype.slice.call(nav.querySelectorAll("a"));
+nav.setAttribute("role", "tablist");
+tabs.forEach(function(a){
+  var id = a.getAttribute("href").slice(1), panel = document.getElementById(id);
+  a.id = "tab-"+id; a.setAttribute("role","tab"); a.setAttribute("aria-controls", id);
+  panel.setAttribute("role","tabpanel"); panel.setAttribute("aria-labelledby", a.id);
+  a.addEventListener("click", function(e){ e.preventDefault(); showTab(id, true); });
+  a.addEventListener("keydown", function(e){
+    var i = tabs.indexOf(a), j = e.key==="ArrowRight" ? i+1 : (e.key==="ArrowLeft" ? i-1 : -2);
+    if(j===-2) return; e.preventDefault(); j = (j+tabs.length)%tabs.length;
+    showTab(tabs[j].getAttribute("href").slice(1), true); tabs[j].focus(); });
+});
+function showTab(id, push){
+  tabs.forEach(function(a){
+    var on = a.getAttribute("href")==="#"+id;
+    a.setAttribute("aria-selected", on ? "true" : "false"); a.tabIndex = on ? 0 : -1;
+    document.getElementById(a.getAttribute("aria-controls")).classList.toggle("active", on);
+    if(on){ a.scrollIntoView({block:"nearest", inline:"nearest"}); }
+  });
+  /* "#view-<id>" is not an element id, so reloading never makes the browser jump down the page */
+  if(push){ try{ history.replaceState(null, "", "#view-"+id); }catch(err){} }
+  if(nav.getBoundingClientRect().top <= 0){ window.scrollTo(0, nav.offsetTop); }
+}
+window.__showTab__ = showTab;
+var startId = (location.hash||"").replace(/^#(view-)?/, "");
+showTab(document.getElementById("tab-"+startId) ? startId : "s1", false);
+
+/* ---------- Everything that depends on saved Change Records ---------- */
+function renderDynamic(){
+  var rows = allRows();
+  KPI = computeKPI(rows); window.__REPORT_KPI__ = KPI;
+  renderSummary(); renderClassification(); renderChangeRecord(); renderMonitoring(rows); renderWorkflow(); renderManagement();
+  K5.forEach(function(k){ k.final_status = finalStatus(k); }); t5.render();
+  document.getElementById("foot").textContent = "Generated from report_dataset.json · "+P.length+" performance rows · "+K.length+" keyword rows · "
+    +rows.length+" change records · "+rows.filter(function(r){ return r.status!=="Proposed"; }).length+" monitoring rows. Standalone file: no network requests.";
+}
+renderDynamic();
+})();
+</script>
+</body>
+</html>

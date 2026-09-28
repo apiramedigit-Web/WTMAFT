@@ -1,0 +1,162 @@
+{
+ "validated_at": "2026-09-25T12:29:48",
+ "passed": 31,
+ "failed": 0,
+ "checks": [
+  {
+   "check": "13. Date ranges: 7 days each, contiguous, Sunday start",
+   "result": "PASS",
+   "detail": "current 2026-09-13->2026-09-19, previous 2026-09-06->2026-09-12"
+  },
+  {
+   "check": "13b. Daily order data present for all 14 days, both accounts",
+   "result": "PASS",
+   "detail": "{6: 14, 8: 14}"
+  },
+  {
+   "check": "Top-moving selection reproduces independently",
+   "result": "PASS",
+   "detail": "50 rows"
+  },
+  {
+   "check": "17. KPI per-ASIN recomputation (orders, impressions, clicks, CTR, CVR, % changes)",
+   "result": "PASS",
+   "detail": "all 50 x 11 values match"
+  },
+  {
+   "check": "12. Division by zero -> null (never 0/NaN/Inf)",
+   "result": "PASS",
+   "detail": "prev_orders=0 rows: 2"
+  },
+  {
+   "check": "6/7. No NaN / Infinity in dataset",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "14. ASIN unique at report grain",
+   "result": "PASS",
+   "detail": "50 rows"
+  },
+  {
+   "check": "15. SKU mapping: every SKU is a UK listing row of that ASIN",
+   "result": "PASS",
+   "detail": "50/50"
+  },
+  {
+   "check": "16. Keyword rows map to the correct ASIN/SKU (via product_id)",
+   "result": "PASS",
+   "detail": "26 rows"
+  },
+  {
+   "check": "Keyword principle: every unique original word kept, nothing added, only duplicates removed",
+   "result": "PASS",
+   "detail": "25 fields verified"
+  },
+  {
+   "check": "12. KPI summary reconciles to dataset rows",
+   "result": "PASS",
+   "detail": "{'top_moving_reviewed': 50, 'performance_drop': 23, 'keyword_review_required': 21, 'finetune_proposed': 24, 'duplicate_words_removed': 662, 'under_monitoring': 0}"
+  },
+  {
+   "check": "Change Record rows = proposed changes (+ saved records carried forward), keys unique",
+   "result": "PASS",
+   "detail": "24 rows"
+  },
+  {
+   "check": "18/19. Build never sets an upload / change date / monitoring status (only user saves do)",
+   "result": "PASS",
+   "detail": "24 change records, all Proposed; 0 user-saved record(s) embedded"
+  },
+  {
+   "check": "17b. Daily monitoring series reconciles to the weekly Current 7D orders (same source)",
+   "result": "PASS",
+   "detail": "21 ASINs match"
+  },
+  {
+   "check": "17c. Loaded days are contiguous and cover both comparison weeks",
+   "result": "PASS",
+   "detail": "2026-07-12 -> 2026-09-23 (74 days)"
+  },
+  {
+   "check": "20. No fabricated thresholds: drop rule is orders < previous (no numeric cut-off)",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "Live DB spot-check (8 random ASINs: orders, impressions, clicks)",
+   "result": "PASS",
+   "detail": "['B0D7944QDY', 'B09L11514G', 'B0CN376GSP', 'B07F9SH71F', 'B0H9XM38LC', 'B0DCFXBYJG', 'B0F1D3FS5C', 'B0BLZFGY38']"
+  },
+  {
+   "check": "1. HTML file exists",
+   "result": "PASS",
+   "detail": "141844 bytes"
+  },
+  {
+   "check": "9/10/11. No external CSS/JS/network references",
+   "result": "PASS",
+   "detail": "[]"
+  },
+  {
+   "check": "8. Embedded JSON parses and equals dataset",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "2. Page loads with no JavaScript console errors",
+   "result": "PASS",
+   "detail": "[]"
+  },
+  {
+   "check": "11b. No network requests at runtime",
+   "result": "PASS",
+   "detail": "[]"
+  },
+  {
+   "check": "3. Required sections present",
+   "result": "PASS",
+   "detail": "['1. Report Purpose', '2. Weekly Performance Summary', '3. ASIN Performance Comparison', '4. Backend Keyword Analysis', '5. Keyword Change Details', '6. Optimization Classification', '7. Change Record', '8. 7-Day Monitoring Report', '9. Weekly Workflow', '10. KPI Formulas', '11. Management Summary', 'Data & Evidence Notes']"
+  },
+  {
+   "check": "4/5. Required columns, KPI names and workflow steps present (exact terminology)",
+   "result": "PASS",
+   "detail": "{}"
+  },
+  {
+   "check": "12b. KPI cards (computed in page) = dataset KPI",
+   "result": "PASS",
+   "detail": "{'Top-Moving ASINs Reviewed': '50', 'ASINs Showing Performance Drop': '23', 'ASINs Requiring Backend Keyword Review': '21', 'Backend Keyword Fine-Tuning Completed': '0', 'Visible Listing Content Changed': '0', 'Duplicate Keywords Removed': '662', 'ASINs Under Monitoring': '0', 'Monitoring Period': 'Next 7 Days', 'Next Review': 'After 7 Days'}"
+  },
+  {
+   "check": "Displayed row counts = dataset row counts",
+   "result": "PASS",
+   "detail": "{'t3 (drop filter)': (23, 23), 't4': (26, 26), 't5': (26, 26), 't6': (9, 9), 't7': (24, 24), 't8': (0, 0)}"
+  },
+  {
+   "check": "6b. No NaN / Infinity / undefined rendered",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "Struck-through words in Keyword Change Details = removed-word counts",
+   "result": "PASS",
+   "detail": "[('B0DH4KYFPD', 15, 15), ('B094R3M2DC', 35, 35), ('B094R3M2DC', 35, 35), ('B0B9Y5MRSK', 21, 21)]"
+  },
+  {
+   "check": "Tabs: clicking each tab shows only that section, no page scroll",
+   "result": "PASS",
+   "detail": "12 tabs"
+  },
+  {
+   "check": "Controls: filter, search and sort work",
+   "result": "PASS",
+   "detail": "all=50, search=1->1, sorted=48 values"
+  },
+  {
+   "check": "No horizontal scrollbar (page or table) on any tab at 1920/1366/1024/800/390px",
+   "result": "PASS",
+   "detail": "all 60 tab x width combinations = 0"
+  }
+ ]
+}

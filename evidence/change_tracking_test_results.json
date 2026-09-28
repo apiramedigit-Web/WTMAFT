@@ -1,0 +1,122 @@
+{
+ "run_at": "2026-09-25T12:29:41",
+ "passed": 23,
+ "failed": 0,
+ "tests": [
+  {
+   "test": "T1 Proposed: every record starts Proposed, not monitored, Section 8 empty",
+   "result": "PASS",
+   "detail": "{'statuses': {'Proposed'}, 'monitor': {'active': False}}"
+  },
+  {
+   "test": "T2 Validation: no date / Proposed+date / future date are rejected and not stored",
+   "result": "PASS",
+   "detail": "['Enter the actual Date Changed before setting Status to Monitoring.', 'A Proposed change has no Date Changed. Set Status to Monitoring to record an applied change, or clear the date.', 'Date Changed cannot be in the future.', None]"
+  },
+  {
+   "test": "T3a Save shows Unsaved -> Saved state",
+   "result": "PASS",
+   "detail": "['● Unsaved changes\\nNot monitored', '✓ Saved 25 Sept 2026, 12:29\\nStatus: Monitoring · Change Date: 22 Sept 2026 · Monitoring: Day 1 of 7 (23 Sept 2026 → 29 Sept 2026)']"
+  },
+  {
+   "test": "T3b Record persists after page refresh",
+   "result": "PASS",
+   "detail": "('2026-09-22', 'Monitoring')"
+  },
+  {
+   "test": "T3c Saved Date Changed is authoritative: Section 7 shows change date and Day X of 7",
+   "result": "PASS",
+   "detail": "✓ Saved 25 Sept 2026, 12:29\nStatus: Monitoring · Change Date: 22 Sept 2026 · Monitoring: Day 1 of 7 (23 Sept 2026 → 29 Sept 2026)"
+  },
+  {
+   "test": "T3d Section 8: 'Monitoring — 1/7 days', post-change values '—' (not fabricated)",
+   "result": "PASS",
+   "detail": "[['B0DH4KYFPD\\nWCDTBM2PK+RPR44WH2PK · changed 22 Sept 2026', '10\\n15 Sept 2026 → 21 Sept 2026', '—\\n23 Sept 2026 → 29 Sept 2026', '—', '—\\nweekly data only', '—\\nweekly data only', '—\\nweekly data only', 'Monitoring — 1/7 days\\nPost-change figures appear when all 7 days are loaded']]"
+  },
+  {
+   "test": "T3e Pre-period D-7..D-1 = 15 → 21 Sept, orders match live DB",
+   "result": "PASS",
+   "detail": "['10\\n15 Sept 2026 → 21 Sept 2026', 10]"
+  },
+  {
+   "test": "T3f Completed cannot be chosen before 7/7 days",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "test": "T3g KPI + Section 5 follow the saved record",
+   "result": "PASS",
+   "detail": "[{'top_moving_reviewed': 50, 'performance_drop': 23, 'keyword_review_required': 21, 'finetune_proposed': 24, 'finetune_completed_verified': 1, 'visible_content_changed': 0, 'duplicate_words_removed': 662, 'under_monitoring': 1, 'completed': 0}, 'B0DH4KYFPDWCDTBM2PK+RPR44WH2PKLampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Ceiling Light Shade, Lamp Shades Ceiling for Indoor Pendant Light Shade Industrial Geometric Ceiling Pendant Light Shade for Wall Light Kitchen Living Room "
+  },
+  {
+   "test": "T3h Impressions shown as '—' with reason (weekly-only source), never estimated",
+   "result": "PASS",
+   "detail": "['—\\nweekly data only', '—\\nweekly data only', '—\\nweekly data only']"
+  },
+  {
+   "test": "T3i Sections 7/8 with a saved record: no horizontal scrollbar at 1920/1366/1024/390px",
+   "result": "PASS",
+   "detail": "all 0"
+  },
+  {
+   "test": "T4 Monitoring with 0/7 days (Date Changed = last loaded day)",
+   "result": "PASS",
+   "detail": "Monitoring — 0/7 days\nPost-change figures appear when all 7 days are loaded"
+  },
+  {
+   "test": "T5 Monitoring with partial days (18 Sept -> 5/7)",
+   "result": "PASS",
+   "detail": "Monitoring — 5/7 days\nPost-change figures appear when all 7 days are loaded"
+  },
+  {
+   "test": "T6 Unsaved input: leaving the page triggers a confirmation",
+   "result": "PASS",
+   "detail": "['beforeunload']"
+  },
+  {
+   "test": "No JavaScript errors (real report)",
+   "result": "PASS",
+   "detail": "[]"
+  },
+  {
+   "test": "T7 Export: saved record downloads as change_records.json",
+   "result": "PASS",
+   "detail": "{'key': 'B0DH4KYFPD|WCDTBM2PK+RPR44WH2PK', 'asin': 'B0DH4KYFPD', 'sku': 'WCDTBM2PK+RPR44WH2PK', 'issue_detected': 'Conversion Drop', 'optimization_action': 'Removed duplicates', 'change_type': 'Backend Keyword Fine-Tuning', 'date_changed': '2026-09-22', 'status': 'Monitoring', 'saved_at': '2026-09-25T06:59:39.891Z'}"
+  },
+  {
+   "test": "T8a Full 7 days: Post-Change Orders + Order Change % + Result calculated",
+   "result": "PASS",
+   "detail": "['B0DH4KYFPD\\nWCDTBM2PK+RPR44WH2PK · changed 22 Sept 2026', '14\\n15 Sept 2026 → 21 Sept 2026', '21\\n23 Sept 2026 → 29 Sept 2026', '+50.0%', '—\\nweekly data only', '—\\nweekly data only', '—\\nweekly data only', 'Orders improved\\n7/7 days loaded · mark Completed in Section 7']"
+  },
+  {
+   "test": "T8b Not auto-completed: stays Monitoring until the user marks Completed",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "test": "T8c Completed record: persists, shows Monitoring Period 23 → 29 Sept, KPI updated",
+   "result": "PASS",
+   "detail": "['✓ Saved 25 Sept 2026, 12:29\\nStatus: Completed · Change Date: 22 Sept 2026 · Completed · Monitoring period 23 Sept 2026 → 29 Sept 2026', {'top_moving_reviewed': 50, 'performance_drop': 23, 'keyword_review_required': 21, 'finetune_proposed': 24, 'finetune_completed_verified': 1, 'visible_content_changed': 0, 'duplicate_words_removed': 662, 'under_monitoring': 0, 'completed': 1}, 'Orders improved\\nCompleted']"
+  },
+  {
+   "test": "No JavaScript errors (fixture)",
+   "result": "PASS",
+   "detail": "[]"
+  },
+  {
+   "test": "T9 Date windows: 22-Sep -> pre 15..21, post 23..29; 02-Oct crosses month (25 Sep..01 Oct / 03..09 Oct)",
+   "result": "PASS",
+   "detail": "[{'active': True, 'change_date': '2026-09-22', 'pre_from': '2026-09-15', 'pre_to': '2026-09-21', 'post_from': '2026-09-23', 'post_to': '2026-09-29', 'pre_days': 7, 'post_days': 1, 'pre_orders': 10, 'post_orders': None, 'order_chg': None, 'pre_impressions': None, 'post_impressions': None, 'impression_chg': None, 'impression_note': 'Not available: Amazon impressions exist only as Sunday–Saturday weekly totals, not for a D±7-day window', 'complete': False}, {'active': True, 'change_date': '2026-10-"
+  },
+  {
+   "test": "T10 Build-embedded record (data/change_records.json) is restored without browser storage",
+   "result": "PASS",
+   "detail": "('2026-09-22', 'Monitoring')"
+  },
+  {
+   "test": "T10b Build rejects a Monitoring record without Date Changed",
+   "result": "PASS",
+   "detail": ""
+  }
+ ]
+}
