@@ -1,0 +1,22 @@
+{
+ "sender_expected": "apiramedigit@gmail.com",
+ "authorized_account": "apiramedigit@gmail.com",
+ "email_verified": true,
+ "gmail_send_scope": true,
+ "scopes_granted": [
+  "email",
+  "https://www.googleapis.com/auth/gmail.send",
+  "https://www.googleapis.com/auth/userinfo.email",
+  "openid"
+ ],
+ "token_outside_repo": true,
+ "gmail_api_reachable": true,
+ "recipients": [
+  "apiramedigit@gmail.com",
+  "roshandigitweb@gmail.com"
+ ],
+ "ready": true,
+ "blocker": null,
+ "gmail_api_probe_http": 403,
+ "checked_at": "2026-09-29T16:03:36"
+}

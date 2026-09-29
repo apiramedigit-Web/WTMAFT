@@ -1,0 +1,15 @@
+{
+ "http_status": 401,
+ "key_authenticates": true,
+ "key_scope": "sending_only",
+ "sender": "",
+ "sender_domain": null,
+ "domain_verified": null,
+ "recipients": [
+  "apiramedigit@gmail.com",
+  "roshandigitweb@gmail.com"
+ ],
+ "ready": false,
+ "blocker": "WTMA_ALERT_FROM is not set: no sender configured.",
+ "checked_at": "2026-09-29T10:45:25"
+}

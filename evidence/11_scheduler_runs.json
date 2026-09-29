@@ -1,0 +1,687 @@
+{
+ "runs": [
+  {
+   "run_id": "20260929T131348_796387",
+   "mode": "dry-run (no e-mail)",
+   "started_at": "2026-09-29T13:13:48",
+   "python": "C:\\Program Files\\Python313\\python.exe",
+   "cwd": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report",
+   "status": "FAILED",
+   "stages": [
+    {
+     "stage": "extract",
+     "command": "python scripts/extract.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T131348_796387\\01_extract.log",
+     "exit_code": 0,
+     "seconds": 11.0,
+     "status": "OK",
+     "tail": "{'current_week': 2, 'previous_week': 2, 'weekly_orders': 34103, 'catalog': 37286, 'daily_totals': 28, 'listings': 16248, 'keywords': 45307, 'listing_issues': 199, 'ph_map': 8652, 'daily_orders': 15063, 'day_coverage': 78}\ncurrent ['2026-09-13', '2026-09-19'] previous ['2026-09-06', '2026-09-12']"
+    },
+    {
+     "stage": "build_dataset",
+     "command": "python scripts/build_dataset.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T131348_796387\\02_build_dataset.log",
+     "exit_code": 0,
+     "seconds": 0.5,
+     "status": "OK",
+     "tail": "}\nissue mix: Counter({'No Drop': 27, 'Conversion Drop': 15, 'Impression Drop': 4, 'CTR Drop': 2, 'Overall Performance Drop': 2})\nkw rows: 24 review: 20"
+    },
+    {
+     "stage": "performance_alert",
+     "command": "python scripts/performance_alert.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T131348_796387\\03_performance_alert.log",
+     "exit_code": 0,
+     "seconds": 0.2,
+     "status": "OK",
+     "tail": "cycle 2026-09-13_2026-09-19: tracked ASINs 2, alerts due 0"
+    },
+    {
+     "stage": "render",
+     "command": "python scripts/render.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T131348_796387\\04_render.log",
+     "exit_code": 0,
+     "seconds": 0.1,
+     "status": "OK",
+     "tail": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\output\\weekly_top_moving_asin_backend_keyword_fine_tuning_report.html 175041 bytes"
+    },
+    {
+     "stage": "validate",
+     "command": "python scripts/validate.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T131348_796387\\05_validate.log",
+     "exit_code": 1,
+     "seconds": 6.8,
+     "status": "FAILED",
+     "tail": "PASS  No horizontal scrollbar (page or table) on any tab at 1920/1366/1024/800/390px\n\n45 PASS / 1 FAIL",
+     "error_tail": "PASS  Section 12: cycle history rows = ledger cycles\nPASS  Tabs: clicking each tab shows only that section, no page scroll\nPASS  Controls: filter, search and sort work\nPASS  No horizontal scrollbar (page or table) on any tab at 1920/1366/1024/800/390px\n\n45 PASS / 1 FAIL"
+    }
+   ],
+   "finished_at": "2026-09-29T13:14:07",
+   "failed_stage": "validate",
+   "cycle_before": "2026-09-13_2026-09-19",
+   "cycle_after": "2026-09-13_2026-09-19",
+   "note": null
+  },
+  {
+   "run_id": "20260929T131434_907104",
+   "mode": "dry-run (no e-mail)",
+   "started_at": "2026-09-29T13:14:34",
+   "python": "C:\\Program Files\\Python313\\python.exe",
+   "cwd": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report",
+   "status": "SUCCESS",
+   "stages": [
+    {
+     "stage": "extract",
+     "command": "python scripts/extract.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T131434_907104\\01_extract.log",
+     "exit_code": 0,
+     "seconds": 9.5,
+     "status": "OK",
+     "tail": "{'current_week': 2, 'previous_week': 2, 'weekly_orders': 34103, 'catalog': 37286, 'daily_totals': 28, 'listings': 16248, 'keywords': 45307, 'listing_issues': 199, 'ph_map': 8652, 'daily_orders': 15063, 'day_coverage': 78}\ncurrent ['2026-09-13', '2026-09-19'] previous ['2026-09-06', '2026-09-12']"
+    },
+    {
+     "stage": "build_dataset",
+     "command": "python scripts/build_dataset.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T131434_907104\\02_build_dataset.log",
+     "exit_code": 0,
+     "seconds": 0.5,
+     "status": "OK",
+     "tail": "}\nissue mix: Counter({'No Drop': 27, 'Conversion Drop': 15, 'Impression Drop': 4, 'CTR Drop': 2, 'Overall Performance Drop': 2})\nkw rows: 24 review: 20"
+    },
+    {
+     "stage": "performance_alert",
+     "command": "python scripts/performance_alert.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T131434_907104\\03_performance_alert.log",
+     "exit_code": 0,
+     "seconds": 0.2,
+     "status": "OK",
+     "tail": "cycle 2026-09-13_2026-09-19: tracked ASINs 2, alerts due 0"
+    },
+    {
+     "stage": "render",
+     "command": "python scripts/render.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T131434_907104\\04_render.log",
+     "exit_code": 0,
+     "seconds": 0.1,
+     "status": "OK",
+     "tail": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\output\\weekly_top_moving_asin_backend_keyword_fine_tuning_report.html 175041 bytes"
+    },
+    {
+     "stage": "validate",
+     "command": "python scripts/validate.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T131434_907104\\05_validate.log",
+     "exit_code": 0,
+     "seconds": 6.8,
+     "status": "OK",
+     "tail": "PASS  No horizontal scrollbar (page or table) on any tab at 1920/1366/1024/800/390px\n\n46 PASS / 0 FAIL"
+    }
+   ],
+   "finished_at": "2026-09-29T13:14:51",
+   "failed_stage": null,
+   "cycle_before": "2026-09-13_2026-09-19",
+   "cycle_after": "2026-09-13_2026-09-19",
+   "note": "no new catalog week loaded yet: the same cycle was re-recorded (idempotent, not double counted)"
+  },
+  {
+   "run_id": "20260929T134305_677266",
+   "mode": "dry-run (no e-mail)",
+   "started_at": "2026-09-29T13:43:05",
+   "python": "C:\\Program Files\\Python313\\python.exe",
+   "cwd": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report",
+   "status": "SUCCESS",
+   "stages": [
+    {
+     "stage": "extract",
+     "command": "python scripts/extract.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T134305_677266\\01_extract.log",
+     "exit_code": 0,
+     "seconds": 13.5,
+     "status": "OK",
+     "tail": "{'current_week': 2, 'previous_week': 2, 'weekly_orders': 34103, 'catalog': 37286, 'daily_totals': 28, 'listings': 16248, 'keywords': 45307, 'listing_issues': 199, 'ph_map': 8652, 'daily_orders': 15063, 'day_coverage': 78}\ncurrent ['2026-09-13', '2026-09-19'] previous ['2026-09-06', '2026-09-12']"
+    },
+    {
+     "stage": "build_dataset",
+     "command": "python scripts/build_dataset.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T134305_677266\\02_build_dataset.log",
+     "exit_code": 0,
+     "seconds": 0.5,
+     "status": "OK",
+     "tail": "}\nissue mix: Counter({'No Drop': 27, 'Conversion Drop': 15, 'Impression Drop': 4, 'CTR Drop': 2, 'Overall Performance Drop': 2})\nkw rows: 24 review: 20"
+    },
+    {
+     "stage": "performance_alert",
+     "command": "python scripts/performance_alert.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T134305_677266\\03_performance_alert.log",
+     "exit_code": 0,
+     "seconds": 0.2,
+     "status": "OK",
+     "tail": "cycle 2026-09-13_2026-09-19: tracked ASINs 2, alerts due 0"
+    },
+    {
+     "stage": "render",
+     "command": "python scripts/render.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T134305_677266\\04_render.log",
+     "exit_code": 0,
+     "seconds": 0.1,
+     "status": "OK",
+     "tail": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\output\\weekly_top_moving_asin_backend_keyword_fine_tuning_report.html 176807 bytes"
+    },
+    {
+     "stage": "validate",
+     "command": "python scripts/validate.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T134305_677266\\05_validate.log",
+     "exit_code": 0,
+     "seconds": 6.9,
+     "status": "OK",
+     "tail": "PASS  No horizontal scrollbar (page or table) on any tab at 1920/1366/1024/800/390px\n\n46 PASS / 0 FAIL"
+    }
+   ],
+   "finished_at": "2026-09-29T13:43:26",
+   "failed_stage": null,
+   "cycle_before": "2026-09-13_2026-09-19",
+   "cycle_after": "2026-09-13_2026-09-19",
+   "note": "no new catalog week loaded yet: the same cycle was re-recorded (idempotent, not double counted)"
+  },
+  {
+   "run_id": "20260929T135730_483873",
+   "mode": "dry-run (no e-mail)",
+   "started_at": "2026-09-29T13:57:30",
+   "python": "C:\\Program Files\\Python313\\python.exe",
+   "cwd": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report",
+   "status": "SUCCESS",
+   "stages": [
+    {
+     "stage": "extract",
+     "command": "python scripts/extract.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T135730_483873\\01_extract.log",
+     "exit_code": 0,
+     "seconds": 30.0,
+     "status": "OK",
+     "tail": "{'current_week': 2, 'previous_week': 2, 'weekly_orders': 34103, 'catalog': 37286, 'daily_totals': 28, 'listings': 16248, 'keywords': 45307, 'listing_issues': 199, 'ph_map': 8652, 'daily_orders': 15063, 'day_coverage': 78}\ncurrent ['2026-09-13', '2026-09-19'] previous ['2026-09-06', '2026-09-12']"
+    },
+    {
+     "stage": "build_dataset",
+     "command": "python scripts/build_dataset.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T135730_483873\\02_build_dataset.log",
+     "exit_code": 0,
+     "seconds": 0.5,
+     "status": "OK",
+     "tail": "}\nissue mix: Counter({'No Drop': 27, 'Conversion Drop': 15, 'Impression Drop': 4, 'CTR Drop': 2, 'Overall Performance Drop': 2})\nkw rows: 24 review: 20"
+    },
+    {
+     "stage": "optimization_cleanup",
+     "command": "python scripts/optimization_cleanup.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T135730_483873\\03_optimization_cleanup.log",
+     "exit_code": 0,
+     "seconds": 0.1,
+     "status": "OK",
+     "tail": "optimizations awaiting keyword clean-up/verification: 0; listing steps this run: 0"
+    },
+    {
+     "stage": "performance_alert",
+     "command": "python scripts/performance_alert.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T135730_483873\\04_performance_alert.log",
+     "exit_code": 0,
+     "seconds": 0.2,
+     "status": "OK",
+     "tail": "cycle 2026-09-13_2026-09-19: tracked ASINs 2, alerts due 0"
+    },
+    {
+     "stage": "render",
+     "command": "python scripts/render.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T135730_483873\\05_render.log",
+     "exit_code": 0,
+     "seconds": 0.1,
+     "status": "OK",
+     "tail": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\output\\weekly_top_moving_asin_backend_keyword_fine_tuning_report.html 182614 bytes"
+    },
+    {
+     "stage": "validate",
+     "command": "python scripts/validate.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T135730_483873\\06_validate.log",
+     "exit_code": 0,
+     "seconds": 6.8,
+     "status": "OK",
+     "tail": "PASS  No horizontal scrollbar (page or table) on any tab at 1920/1366/1024/800/390px\n\n47 PASS / 0 FAIL"
+    }
+   ],
+   "finished_at": "2026-09-29T13:58:08",
+   "failed_stage": null,
+   "cycle_before": "2026-09-13_2026-09-19",
+   "cycle_after": "2026-09-13_2026-09-19",
+   "note": "no new catalog week loaded yet: the same cycle was re-recorded (idempotent, not double counted)"
+  },
+  {
+   "run_id": "20260929T142833_471499",
+   "mode": "dry-run (no e-mail)",
+   "started_at": "2026-09-29T14:28:33",
+   "python": "C:\\Program Files\\Python313\\python.exe",
+   "cwd": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report",
+   "status": "SUCCESS",
+   "stages": [
+    {
+     "stage": "extract",
+     "command": "python scripts/extract.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T142833_471499\\01_extract.log",
+     "exit_code": 0,
+     "seconds": 11.9,
+     "status": "OK",
+     "tail": "{'current_week': 2, 'previous_week': 2, 'weekly_orders': 34103, 'catalog': 37286, 'daily_totals': 28, 'listings': 16248, 'keywords': 45307, 'listing_issues': 202, 'ph_map': 8652, 'daily_orders': 15063, 'day_coverage': 78}\ncurrent ['2026-09-13', '2026-09-19'] previous ['2026-09-06', '2026-09-12']"
+    },
+    {
+     "stage": "build_dataset",
+     "command": "python scripts/build_dataset.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T142833_471499\\02_build_dataset.log",
+     "exit_code": 0,
+     "seconds": 0.5,
+     "status": "OK",
+     "tail": "}\nissue mix: Counter({'No Drop': 27, 'Conversion Drop': 15, 'Impression Drop': 4, 'CTR Drop': 2, 'Overall Performance Drop': 2})\nkw rows: 24 review: 20"
+    },
+    {
+     "stage": "optimization_cleanup",
+     "command": "python scripts/optimization_cleanup.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T142833_471499\\03_optimization_cleanup.log",
+     "exit_code": 0,
+     "seconds": 0.1,
+     "status": "OK",
+     "tail": "optimizations awaiting keyword clean-up/verification: 0; listing steps this run: 0"
+    },
+    {
+     "stage": "performance_alert",
+     "command": "python scripts/performance_alert.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T142833_471499\\04_performance_alert.log",
+     "exit_code": 0,
+     "seconds": 0.2,
+     "status": "OK",
+     "tail": "cycle 2026-09-13_2026-09-19: tracked ASINs 2, alerts due 0"
+    },
+    {
+     "stage": "render",
+     "command": "python scripts/render.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T142833_471499\\05_render.log",
+     "exit_code": 0,
+     "seconds": 0.1,
+     "status": "OK",
+     "tail": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\output\\weekly_top_moving_asin_backend_keyword_fine_tuning_report.html 182614 bytes"
+    },
+    {
+     "stage": "validate",
+     "command": "python scripts/validate.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T142833_471499\\06_validate.log",
+     "exit_code": 0,
+     "seconds": 6.9,
+     "status": "OK",
+     "tail": "PASS  No horizontal scrollbar (page or table) on any tab at 1920/1366/1024/800/390px\n\n47 PASS / 0 FAIL"
+    }
+   ],
+   "finished_at": "2026-09-29T14:28:53",
+   "failed_stage": null,
+   "cycle_before": "2026-09-13_2026-09-19",
+   "cycle_after": "2026-09-13_2026-09-19",
+   "note": "no new catalog week loaded yet: the same cycle was re-recorded (idempotent, not double counted)"
+  },
+  {
+   "run_id": "20260929T144000_895304",
+   "mode": "dry-run (no e-mail)",
+   "started_at": "2026-09-29T14:40:00",
+   "python": "C:\\Program Files\\Python313\\python.exe",
+   "cwd": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report",
+   "status": "SUCCESS",
+   "stages": [
+    {
+     "stage": "extract",
+     "command": "python scripts/extract.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T144000_895304\\01_extract.log",
+     "exit_code": 0,
+     "seconds": 12.8,
+     "status": "OK",
+     "tail": "{'current_week': 2, 'previous_week': 2, 'weekly_orders': 34103, 'catalog': 37286, 'daily_totals': 28, 'listings': 16248, 'keywords': 45307, 'listing_issues': 202, 'ph_map': 8652, 'daily_orders': 15063, 'day_coverage': 78}\ncurrent ['2026-09-13', '2026-09-19'] previous ['2026-09-06', '2026-09-12']"
+    },
+    {
+     "stage": "live_verify_pending",
+     "command": "python scripts/keyword_live_verify.py --pending-only",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T144000_895304\\02_live_verify_pending.log",
+     "exit_code": 0,
+     "seconds": 146.7,
+     "status": "OK",
+     "tail": "POST_ACCEPTED_PENDING_SYNC   B0GXB1RGJB WCBSF90FG+RPR44WH verified_at=None | live still shows the original keywords\nPOST_ACCEPTED_PENDING_SYNC   B07RTY1TFK WCGEBNCR-A verified_at=None | live still shows the original keywords\nPOST_ACCEPTED_PENDING_SYNC   B0CCDKF18M WCB3B+RPR44WH verified_at=None | live still shows the original keywords"
+    },
+    {
+     "stage": "build_dataset",
+     "command": "python scripts/build_dataset.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T144000_895304\\03_build_dataset.log",
+     "exit_code": 0,
+     "seconds": 0.6,
+     "status": "OK",
+     "tail": "}\nissue mix: Counter({'No Drop': 27, 'Conversion Drop': 15, 'Impression Drop': 4, 'CTR Drop': 2, 'Overall Performance Drop': 2})\nkw rows: 24 review: 20"
+    },
+    {
+     "stage": "optimization_cleanup",
+     "command": "python scripts/optimization_cleanup.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T144000_895304\\04_optimization_cleanup.log",
+     "exit_code": 0,
+     "seconds": 0.1,
+     "status": "OK",
+     "tail": "optimizations awaiting keyword clean-up/verification: 0; listing steps this run: 0"
+    },
+    {
+     "stage": "performance_alert",
+     "command": "python scripts/performance_alert.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T144000_895304\\05_performance_alert.log",
+     "exit_code": 0,
+     "seconds": 0.2,
+     "status": "OK",
+     "tail": "cycle 2026-09-13_2026-09-19: tracked ASINs 2, alerts due 0"
+    },
+    {
+     "stage": "render",
+     "command": "python scripts/render.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T144000_895304\\06_render.log",
+     "exit_code": 0,
+     "seconds": 0.1,
+     "status": "OK",
+     "tail": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\output\\weekly_top_moving_asin_backend_keyword_fine_tuning_report.html 182473 bytes"
+    },
+    {
+     "stage": "validate",
+     "command": "python scripts/validate.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T144000_895304\\07_validate.log",
+     "exit_code": 0,
+     "seconds": 7.9,
+     "status": "OK",
+     "tail": "PASS  No horizontal scrollbar (page or table) on any tab at 1920/1366/1024/800/390px\n\n47 PASS / 0 FAIL"
+    }
+   ],
+   "finished_at": "2026-09-29T14:42:49",
+   "failed_stage": null,
+   "cycle_before": "2026-09-13_2026-09-19",
+   "cycle_after": "2026-09-13_2026-09-19",
+   "note": "no new catalog week loaded yet: the same cycle was re-recorded (idempotent, not double counted)"
+  },
+  {
+   "run_id": "20260929T151051_685282",
+   "mode": "dry-run (no e-mail)",
+   "started_at": "2026-09-29T15:10:51",
+   "python": "C:\\Program Files\\Python313\\python.exe",
+   "cwd": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report",
+   "status": "SUCCESS",
+   "stages": [
+    {
+     "stage": "extract",
+     "command": "python scripts/extract.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T151051_685282\\01_extract.log",
+     "exit_code": 0,
+     "seconds": 13.6,
+     "status": "OK",
+     "tail": "{'current_week': 2, 'previous_week': 2, 'weekly_orders': 34103, 'catalog': 37286, 'daily_totals': 28, 'listings': 16248, 'keywords': 45307, 'listing_issues': 203, 'ph_map': 8652, 'daily_orders': 15063, 'day_coverage': 78}\ncurrent ['2026-09-13', '2026-09-19'] previous ['2026-09-06', '2026-09-12']"
+    },
+    {
+     "stage": "live_verify_pending",
+     "command": "python scripts/keyword_live_verify.py --pending-only",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T151051_685282\\02_live_verify_pending.log",
+     "exit_code": 0,
+     "seconds": 255.0,
+     "status": "OK",
+     "tail": "POST_ACCEPTED_PENDING_SYNC   B0GXB1RGJB WCBSF90FG+RPR44WH verified_at=None | live still shows the original keywords\nPOST_ACCEPTED_PENDING_SYNC   B07RTY1TFK WCGEBNCR-A verified_at=None | live still shows the original keywords\nPOST_ACCEPTED_PENDING_SYNC   B0CCDKF18M WCB3B+RPR44WH verified_at=None | live still shows the original keywords"
+    },
+    {
+     "stage": "build_dataset",
+     "command": "python scripts/build_dataset.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T151051_685282\\03_build_dataset.log",
+     "exit_code": 0,
+     "seconds": 0.7,
+     "status": "OK",
+     "tail": "}\nissue mix: Counter({'No Drop': 27, 'Conversion Drop': 15, 'Impression Drop': 4, 'CTR Drop': 2, 'Overall Performance Drop': 2})\nkw rows: 24 review: 20"
+    },
+    {
+     "stage": "optimization_cleanup",
+     "command": "python scripts/optimization_cleanup.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T151051_685282\\04_optimization_cleanup.log",
+     "exit_code": 0,
+     "seconds": 0.1,
+     "status": "OK",
+     "tail": "monitored ASINs: 2; due this run: 0; listing steps: 0\n  B0DH4KYFPD: next weekly keyword check due 2026-10-06 (last check week None)\n  B0GXB7RGZK: next weekly keyword check due 2026-10-06 (last check week None)"
+    },
+    {
+     "stage": "performance_alert",
+     "command": "python scripts/performance_alert.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T151051_685282\\05_performance_alert.log",
+     "exit_code": 0,
+     "seconds": 0.2,
+     "status": "OK",
+     "tail": "cycle 2026-09-13_2026-09-19: tracked ASINs 2, alerts due 0"
+    },
+    {
+     "stage": "render",
+     "command": "python scripts/render.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T151051_685282\\06_render.log",
+     "exit_code": 0,
+     "seconds": 0.1,
+     "status": "OK",
+     "tail": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\output\\weekly_top_moving_asin_backend_keyword_fine_tuning_report.html 184038 bytes"
+    },
+    {
+     "stage": "validate",
+     "command": "python scripts/validate.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T151051_685282\\07_validate.log",
+     "exit_code": 0,
+     "seconds": 7.6,
+     "status": "OK",
+     "tail": "PASS  No horizontal scrollbar (page or table) on any tab at 1920/1366/1024/800/390px\n\n47 PASS / 0 FAIL"
+    }
+   ],
+   "finished_at": "2026-09-29T15:15:29",
+   "failed_stage": null,
+   "cycle_before": "2026-09-13_2026-09-19",
+   "cycle_after": "2026-09-13_2026-09-19",
+   "note": "no new catalog week loaded yet: the same cycle was re-recorded (idempotent, not double counted)"
+  },
+  {
+   "run_id": "20260929T153645_142524",
+   "mode": "dry-run (no e-mail)",
+   "started_at": "2026-09-29T15:36:45",
+   "python": "C:\\Program Files\\Python313\\python.exe",
+   "cwd": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report",
+   "status": "FAILED",
+   "stages": [
+    {
+     "stage": "extract",
+     "command": "python scripts/extract.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T153645_142524\\01_extract.log",
+     "exit_code": 0,
+     "seconds": 15.6,
+     "status": "OK",
+     "tail": "{'current_week': 2, 'previous_week': 2, 'weekly_orders': 34103, 'catalog': 37286, 'daily_totals': 28, 'listings': 16248, 'keywords': 45307, 'listing_issues': 203, 'ph_map': 8652, 'daily_orders': 15063, 'day_coverage': 78}\ncurrent ['2026-09-13', '2026-09-19'] previous ['2026-09-06', '2026-09-12']"
+    },
+    {
+     "stage": "weekly_keyword_check",
+     "command": "python scripts/optimization_cleanup.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T153645_142524\\02_weekly_keyword_check.log",
+     "exit_code": 0,
+     "seconds": 29.7,
+     "status": "OK",
+     "tail": "  B0CBLWLZ4W WCWDBM2PK+RPR44WH2PK_AMD: Awaiting first weekly check -> No backend keywords (nothing to clean) [no POST] the live listing has no backend keywords\n  B0CBLWLZ4W WCWDBM2PK+RPR44WH2PK_DCVV: Awaiting first weekly check -> Update Failed (listing not readable / identity mismatch) [None] listing not in the Listing Management active feed\n  B0DTTKL6KX WCVCBM3PK+RPR44WH3P BM: Awaiting first weekly check -> No backend keywords (nothing to clean) [no POST] the live listing has no backend keywords"
+    },
+    {
+     "stage": "build_dataset",
+     "command": "python scripts/build_dataset.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T153645_142524\\03_build_dataset.log",
+     "exit_code": 0,
+     "seconds": 0.6,
+     "status": "OK",
+     "tail": "}\nissue mix: Counter({'No Drop': 27, 'Conversion Drop': 15, 'Impression Drop': 4, 'CTR Drop': 2, 'Overall Performance Drop': 2})\nkw rows: 24 review: 20"
+    },
+    {
+     "stage": "performance_alert",
+     "command": "python scripts/performance_alert.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T153645_142524\\04_performance_alert.log",
+     "exit_code": 0,
+     "seconds": 0.2,
+     "status": "OK",
+     "tail": "cycle 2026-09-13_2026-09-19: tracked ASINs 2, alerts due 0"
+    },
+    {
+     "stage": "render",
+     "command": "python scripts/render.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T153645_142524\\05_render.log",
+     "exit_code": 0,
+     "seconds": 0.1,
+     "status": "OK",
+     "tail": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\output\\weekly_top_moving_asin_backend_keyword_fine_tuning_report.html 209247 bytes"
+    },
+    {
+     "stage": "validate",
+     "command": "python scripts/validate.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T153645_142524\\06_validate.log",
+     "exit_code": 1,
+     "seconds": 7.1,
+     "status": "FAILED",
+     "tail": "FAIL  No horizontal scrollbar (page or table) on any tab at 1920/1366/1024/800/390px  -> {'1366px s13': 234}\n\n46 PASS / 1 FAIL",
+     "error_tail": "PASS  Section 12: cycle history rows = ledger cycles\nPASS  Tabs: clicking each tab shows only that section, no page scroll\nPASS  Controls: filter, search and sort work\nFAIL  No horizontal scrollbar (page or table) on any tab at 1920/1366/1024/800/390px  -> {'1366px s13': 234}\n\n46 PASS / 1 FAIL"
+    }
+   ],
+   "finished_at": "2026-09-29T15:37:38",
+   "failed_stage": "validate",
+   "cycle_before": "2026-09-13_2026-09-19",
+   "cycle_after": "2026-09-13_2026-09-19",
+   "note": null
+  },
+  {
+   "run_id": "20260929T153847_784456",
+   "mode": "dry-run (no e-mail)",
+   "started_at": "2026-09-29T15:38:47",
+   "python": "C:\\Program Files\\Python313\\python.exe",
+   "cwd": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report",
+   "status": "SUCCESS",
+   "stages": [
+    {
+     "stage": "extract",
+     "command": "python scripts/extract.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T153847_784456\\01_extract.log",
+     "exit_code": 0,
+     "seconds": 10.8,
+     "status": "OK",
+     "tail": "{'current_week': 2, 'previous_week': 2, 'weekly_orders': 34103, 'catalog': 37286, 'daily_totals': 28, 'listings': 16248, 'keywords': 45307, 'listing_issues': 203, 'ph_map': 8652, 'daily_orders': 15063, 'day_coverage': 78}\ncurrent ['2026-09-13', '2026-09-19'] previous ['2026-09-06', '2026-09-12']"
+    },
+    {
+     "stage": "weekly_keyword_check",
+     "command": "python scripts/optimization_cleanup.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T153847_784456\\02_weekly_keyword_check.log",
+     "exit_code": 0,
+     "seconds": 26.5,
+     "status": "OK",
+     "tail": "  B0CBLWLZ4W WCWDBM2PK+RPR44WH2PK_AMD: Awaiting first weekly check -> No backend keywords (nothing to clean) [no POST] the live listing has no backend keywords\n  B0CBLWLZ4W WCWDBM2PK+RPR44WH2PK_DCVV: Awaiting first weekly check -> Read Failed (not in the Listing Management feed / identity mismatch) [None] listing not in the Listing Management active feed\n  B0DTTKL6KX WCVCBM3PK+RPR44WH3P BM: Awaiting first weekly check -> No backend keywords (nothing to clean) [no POST] the live listing has no backend keywords"
+    },
+    {
+     "stage": "build_dataset",
+     "command": "python scripts/build_dataset.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T153847_784456\\03_build_dataset.log",
+     "exit_code": 0,
+     "seconds": 0.7,
+     "status": "OK",
+     "tail": "}\nissue mix: Counter({'No Drop': 27, 'Conversion Drop': 15, 'Impression Drop': 4, 'CTR Drop': 2, 'Overall Performance Drop': 2})\nkw rows: 24 review: 20"
+    },
+    {
+     "stage": "performance_alert",
+     "command": "python scripts/performance_alert.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T153847_784456\\04_performance_alert.log",
+     "exit_code": 0,
+     "seconds": 0.2,
+     "status": "OK",
+     "tail": "cycle 2026-09-13_2026-09-19: tracked ASINs 2, alerts due 0"
+    },
+    {
+     "stage": "render",
+     "command": "python scripts/render.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T153847_784456\\05_render.log",
+     "exit_code": 0,
+     "seconds": 0.1,
+     "status": "OK",
+     "tail": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\output\\weekly_top_moving_asin_backend_keyword_fine_tuning_report.html 209282 bytes"
+    },
+    {
+     "stage": "validate",
+     "command": "python scripts/validate.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T153847_784456\\06_validate.log",
+     "exit_code": 0,
+     "seconds": 7.4,
+     "status": "OK",
+     "tail": "PASS  No horizontal scrollbar (page or table) on any tab at 1920/1366/1024/800/390px\n\n47 PASS / 0 FAIL"
+    }
+   ],
+   "finished_at": "2026-09-29T15:39:33",
+   "failed_stage": null,
+   "cycle_before": "2026-09-13_2026-09-19",
+   "cycle_after": "2026-09-13_2026-09-19",
+   "note": "no new catalog week loaded yet: the same cycle was re-recorded (idempotent, not double counted)"
+  },
+  {
+   "run_id": "20260929T160414_901047",
+   "mode": "dry-run (no e-mail)",
+   "started_at": "2026-09-29T16:04:14",
+   "python": "C:\\Program Files\\Python313\\python.exe",
+   "cwd": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report",
+   "status": "SUCCESS",
+   "stages": [
+    {
+     "stage": "extract",
+     "command": "python scripts/extract.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T160414_901047\\01_extract.log",
+     "exit_code": 0,
+     "seconds": 9.9,
+     "status": "OK",
+     "tail": "{'current_week': 2, 'previous_week': 2, 'weekly_orders': 34103, 'catalog': 37286, 'daily_totals': 28, 'listings': 16248, 'keywords': 45307, 'listing_issues': 203, 'ph_map': 8652, 'daily_orders': 15063, 'day_coverage': 78}\ncurrent ['2026-09-13', '2026-09-19'] previous ['2026-09-06', '2026-09-12']"
+    },
+    {
+     "stage": "weekly_keyword_check",
+     "command": "python scripts/optimization_cleanup.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T160414_901047\\02_weekly_keyword_check.log",
+     "exit_code": 0,
+     "seconds": 25.8,
+     "status": "OK",
+     "tail": "  B0CBLWLZ4W WCWDBM2PK+RPR44WH2PK_AMD: Awaiting first weekly check -> No backend keywords (nothing to clean) [no POST] the live listing has no backend keywords\n  B0CBLWLZ4W WCWDBM2PK+RPR44WH2PK_DCVV: Awaiting first weekly check -> Read Failed (not in the Listing Management feed / identity mismatch) [None] listing not in the Listing Management active feed\n  B0DTTKL6KX WCVCBM3PK+RPR44WH3P BM: Awaiting first weekly check -> No backend keywords (nothing to clean) [no POST] the live listing has no backend keywords"
+    },
+    {
+     "stage": "build_dataset",
+     "command": "python scripts/build_dataset.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T160414_901047\\03_build_dataset.log",
+     "exit_code": 0,
+     "seconds": 0.6,
+     "status": "OK",
+     "tail": "}\nissue mix: Counter({'No Drop': 27, 'Conversion Drop': 15, 'Impression Drop': 4, 'CTR Drop': 2, 'Overall Performance Drop': 2})\nkw rows: 24 review: 20"
+    },
+    {
+     "stage": "performance_alert",
+     "command": "python scripts/performance_alert.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T160414_901047\\04_performance_alert.log",
+     "exit_code": 0,
+     "seconds": 0.2,
+     "status": "OK",
+     "tail": "cycle 2026-09-13_2026-09-19: tracked ASINs 2, alerts due 0"
+    },
+    {
+     "stage": "render",
+     "command": "python scripts/render.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T160414_901047\\05_render.log",
+     "exit_code": 0,
+     "seconds": 0.1,
+     "status": "OK",
+     "tail": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\output\\weekly_top_moving_asin_backend_keyword_fine_tuning_report.html 209282 bytes"
+    },
+    {
+     "stage": "validate",
+     "command": "python scripts/validate.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20260929T160414_901047\\06_validate.log",
+     "exit_code": 0,
+     "seconds": 7.4,
+     "status": "OK",
+     "tail": "PASS  No horizontal scrollbar (page or table) on any tab at 1920/1366/1024/800/390px\n\n47 PASS / 0 FAIL"
+    }
+   ],
+   "finished_at": "2026-09-29T16:04:58",
+   "failed_stage": null,
+   "cycle_before": "2026-09-13_2026-09-19",
+   "cycle_after": "2026-09-13_2026-09-19",
+   "note": "no new catalog week loaded yet: the same cycle was re-recorded (idempotent, not double counted)"
+  }
+ ]
+}

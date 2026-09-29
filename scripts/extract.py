@@ -45,15 +45,28 @@ def main():
         con.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY")
         cur = con.cursor()
 
-        # Latest complete catalog week present for BOTH accounts.
-        cur_start = cur.execute(
-            """SELECT max(start_date) FROM (
-                 SELECT start_date FROM business_reports.amz_catalog_performance_data
-                 WHERE market_place=%s AND sub_source = ANY(%s)
-                   AND end_date - start_date = 6
-                 GROUP BY start_date HAVING count(DISTINCT sub_source) = %s) w""",
-            (MARKET_PLACE, list(ACCOUNTS), len(ACCOUNTS)),
-        ).fetchone()[0]
+        # Complete catalog weeks present for BOTH accounts.
+        loaded = {r[0] for r in cur.execute(
+            """SELECT start_date FROM business_reports.amz_catalog_performance_data
+               WHERE market_place=%s AND sub_source = ANY(%s) AND end_date - start_date = 6
+               GROUP BY start_date HAVING count(DISTINCT sub_source) = %s""",
+            (MARKET_PLACE, list(ACCOUNTS), len(ACCOUNTS))).fetchall()}
+        # Weekly Monday cycle (business instruction 2026-09-29): Current 7D = the Sun-Sat week ending on
+        # the latest Saturday <= run date - 8 days (on a Monday: the week that ended 9 days earlier).
+        # A fixed lag gives exactly one new, contiguous week per Monday; "latest loaded week" skipped or
+        # repeated a week on Mondays (catalog weeks load Mon-Thu, once Sat). Loaded 11/11 weeks Jul-Sep.
+        run_date = dt.date.fromisoformat(os.environ.get("WTMA_RUN_DATE") or dt.date.today().isoformat())
+        d8 = run_date - dt.timedelta(days=8)
+        target = d8 - dt.timedelta(days=(d8.weekday() - 5) % 7) - dt.timedelta(days=6)
+        week_rule = {"rule": "fixed lag: week ending the latest Saturday <= run date - 8 days",
+                     "run_date": run_date.isoformat(), "target_week_start": target.isoformat(), "fallback": None}
+        if target in loaded:
+            cur_start = target
+        else:  # not loaded yet: never guess; use the latest loaded week before it and say so
+            cur_start = max(w for w in loaded if w < target)
+            week_rule["fallback"] = (f"target week {target} not loaded for both accounts; "
+                                     f"used latest loaded week {cur_start} (same cycle may be re-recorded)")
+            print("WARNING:", week_rule["fallback"])
         prev_start = cur_start - dt.timedelta(days=7)
         hist_start = cur_start - dt.timedelta(days=7 * (HISTORY_WEEKS - 1))
         cur_end = cur_start + dt.timedelta(days=6)
@@ -131,11 +144,22 @@ def main():
               AND marketplace_id = 'A1F83G8C2ARO7P'""",
             (list(ACCOUNTS), asins))
 
+        # Portfolio Holder attribution: the authoritative ASIN -> PH mapping
+        # (staff.ph_category_products, source_id 1 = Amazon, ref_id = ASIN).
+        ph_map = q(cur, """
+            SELECT p.ref_id AS asin, c.id AS ph_category_id, c.category_name AS ph_category,
+                   c.user_id AS ph_user_id, u.first_name AS ph_name, u.username AS ph_username
+            FROM staff.ph_category_products p
+            JOIN staff.ph_categories c ON c.id = p.ph_category_id
+            LEFT JOIN staff.users u ON u.id = c.user_id
+            WHERE p.source_id = 1 AND p.ref_id = ANY(%s)""", (asins,))
+
     payload = {
         "extracted_at": dt.datetime.now().isoformat(timespec="seconds"),
         "market_place": MARKET_PLACE,
         "accounts": ACCOUNTS,
         "current_week": [cur_start.isoformat(), cur_end.isoformat()],
+        "week_rule": week_rule,
         "previous_week": [prev_start.isoformat(), (prev_start + dt.timedelta(days=6)).isoformat()],
         "history_start": hist_start.isoformat(),
         "weekly_orders": weekly_orders,
@@ -144,6 +168,7 @@ def main():
         "listings": listings,
         "keywords": keywords,
         "listing_issues": issues,
+        "ph_map": ph_map,
         "daily_from": daily_from.isoformat(),
         "daily_orders": daily_orders,
         "day_coverage": day_coverage,

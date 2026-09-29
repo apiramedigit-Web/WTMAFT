@@ -1,0 +1,11 @@
+{
+ "run_at": "2026-09-29T16:04:51",
+ "mode": "dry_run",
+ "recipients": [
+  "apiramedigit@gmail.com",
+  "roshandigitweb@gmail.com"
+ ],
+ "this_run": [],
+ "alert_log": [],
+ "full_optimizations": {}
+}

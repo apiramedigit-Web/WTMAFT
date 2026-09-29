@@ -1,0 +1,314 @@
+{
+ "run_at": "2026-09-29T16:04:02",
+ "mode": "deterministic dry-run: temp fixtures + temp ledger + fake Gmail transport + temp dashboards; no real e-mail, no network, no Amazon keyword update",
+ "passed": 51,
+ "failed": 0,
+ "results": [
+  {
+   "case": "TC1",
+   "test": "week 1 down: consecutive decline count = 1",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "TC1",
+   "test": "NO Gmail alert (no alert due, no send request)",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "TC1",
+   "test": "production alert log has no alert",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "TC1",
+   "test": "dashboard = one consecutive decline, NO Full Optimization Review alert",
+   "result": "PASS",
+   "detail": "{'state': 'one', 'row': 'B0E2ETEST01\\nWCE2E2PK\\n\\t\\namazon Ledsone\\nAmazon UK\\n\\t\\n6\\n04 Oct → 10 Oct\\n\\t\\n10\\n27 Sept → 03 Oct\\n\\t\\n-40.0%\\nDecline\\n\\t\\nFine-tuned 28 Sept 2026\\nLive verified 29 Sept 2026\\nMonitoring from 04 Oct 2026\\nCurrent cycle #1\\n\\t\\n1\\n\\t\\nNo Duplicates Found\\nduplicate words removed: 9\\n\\t\\nOne consecutive decline (no alert)\\n\\t\\nNot required', 'banner': '', 'section': \"12.\\nFull Optimization Review Monitoring\\n\\nEvery ASIN whose backend keyword fine-tuning is live veri"
+  },
+  {
+   "case": "TC2",
+   "test": "week 2 down: consecutive decline count = 2",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "TC2",
+   "test": "dashboard shows ⚠️ Full Optimization Review Required (+ banner, + manual notice)",
+   "result": "PASS",
+   "detail": "{'state': 'required', 'row': 'B0E2ETEST01\\nWCE2E2PK\\n\\t\\namazon Ledsone\\nAmazon UK\\n\\t\\n4\\n11 Oct → 17 Oct\\n\\t\\n6\\n04 Oct → 10 Oct\\n\\t\\n-33.3%\\nDecline\\n\\t\\nFine-tuned 28 Sept 2026\\nLive verified 29 Sept 2026\\nMonitoring from 04 Oct 2026\\nCurrent cycle #2\\n\\t\\n2\\n\\t\\nNo Duplicates Found\\nduplicate words removed: 9\\n\\t\\n⚠️ Full Optimization Review Required\\n\\t\\nDRY_RUN (not sent)', 'banner': '⚠️ FULL OPTIMIZATION REVIEW REQUIRED: B0E2ETEST01 (alert pending) · Full Optimization is manual. When don"
+  },
+  {
+   "case": "TC2",
+   "test": "Gmail Full Optimization Review alert triggered (one send, both recipients in To)",
+   "result": "PASS",
+   "detail": "[{'asin': 'B0E2ETEST01', 'cycle_id': '2026-10-11_2026-10-17', 'sku': 'WCE2E2PK', 'consecutive_decline_count': 2, 'subject': '⚠️ Full Optimization Review Required – ASIN B0E2ETEST01 – 2 Consecutive 7D Performance Drops', 'recipients': ['apiramedigit@gmail.com', 'roshandigitweb@gmail.com'], 'alert_status': 'SENT', 'alert_sent_at': '2026-09-29T16:03:57', 'message_id': 'fake-gmail-0001', 'error': None, 'attempted_at': '2026-09-29T16:03:57', 'http_status': 200, 'this_run': 'SENT'}]"
+  },
+  {
+   "case": "TC2",
+   "test": "alert recorded in the alert ledger (status, sent time, Gmail message id)",
+   "result": "PASS",
+   "detail": "{'asin': 'B0E2ETEST01', 'cycle_id': '2026-10-11_2026-10-17', 'sku': 'WCE2E2PK', 'consecutive_decline_count': 2, 'subject': '⚠️ Full Optimization Review Required – ASIN B0E2ETEST01 – 2 Consecutive 7D Performance Drops', 'recipients': ['apiramedigit@gmail.com', 'roshandigitweb@gmail.com'], 'alert_status': 'SENT', 'alert_sent_at': '2026-09-29T16:03:57', 'message_id': 'fake-gmail-0001', 'error': None, 'attempted_at': '2026-09-29T16:03:57', 'http_status': 200}"
+  },
+  {
+   "case": "TC2",
+   "test": "duplicate protection: same ASIN/cycle not sent twice",
+   "result": "PASS",
+   "detail": "[{'asin': 'B0E2ETEST01', 'cycle_id': '2026-10-11_2026-10-17', 'sku': 'WCE2E2PK', 'consecutive_decline_count': 2, 'subject': '⚠️ Full Optimization Review Required – ASIN B0E2ETEST01 – 2 Consecutive 7D Performance Drops', 'recipients': ['apiramedigit@gmail.com', 'roshandigitweb@gmail.com'], 'alert_status': 'SENT', 'alert_sent_at': '2026-09-29T16:03:57', 'message_id': 'fake-gmail-0001', 'error': None, 'attempted_at': '2026-09-29T16:03:57', 'http_status': 200, 'this_run': 'BLOCKED_DUPLICATE (already"
+  },
+  {
+   "case": "TC2",
+   "test": "dashboard after sending = review required + alert already sent, with message id",
+   "result": "PASS",
+   "detail": "{'state': 'sent', 'row': 'B0E2ETEST01\\nWCE2E2PK\\n\\t\\namazon Ledsone\\nAmazon UK\\n\\t\\n4\\n11 Oct → 17 Oct\\n\\t\\n6\\n04 Oct → 10 Oct\\n\\t\\n-33.3%\\nDecline\\n\\t\\nFine-tuned 28 Sept 2026\\nLive verified 29 Sept 2026\\nMonitoring from 04 Oct 2026\\nCurrent cycle #2\\n\\t\\n2\\n\\t\\nNo Duplicates Found\\nduplicate words removed: 9\\n\\t\\n⚠️ Full Optimization Review Required · Alert sent\\n\\t\\nSent\\n2026-09-29 16:03:57\\nGmail id fake-gmail-0001', 'banner': '⚠️ FULL OPTIMIZATION REVIEW REQUIRED: B0E2ETEST01 (alert sent, "
+  },
+  {
+   "case": "TC3",
+   "test": "week 2 improved: count resets to 0",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "TC3",
+   "test": "NO alert",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "TC3",
+   "test": "dashboard = normal / improving",
+   "result": "PASS",
+   "detail": "{'state': 'normal', 'row': 'B0E2ETEST01\\nWCE2E2PK\\n\\t\\namazon Ledsone\\nAmazon UK\\n\\t\\n9\\n11 Oct → 17 Oct\\n\\t\\n6\\n04 Oct → 10 Oct\\n\\t\\n+50.0%\\nImproved\\n\\t\\nFine-tuned 28 Sept 2026\\nLive verified 29 Sept 2026\\nMonitoring from 04 Oct 2026\\nCurrent cycle #2\\n\\t\\n0\\n\\t\\nNo Duplicates Found\\nduplicate words removed: 9\\n\\t\\nNormal / improving\\n\\t\\nNot required', 'banner': '', 'section': \"12.\\nFull Optimization Review Monitoring\\n\\nEvery ASIN whose backend keyword fine-tuning is live verified is monito"
+  },
+  {
+   "case": "TC4a",
+   "test": "missing week: streak breaks, count restarts at 1 (not 2), NO alert",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "TC4b",
+   "test": "no-data cycle breaks the streak: next decline counts 1, NO alert",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "TC4b",
+   "test": "dashboard shows the no-data cycle (streak reset), not an alert",
+   "result": "PASS",
+   "detail": "{'state': 'nodata', 'row': 'B0E2ETEST01\\nWCE2E2PK\\n\\t\\n—\\nAmazon UK\\n\\t\\n—\\n11 Oct → 17 Oct\\n\\t\\n—\\n04 Oct → 10 Oct\\n\\t\\n—\\n—\\noutside top 50 · still monitored\\n\\t\\nFine-tuned 28 Sept 2026\\nLive verified 29 Sept 2026\\nMonitoring from 04 Oct 2026\\nCurrent cycle #2\\n\\t\\n0\\n\\t\\n—\\nduplicate words removed: 0\\n\\t\\nNo data this cycle (streak reset)\\n\\t\\nNot required', 'banner': '', 'section': \"12.\\nFull Optimization Review Monitoring\\n\\nEvery ASIN whose backend keyword fine-tuning is live verified is "
+  },
+  {
+   "case": "TC4c",
+   "test": "non-eligible down week + eligible down week -> count 1, NO alert",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "TC5",
+   "test": "week 3 and 4 down after the alert: NO repeat alert (streak closed), still exactly 1 e-mail",
+   "result": "PASS",
+   "detail": "(1, ['B0E2ETEST01|2026-10-11_2026-10-17'])"
+  },
+  {
+   "case": "TC5",
+   "test": "the ASIN stays monitored: weeks 3/4 recorded as 'awaiting manual Full Optimization', count 0",
+   "result": "PASS",
+   "detail": "('awaiting_full_optimization', 'awaiting_full_optimization')"
+  },
+  {
+   "case": "TC5",
+   "test": "dashboard shows 'Awaiting User Optimization' (with the sent alert), not a new alert",
+   "result": "PASS",
+   "detail": "{'state': 'awaiting', 'row': 'B0E2ETEST01\\nWCE2E2PK\\n\\t\\namazon Ledsone\\nAmazon UK\\n\\t\\n3\\n25 Oct → 31 Oct\\n\\t\\n4\\n18 Oct → 24 Oct\\n\\t\\n-25.0%\\nDecline\\n\\t\\nFine-tuned 28 Sept 2026\\nLive verified 29 Sept 2026\\nMonitoring from 04 Oct 2026\\nCurrent cycle #4\\n\\t\\n0\\n\\t\\nNo Duplicates Found\\nduplicate words removed: 9\\n\\t\\n⚠️ Alert sent · Awaiting User Optimization\\n\\t\\nSent\\n2026-09-29 16:03:58\\nGmail id fake-gmail-0001\\nalert cycle 2026-10-11_2026-10-17', 'banner': '⚠️ FULL OPTIMIZATION REVIEW REQ"
+  },
+  {
+   "case": "TC9",
+   "test": "Week 1 down -> count 1, no alert",
+   "result": "PASS",
+   "detail": "(1, 0)"
+  },
+  {
+   "case": "TC9",
+   "test": "Week 2 down -> count 2, Full Optimization alert",
+   "result": "PASS",
+   "detail": "(2, 1)"
+  },
+  {
+   "case": "TC9",
+   "test": "Full Optimization recorded against the week-2 alert",
+   "result": "PASS",
+   "detail": "{'asin': 'B0E2ETEST01', 'completed_on': '2026-10-21', 'alert_cycle_id': '2026-10-11_2026-10-17', 'recorded_by': 'E2E', 'note': None, 'recorded_at': '2026-10-21T10:00:00'}"
+  },
+  {
+   "case": "TC9",
+   "test": "Week 3 = new monitoring cycle (baseline after Full Optimization), count 0, decline not counted",
+   "result": "PASS",
+   "detail": "('baseline', 'optimized')"
+  },
+  {
+   "case": "TC9",
+   "test": "Week 4 down -> count 1, no alert (fresh streak after optimization)",
+   "result": "PASS",
+   "detail": "(1, 1)"
+  },
+  {
+   "case": "TC9",
+   "test": "Week 5 down -> count 2 -> NEW Full Optimization alert (new cycle key, 2nd e-mail)",
+   "result": "PASS",
+   "detail": "((2, 2), ['B0E2ETEST01|2026-10-11_2026-10-17', 'B0E2ETEST01|2026-11-01_2026-11-07'])"
+  },
+  {
+   "case": "TC9",
+   "test": "the ASIN stayed in weekly monitoring throughout (5 consecutive cycles recorded)",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "TC9",
+   "test": "dashboard after week 5 shows the new alert",
+   "result": "PASS",
+   "detail": "{'state': 'sent', 'row': 'B0E2ETEST01\\nWCE2E2PK\\n\\t\\namazon Ledsone\\nAmazon UK\\n\\t\\n2\\n01 Nov → 07 Nov\\n\\t\\n3\\n25 Oct → 31 Oct\\n\\t\\n-33.3%\\nDecline\\n\\t\\nFine-tuned 28 Sept 2026\\nLive verified 29 Sept 2026\\nMonitoring from 04 Oct 2026\\nClean-up live-verified 21 Oct 2026 (new baseline)\\nCurrent cycle #2\\n\\t\\n2\\n\\t\\nNo Duplicates Found\\nduplicate words removed: 9\\n\\t\\n⚠️ Full Optimization Review Required · Alert sent\\n\\t\\nSent\\n2026-09-29 16:03:59\\nGmail id fake-gmail-0002', 'banner': '⚠️ FULL OPTI"
+  },
+  {
+   "case": "TC10",
+   "test": "late optimization: awaiting weeks never alert; baseline week, then 2 new declines -> new alert",
+   "result": "PASS",
+   "detail": "(['open', 'alert', 'awaiting_full_optimization', 'awaiting_full_optimization', 'baseline', 'open', 'alert'], 2)"
+  },
+  {
+   "case": "TC11",
+   "test": "no open alert -> recording rejected",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "TC11",
+   "test": "future date rejected",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "TC11",
+   "test": "date before the end of the alert cycle rejected",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "TC11",
+   "test": "malformed date rejected",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "TC11",
+   "test": "same date recorded twice is idempotent (one record)",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "TC11",
+   "test": "a second, different date is rejected once the alert is resolved",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "TC11",
+   "test": "CLI without --date -> clean error, exit 2",
+   "result": "PASS",
+   "detail": "ERROR: --date YYYY-MM-DD is required with --record-optimization\n"
+  },
+  {
+   "case": "TC12",
+   "test": "failed alert is retried next run (same cycle key), and no extra alert for the awaiting week",
+   "result": "PASS",
+   "detail": "('FAILED', [{'asin': 'B0E2ETEST01', 'cycle_id': '2026-10-11_2026-10-17', 'sku': 'WCE2E2PK', 'consecutive_decline_count': 2, 'subject': '⚠️ Full Optimization Review Required – ASIN B0E2ETEST01 – 2 Consecutive 7D Performance Drops', 'recipients': ['apiramedigit@gmail.com', 'roshandigitweb@gmail.com'], 'alert_status': 'SENT', 'alert_sent_at': '2026-09-29T16:04:00', 'message_id': 'fake-gmail-0001', 'error': None, 'attempted_at': '2026-09-29T16:04:00', 'http_status': 200, 'this_run': 'SENT'}])"
+  },
+  {
+   "case": "TC6",
+   "test": "pending (not live-verified) change: no monitoring cycle starts, nothing tracked",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "TC6",
+   "test": "its declines do not count and no alert is sent",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "TC6",
+   "test": "after live verification, earlier/overlapping declines still do not count (count 0, no alert)",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "TC7",
+   "test": "outside the top 50: still monitored, decline counted (count 2) and alert sent",
+   "result": "PASS",
+   "detail": "{'cycle_id': '2026-10-11_2026-10-17', 'asin': 'B0E2ETEST01', 'sku': 'WCE2E2PK', 'account': 'amazon Ledsone', 'marketplace': 'Amazon UK', 'current_7d_start': '2026-10-11', 'current_7d_end': '2026-10-17', 'previous_7d_start': '2026-10-04', 'previous_7d_end': '2026-10-10', 'previous_orders': 6, 'current_orders': 4, 'order_change_pct': -33.3, 'previous_impressions': 1000, 'current_impressions': 950, 'impression_change_pct': -5.0, 'previous_clicks': 50, 'current_clicks': 45, 'ctr_change_pct': -5.3, '"
+  },
+  {
+   "case": "TC7",
+   "test": "dashboard keeps the ASIN and marks it 'outside top 50 · still monitored'",
+   "result": "PASS",
+   "detail": "{'state': 'sent', 'row': 'B0E2ETEST01\\nWCE2E2PK\\n\\t\\namazon Ledsone\\nAmazon UK\\n\\t\\n4\\n11 Oct → 17 Oct\\n\\t\\n6\\n04 Oct → 10 Oct\\n\\t\\n-33.3%\\nDecline\\noutside top 50 · still monitored\\n\\t\\nFine-tuned 28 Sept 2026\\nLive verified 29 Sept 2026\\nMonitoring from 04 Oct 2026\\nCurrent cycle #2\\n\\t\\n2\\n\\t\\nNo Duplicates Found\\nduplicate words removed: 9\\n\\t\\n⚠️ Full Optimization Review Required · Alert sent\\n\\t\\nSent\\n2026-09-29 16:04:00\\nGmail id fake-gmail-0001', 'banner': '⚠️ FULL OPTIMIZATION REVIEW R"
+  },
+  {
+   "case": "TC7",
+   "test": "ASIN already monitored in the ledger stays tracked even without a change record",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "TC7",
+   "test": "build: ASIN outside the top 50 keeps its live-verified change record (carried forward) and weekly metrics",
+   "result": "PASS",
+   "detail": "{'in_top50': False, 'change_record': [{'key': 'B0GXB7RGZK|WCBSF90FG2PK+RPR44WH2PK', 'asin': 'B0GXB7RGZK', 'sku': 'WCBSF90FG2PK+RPR44WH2PK', 'issue_detected': 'Conversion Drop', 'optimization_action': 'Removed duplicates', 'change_type': 'Backend Keyword Fine-Tuning', 'date_changed': '2026-09-28', 'status': 'Live-verified', 'carried_forward': True, 'submission': {'submission_id': '493f948b0dea4b4abbfa9699b1f04d1b', 'api_status': 'ACCEPTED', 'post_timestamp': '2026-09-28T17:21:47', 'post_date': '2"
+  },
+  {
+   "case": "TC8",
+   "test": "TEST e-mail record is separate (evidence/10_gmail_test_email.json, to apiramedigit only)",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "TC8",
+   "test": "production alert ledger has no TEST alert record",
+   "result": "PASS",
+   "detail": "{}"
+  },
+  {
+   "case": "TC8",
+   "test": "the alert logic never reads the TEST-mail record",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "TC8",
+   "test": "TEST e-mail does not change any consecutive-decline count or create an alert",
+   "result": "PASS",
+   "detail": "({'B0DH4KYFPD|2026-09-13_2026-09-19': 0, 'B0GXB7RGZK|2026-09-13_2026-09-19': 0}, {'B0DH4KYFPD|2026-09-13_2026-09-19': 0, 'B0GXB7RGZK|2026-09-13_2026-09-19': 0})"
+  },
+  {
+   "case": "TC8",
+   "test": "dashboard shows the TEST e-mail only as a separate note; no monitored ASIN in an alert state",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "ALL",
+   "test": "no JavaScript errors on any rendered dashboard",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "SAFETY",
+   "test": "production ledger, dataset, extract and TEST-mail record unchanged by the E2E run",
+   "result": "PASS",
+   "detail": "{'monitoring_cycles.json': True, 'report_dataset.json': True, 'extract.json': True, '10_gmail_test_email.json': True}"
+  }
+ ]
+}

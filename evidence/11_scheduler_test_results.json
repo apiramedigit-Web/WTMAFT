@@ -1,0 +1,80 @@
+{
+ "run_at": "2026-09-29T16:04:05",
+ "mode": "fake stage scripts in a temp folder",
+ "passed": 12,
+ "failed": 0,
+ "results": [
+  {
+   "id": "S1",
+   "test": "production order = extract -> weekly_keyword_check --apply -> build_dataset -> performance_alert --send -> render -> validate",
+   "result": "PASS",
+   "detail": "[('extract', ['scripts/extract.py']), ('weekly_keyword_check', ['scripts/optimization_cleanup.py', '--apply']), ('build_dataset', ['scripts/build_dataset.py']), ('performance_alert', ['scripts/performance_alert.py', '--send']), ('render', ['scripts/render.py']), ('validate', ['scripts/validate.py'])]"
+  },
+  {
+   "id": "S2",
+   "test": "--dry-run: keyword check without --apply (no POST) and alert without --send (no e-mail)",
+   "result": "PASS",
+   "detail": "[('extract', ['scripts/extract.py']), ('weekly_keyword_check', ['scripts/optimization_cleanup.py']), ('build_dataset', ['scripts/build_dataset.py']), ('performance_alert', ['scripts/performance_alert.py']), ('render', ['scripts/render.py']), ('validate', ['scripts/validate.py'])]"
+  },
+  {
+   "id": "S3",
+   "test": "no Amazon keyword-update / test-mail / publish script in the pipeline",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "S4",
+   "test": "all stages exit 0 -> SUCCESS, process exit 0, 5 logs",
+   "result": "PASS",
+   "detail": "(0, 'SUCCESS')"
+  },
+  {
+   "id": "S5",
+   "test": "stage 3 fails -> run FAILED at 'c', exit 1, later stages NOT RUN",
+   "result": "PASS",
+   "detail": "(1, [{'stage': 'a', 'command': 'python C:\\\\Users\\\\LED222~1\\\\AppData\\\\Local\\\\Temp\\\\tmpzl7cvoui\\\\ok.py', 'log': 'C:\\\\Users\\\\LED222~1\\\\AppData\\\\Local\\\\Temp\\\\tmpzl7cvoui\\\\logs\\\\20260929T160404_716092\\\\01_a.log', 'exit_code': 0, 'seconds': 0.0, 'status': 'OK', 'tail': 'stage ok'}, {'stage': 'b', 'command': 'python C:\\\\Users\\\\LED222~1\\\\AppData\\\\Local\\\\Temp\\\\tmpzl7cvoui\\\\ok.py', 'log': 'C:\\\\Users\\\\LED222"
+  },
+  {
+   "id": "S6",
+   "test": "stdout, stderr and exit code are in the stage log + error tail in the run record",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "S7",
+   "test": "first stage fails -> nothing else runs, FAILED",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "S8",
+   "test": "token / client-secret shaped output is redacted in logs and run record",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "S9",
+   "test": "an Amazon keyword-update script is refused (exit 2, not run)",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "S9b",
+   "test": "keyword_live_verify.py is only allowed in --pending-only (read-only weekly) mode",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "S10",
+   "test": "a second run while one is in progress is refused (lock)",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "S11",
+   "test": "run_history.log has one line per completed run with status",
+   "result": "PASS",
+   "detail": "['2026-09-29T16:04:04  production             SUCCESS  failed_stage=None  cycle=2026-09-13_2026-09-19  20260929T160404_371292', '2026-09-29T16:04:04  production             FAILED   failed_stage=c  cycle=2026-09-13_2026-09-19  20260929T160404_716092', '2026-09-29T16:04:05  production             FAILED   failed_stage=a  cycle=2026-09-13_2026-09-19  20260929T160405_024446', '2026-09-29T16:04:05  pr"
+  }
+ ]
+}

@@ -92,7 +92,10 @@ td.nowrap{white-space:nowrap}
 .cr-msg{font-size:12px;color:var(--bad);margin-top:4px}
 tr.is-dirty td{background:var(--warn-soft)}
 .sub2{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:11.5px;color:var(--muted);margin-top:2px;white-space:nowrap}
+.sub2.ph{white-space:normal;max-width:110px}
 .sub2.sub2-wrap{white-space:normal;min-width:160px;max-width:230px}
+.fo td .pill{white-space:normal}
+.fo-banner{border-left:3px solid var(--bad);background:var(--bad-soft);color:var(--bad);font-weight:650;padding:10px 12px;border-radius:0 8px 8px 0;margin:10px 0}
 @media (max-width:1199px){.tbl .sub2{white-space:normal;min-width:0;max-width:none}}
 /* Phones: tab strip swipes sideways (no visible scrollbar). */
 @media (max-width:760px){
@@ -142,7 +145,7 @@ footer{color:var(--muted);font-size:12px;margin-top:24px}
 <nav class="toc" aria-label="Sections">
   <a href="#s1">1. Purpose</a><a href="#s2">2. Summary</a><a href="#s3">3. ASIN Comparison</a><a href="#s4">4. Keyword Analysis</a>
   <a href="#s5">5. Keyword Changes</a><a href="#s6">6. Classification</a><a href="#s7">7. Change Record</a><a href="#s8">8. Monitoring</a>
-  <a href="#s9">9. Workflow</a><a href="#s10">10. Formulas</a><a href="#s11">11. Management</a><a href="#s12">Data notes</a>
+  <a href="#s9">9. Workflow</a><a href="#s10">10. Formulas</a><a href="#s11">11. Management</a><a href="#s13">12. Full Optimization</a><a href="#s12">Data notes</a>
 </nav>
 
 <section id="s1"><h2><span class="n">1.</span> Report Purpose</h2>
@@ -158,7 +161,7 @@ footer{color:var(--muted);font-size:12px;margin-top:24px}
 
 <section id="s3"><h2><span class="n">3.</span> ASIN Performance Comparison</h2>
   <p class="lead" id="s3lead"></p>
-  <div class="tools"><input type="search" id="q3" placeholder="Search ASIN or SKU" aria-label="Search ASIN or SKU">
+  <div class="tools"><input type="search" id="q3" placeholder="Search ASIN, SKU or PH" aria-label="Search ASIN, SKU or PH">
     <select id="f3" aria-label="Filter"><option value="drop">Performance drop only</option><option value="all">All top-moving ASINs</option></select>
     <span class="count" id="c3"></span></div>
   <div class="tbl"><table id="t3"></table></div>
@@ -183,7 +186,7 @@ footer{color:var(--muted);font-size:12px;margin-top:24px}
 </section>
 
 <section id="s7"><h2><span class="n">7.</span> Change Record</h2>
-  <p class="lead">When a backend keyword change has actually been made in Amazon, enter the real <b>Date Changed</b>, set <b>Status</b> to Monitoring and click <b>Save</b>. The saved date starts the 7-day monitoring in Section 8. Proposed records are never monitored.</p>
+  <p class="lead"><b>Live-verified</b> is set by the build only when the Listing Management Tool shows the proposed keywords; its Date Changed is the Amazon POST date. Records still showing the original keywords stay <b>Proposed</b> (POST Accepted — Live Verification Pending) with no Date Changed. To start the 7-day monitoring in Section 8, set a live-verified record's <b>Status</b> to Monitoring and click <b>Save</b>. Proposed and Live-verified records are not monitored.</p>
   <div class="callout" id="storeNote"></div>
   <div class="tools" id="t7tools">
     <button type="button" class="btn" id="crExport">Export saved records (JSON)</button>
@@ -210,6 +213,22 @@ footer{color:var(--muted);font-size:12px;margin-top:24px}
 <section id="s11"><h2><span class="n">11.</span> Management Summary</h2>
   <div class="tbl"><table id="t11"></table></div>
   <div class="callout" id="mgmtNote"></div>
+</section>
+
+<section id="s13"><h2><span class="n">12.</span> Full Optimization Review Monitoring</h2>
+  <p class="lead" id="s13lead"></p>
+  <div class="callout warn"><b>Full Optimization is MANUAL.</b> When an ASIN shows ⚠️ Full Optimization Review Required, the business team performs the Full Optimization. The automation will NOT modify the title, bullets, images, description, A+ content or any other visible listing content; it only monitors, e-mails the alert and records it.</div>
+  <div id="foBanner"></div>
+  <div class="mix" id="foMix"></div>
+  <h3 style="font-size:14px;margin:16px 0 8px">Latest monitoring cycle per ASIN</h3>
+  <div class="tools"><input type="search" id="q13" placeholder="Search ASIN or SKU" aria-label="Search ASIN or SKU"><span class="count" id="c13"></span></div>
+  <div class="tbl fo"><table id="t13"></table></div>
+  <h3 style="font-size:14px;margin:16px 0 8px">Weekly backend keyword check</h3>
+  <p class="lead">Scope: the report's 24 ASIN-SKU rows (26 listings), never all seller listings. Every Monday, each <b>due</b> listing (once per weekly cycle) gets a fresh GET of its <b>live backend keywords</b> - the source of truth - whether or not performance declined. Only duplicate words, repeated entries and whitespace are removed (every relevant word kept in order, nothing added). If the cleaned value differs from the live value it is POSTed once and live-verified; if it is already identical, nothing is sent and the row is Live Verified. A pending row is re-processed from a fresh GET each week. Every GET, POST attempt, verification and final live value is kept in the audit history.</p>
+  <div class="tbl fo"><table id="t13o"></table></div>
+  <h3 style="font-size:14px;margin:16px 0 8px">Cycle history</h3>
+  <div class="tbl fo"><table id="t13h"></table></div>
+  <p class="lead" style="margin-top:10px" id="s13test"></p>
 </section>
 
 <section id="s12"><h2>Data &amp; Evidence Notes</h2>
@@ -251,7 +270,9 @@ var dupRemoved = review.reduce(function(a,k){ return a + k.duplicate_words_remov
    Saved records live in this browser's localStorage (survives refresh / reopening the file).
    Records exported to data/change_records.json are embedded by the next build (D.saved_change_records);
    for the same key, the most recently saved version wins. */
-var STORE_KEY = "wtma.changeRecords.v1", STATUSES = ["Proposed","Monitoring","Completed"];
+var STORE_KEY = "wtma.changeRecords.v1", STATUSES = ["Proposed","Live-verified","Monitoring","Completed"];
+function isMonitored(status){ return status==="Monitoring" || status==="Completed"; }
+function isVerifiedSub(s){ return !!s && s.state==="UPDATED / VERIFIED"; }
 var storageOk = (function(){ try{ var k="__wtma_probe"; localStorage.setItem(k,"1"); localStorage.removeItem(k); return true; }catch(e){ return false; } })();
 function readStore(){ if(!storageOk) return {}; try{ return JSON.parse(localStorage.getItem(STORE_KEY)||"{}")||{}; }catch(e){ return {}; } }
 var records = {};
@@ -268,7 +289,7 @@ var AVAIL = {}; MD.available_dates.forEach(function(d){ AVAIL[d]=1; });
 function addDays(iso, n){ var d=new Date(iso+"T00:00:00Z"); d.setUTCDate(d.getUTCDate()+n); return d.toISOString().slice(0,10); }
 function todayIso(){ var d=new Date(); return new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())).toISOString().slice(0,10); }
 function monitor(rec){
-  if(!rec || rec.status==="Proposed" || !rec.date_changed) return {active:false};
+  if(!rec || !isMonitored(rec.status) || !rec.date_changed) return {active:false};
   var d0 = rec.date_changed, pre=[], post=[], i;
   for(i=7;i>=1;i--) pre.push(addDays(d0,-i));
   for(i=1;i<=7;i++) post.push(addDays(d0,i));
@@ -302,42 +323,59 @@ function allRows(){  /* Section 7 rows = this build's change records + any saved
 }
 function withRecord(c){
   var r = records[c.key], o = {}; for(var x in c){ o[x]=c[x]; }
-  o.status = r ? r.status : "Proposed"; o.date_changed = r ? (r.date_changed||null) : null; o.saved_at = r ? r.saved_at : null;
+  /* No saved record: the build's evidence-backed status applies (Live-verified or Proposed). */
+  o.status = r ? r.status : (c.status||"Proposed"); o.date_changed = r ? (r.date_changed||null) : (c.date_changed||null); o.saved_at = r ? r.saved_at : null;
   o.mon = monitor(o); return o;
 }
 function computeKPI(rows){
   var applied = rows.filter(function(r){ return r.status!=="Proposed"; }), mon = {};
   rows.forEach(function(r){ if(r.status==="Monitoring") mon[r.asin]=1; });
+  var subs = CR.filter(function(c){ return c.submission; });
   return { top_moving_reviewed: P.length, performance_drop: drops.length,
     keyword_review_required: Object.keys(reviewAsins).length, finetune_proposed: review.length,
     finetune_completed_verified: applied.length, visible_content_changed: 0,
     duplicate_words_removed: dupRemoved, under_monitoring: Object.keys(mon).length,
-    completed: rows.filter(function(r){ return r.status==="Completed"; }).length };
+    completed: rows.filter(function(r){ return r.status==="Completed"; }).length,
+    posts_accepted: subs.filter(function(c){ return c.submission.api_status==="ACCEPTED"; }).length,
+    live_verified: subs.filter(function(c){ return isVerifiedSub(c.submission); }).length,
+    live_verification_pending: subs.filter(function(c){ return c.submission.state==="POST_ACCEPTED_PENDING_SYNC"; }).length,
+    monitoring_rows: rows.filter(function(r){ return isMonitored(r.status) && r.date_changed; }).length };
+}
+var SYNC = M.sync_info;
+/* Read-only submission state for a Section 5 / 7 row (from evidence 06/07/09 Listing Management reads). */
+function subState(s){
+  if(!s) return null;
+  return isVerifiedSub(s) ? "Live-verified — monitoring not yet started" : "POST Accepted — Live Verification Pending";
 }
 var KPI = computeKPI(allRows());
 window.__REPORT_KPI__ = KPI;  /* exposed for the automated reconciliation check */
 
 document.getElementById("title").textContent = M.title;
-document.getElementById("subtitle").textContent = M.marketplace+" · "+M.accounts.join(" + ")+" · data extracted "+M.extracted_at.replace("T"," ");
+document.getElementById("subtitle").textContent = M.marketplace+" · PH "+M.ph_scope.name+" ("+M.ph_scope.categories.join(", ")+") · "+M.accounts.join(" + ")+" · data extracted "+M.extracted_at.replace("T"," ");
 var chips = [["Current 7D", range(M.current_7d)], ["Previous 7D", range(M.previous_7d)], ["Top-moving basis", range([M.baseline_weeks[0], M.previous_7d[1]])]];
 chips.forEach(function(c){ document.getElementById("metaChips").appendChild(el("span",{"class":"chip"},"<b>"+c[0]+":</b> "+c[1])); });
 
 function renderSummary(){
   var n = KPI.finetune_completed_verified;
-  document.getElementById("uploadCallout").innerHTML = "<b>Status of changes:</b> "+(n
-    ? n+" backend keyword change(s) confirmed by the user in Section 7 ("+KPI.under_monitoring+" ASIN(s) under monitoring, "+KPI.completed+" completed). All other fine-tuning actions remain <b>Proposed</b>."
-    : "no backend keyword change has been confirmed yet. Fine-tuning actions are <b>Proposed</b> until the user records the actual Date Changed in Section 7.")
-    +" Monitoring starts only from a user-saved Date Changed. Visible listing content (title, bullets, images, description) is not changed by this process.";
+  document.getElementById("uploadCallout").innerHTML = "<b>Status of changes:</b> "+(KPI.posts_accepted
+    ? "<b>"+KPI.posts_accepted+" Submitted</b> → <b>"+KPI.live_verified+" Live-verified</b> → <b>"+KPI.live_verification_pending+" Pending Live Verification</b>. "
+      +KPI.posts_accepted+" cleaned backend keyword fields were submitted to Amazon (all ACCEPTED). "+KPI.live_verified+" of "+KPI.posts_accepted+" now show the proposed keywords in the Listing Management Tool; the other "+KPI.live_verification_pending+" still show their original keywords and are not counted as changed."
+      +(SYNC ? " Last read-only check: "+esc(SYNC.last_checked.replace("T"," ").replace("Z"," UTC"))+"." : "")
+    : (n ? n+" backend keyword change(s) confirmed in Section 7. All other fine-tuning actions remain <b>Proposed</b>."
+         : "no backend keyword change has been confirmed yet. Fine-tuning actions are <b>Proposed</b> until the user records the actual Date Changed in Section 7."))
+    +" 7-day monitoring has not started: it starts only from a live-verified change with a user-saved Monitoring status. Visible listing content (title, bullets, images, description) is not changed by this process.";
   var cards = [
-    ["Top-Moving ASINs Reviewed", KPI.top_moving_reviewed, "Top "+M.top_moving_n+" of "+M.top_moving_candidates.toLocaleString("en-GB")+" UK ASINs with orders"],
+    ["Top-Moving ASINs Reviewed", KPI.top_moving_reviewed, "Top "+M.top_moving_n+" of "+M.top_moving_candidates.toLocaleString("en-GB")+" "+M.ph_scope.name+" UK ASINs with orders"],
     ["ASINs Showing Performance Drop", KPI.performance_drop, "Current 7D orders < Previous 7D orders"],
     ["ASINs Requiring Backend Keyword Review", KPI.keyword_review_required, "Drop ASINs with duplicate / repeated backend terms"],
-    ["Backend Keyword Fine-Tuning Completed", KPI.finetune_completed_verified, "Changes confirmed with a Date Changed (of "+KPI.finetune_proposed+" proposed)"],
+    ["Backend Keyword Fine-Tuning Completed", KPI.finetune_completed_verified, "Live-verified in Listing Management (of "+KPI.finetune_proposed+" proposed)"],
+    ["Backend Keyword POSTs Accepted", KPI.posts_accepted, "Accepted by Amazon · not the same as completed"],
+    ["Live Verification Pending", KPI.live_verification_pending, "POST accepted · still showing original keywords"],
     ["Visible Listing Content Changed", KPI.visible_content_changed, "No visible-content change made by this process"],
     ["Duplicate Keywords Removed", KPI.duplicate_words_removed, "Duplicate words removed from the proposed cleaned terms"],
-    ["ASINs Under Monitoring", KPI.under_monitoring, KPI.completed+" change(s) completed"],
-    ["Monitoring Period", "Next 7 Days", "D+1 → D+7 after the saved Date Changed", 1],
-    ["Next Review", "After 7 Days", "When all 7 post-change days are loaded", 1]
+    ["ASINs Under Monitoring", KPI.under_monitoring, KPI.monitoring_rows ? KPI.completed+" change(s) completed" : "Monitoring not started"],
+    ["Monitoring Period", "7 Days", "After live verification (D+1 → D+7)", 1],
+    ["Next Review", "After Verification", "After live verification + 7-day monitoring period", 1]
   ];
   var box = document.getElementById("kpis"); box.innerHTML = "";
   cards.forEach(function(c){
@@ -401,7 +439,7 @@ document.getElementById("s3lead").innerHTML = "Current 7D <b>"+range(M.current_7
 function sub(html){ return '<div class="sub2">'+html+"</div>"; }
 function chgWithBase(prevKey, currKey, f){ return function(v,row){ return fmtPct(v)+sub(f(row[prevKey])+" → "+f(row[currKey])); }; }
 var t3 = new Table("t3", [
-  {key:"asin",label:"ASIN",cls:"mono",fmt:function(v,row){ return esc(v)+sub("Rank #"+row.rank); }},
+  {key:"asin",label:"ASIN",cls:"mono",fmt:function(v,row){ return esc(v)+sub("Rank #"+row.rank)+'<div class="sub2 ph">PH: '+(row.ph_name ? esc(row.ph_name)+" · "+esc(row.ph_category) : "not mapped")+"</div>"; }},
   {key:"sku",label:"SKU",cls:"mono sku",fmt:function(v,row){ return fmtSku(v)+sub(esc(String(row.account||"").replace(/amazon /g,""))); }},
   {key:"prev_orders",label:"Previous 7D Orders",num:1,fmt:fmtInt}, {key:"curr_orders",label:"Current 7D Orders",num:1,fmt:fmtInt},
   {key:"order_chg",label:"Order Change %",num:1,fmt:fmtPct},
@@ -412,7 +450,7 @@ var t3 = new Table("t3", [
   {key:"issue_detected",label:"Issue Detected",fmt:function(v){return issuePill(v);}}
 ], P, {counter:"c3"});
 var f3 = document.getElementById("f3");
-var run3 = bindSearch("q3", t3, ["asin","sku"], function(r){ return f3.value==="all" || r.curr_orders < r.prev_orders; });
+var run3 = bindSearch("q3", t3, ["asin","sku","ph_name","ph_category"], function(r){ return f3.value==="all" || r.curr_orders < r.prev_orders; });
 f3.addEventListener("change", run3); run3();
 
 /* ---------- 4. Backend Keyword Analysis ---------- */
@@ -442,14 +480,20 @@ function kwCell(v,row){
 function finalStatus(k){
   if(!k.needs_change) return "No change required";
   var r = records[k.asin+"|"+k.sku];
-  return (r && r.status!=="Proposed" && r.date_changed) ? "Uploaded (user-confirmed "+fmtDate(r.date_changed)+")" : "Proposed – upload not confirmed";
+  if(r && r.status!=="Proposed" && r.date_changed) return "Uploaded (user-confirmed "+fmtDate(r.date_changed)+")";
+  var c = CR.filter(function(x){ return x.key===k.asin+"|"+k.sku; })[0];
+  return (c && subState(c.submission)) || "Proposed – upload not confirmed";
+}
+function statusPill(v){
+  var c = v.indexOf("Proposed")===0 ? "info" : (v.indexOf("POST Accepted")===0 ? "warn" : "good");
+  return '<span class="pill '+c+'">'+esc(v)+"</span>";
 }
 var K5 = K.map(function(k){ var o={}; for(var x in k){o[x]=k[x];} o.final_status = finalStatus(k); return o; });
 var t5 = new Table("t5", [
   {key:"asin",label:"ASIN",cls:"mono"}, {key:"sku",label:"SKU",cls:"mono sku",fmt:fmtSku},
   {key:"original",label:"Original Backend Keywords",cls:"kw",sort:false,fmt:kwCell},
   {key:"issue_found",label:"Issue"}, {key:"action_taken",label:"Fine-Tuning Action"},
-  {key:"final_status",label:"Final Status",fmt:function(v){ return '<span class="pill '+(v.indexOf("Proposed")===0?"info":"good")+'">'+esc(v)+"</span>"; }},
+  {key:"final_status",label:"Final Status",fmt:statusPill},
   {key:"original_word_count",label:"Words Before",num:1,fmt:fmtInt}, {key:"cleaned_word_count",label:"Words After",num:1,fmt:fmtInt}
 ], K5, {counter:"c5"});
 bindSearch("q5", t5, ["asin","sku","original"]);
@@ -458,9 +502,13 @@ bindSearch("q5", t5, ["asin","sku","original"]);
 function renderClassification(){
 var anyProposed = review.length>0, applied = KPI.finetune_completed_verified;
 new Table("t6", [{key:"t",label:"Change Type",sort:false},{key:"a",label:"Applied?",sort:false,fmt:function(v){
-    var c = v.indexOf("Yes")===0 ? "good" : (v.indexOf("Proposed")===0 ? "info" : ""); return '<span class="pill '+c+'">'+esc(v)+"</span>"; }},
+    var c = v.indexOf("Yes")===0 ? "good" : (v.indexOf("Proposed")===0 ? "info" : (v.indexOf("POST accepted")===0 ? "warn" : "")); return '<span class="pill '+c+'" style="white-space:normal">'+esc(v)+"</span>"; }},
   {key:"d",label:"Description",sort:false}], [
-  {t:"Backend Keyword Fine-Tuning", a: applied ? "Yes ("+applied+" user-confirmed)" : (anyProposed ? "Proposed (not yet confirmed)" : "No"), d:"Remove duplicate/repeated keywords and refine existing search terms"},
+  {t:"Backend Keyword Fine-Tuning", a: KPI.posts_accepted
+      ? "POST accepted ("+KPI.posts_accepted+") · "+KPI.live_verified+" live-verified · "+KPI.live_verification_pending+" pending live verification"
+      : (applied ? "Yes ("+applied+" user-confirmed)" : (anyProposed ? "Proposed (not yet confirmed)" : "No")),
+   d:"Backend search terms only: remove duplicate/repeated keywords and refine existing terms. "
+     +(KPI.posts_accepted ? KPI.posts_accepted+" POSTs accepted by Amazon, "+KPI.live_verified+" live-verified in Listing Management, "+KPI.live_verification_pending+" still pending live verification. Monitoring not started." : "")},
   {t:"Title Optimization", a:"No", d:"Title not changed by this process"},
   {t:"Bullet Optimization", a:"No", d:"Bullets not changed by this process"},
   {t:"Image Optimization", a:"No", d:"Images not changed by this process"},
@@ -475,7 +523,7 @@ new Table("t6", [{key:"t",label:"Change Type",sort:false},{key:"a",label:"Applie
 /* ---------- 7. Change Record (user-driven, persisted) ---------- */
 var drafts = {};   /* key -> {date, status} typed but not yet saved */
 var messages = {}; /* key -> {text, ok} last save result */
-function savedOf(row){ var r = records[row.key]; return {date: r ? (r.date_changed||"") : "", status: r ? r.status : "Proposed"}; }
+function savedOf(row){ var r = records[row.key]; return r ? {date: r.date_changed||"", status: r.status} : {date: row.date_changed||"", status: row.status||"Proposed"}; }
 function draftOf(row){ return drafts[row.key] || savedOf(row); }
 function isDirty(row){ var d = drafts[row.key], s = savedOf(row); return !!d && (d.date!==s.date || d.status!==s.status); }
 function monState(m, status){
@@ -491,10 +539,12 @@ function crDateCell(v, row){
 function crStatusCell(v, row){
   var d = draftOf(row), m = monitor({asin:row.asin, status:"Monitoring", date_changed:d.date||null});
   var opts = STATUSES.map(function(s){
-    var dis = (s==="Completed" && !(m.active && m.complete)) ? " disabled" : "";
-    return '<option value="'+s+'"'+(s===d.status?" selected":"")+dis+">"+s+(dis?" (after 7/7 days)":"")+"</option>"; }).join("");
+    var dis = (s==="Completed" && !(m.active && m.complete)) ? " (after 7/7 days)"
+            : (s==="Live-verified" && !isVerifiedSub(row.submission) ? " (needs Listing Management verification)" : "");
+    return '<option value="'+s+'"'+(s===d.status?" selected":"")+(dis?" disabled":"")+">"+s+dis+"</option>"; }).join("");
   var saved = savedOf(row), dirty = isDirty(row), msg = messages[row.key];
-  var info = saved.status==="Proposed" ? "Not monitored"
+  var info = saved.status==="Proposed" ? (row.submission ? "POST Accepted — Live Verification Pending · not monitored" : "Not monitored")
+           : saved.status==="Live-verified" ? "Status: Live-verified · Date Changed: "+fmtDate(saved.date)+" (POST date) · eligible to begin monitoring; monitoring not started"
            : "Status: "+saved.status+" · Change Date: "+fmtDate(saved.date)+" · "+monState(row.mon, saved.status);
   return '<div class="cr-edit"><select class="cr-status" data-key="'+esc(row.key)+'" aria-label="Status for '+esc(row.asin)+'">'+opts+'</select>'
     +'<button type="button" class="btn primary cr-save" data-key="'+esc(row.key)+'"'+(dirty?"":" disabled")+'>Save</button></div>'
@@ -509,10 +559,18 @@ function renderChangeRecord(){
     {key:"asin",label:"ASIN",cls:"mono",fmt:function(v,row){ return esc(v)+(row.carried_forward?sub("From an earlier report"):""); }},
     {key:"sku",label:"SKU",cls:"mono sku",fmt:fmtSku}, {key:"issue_detected",label:"Issue Detected"},
     {key:"optimization_action",label:"Optimization Action"}, {key:"change_type",label:"Change Type"},
+    {key:"submission",label:"Amazon Submission",sort:false,fmt:function(s){
+      if(!s) return '<span class="na">Not submitted</span>';
+      return statusPill(subState(s)).replace('class="pill','style="white-space:normal" class="pill')
+        +'<div class="sub2 sub2-wrap" style="overflow-wrap:anywhere">ID '+esc(s.submission_id)+"<br>"
+        +"POST "+(s.post_timestamp ? esc(s.post_timestamp.replace("T"," ")) : esc(s.post_date)+", time not recorded")
+        +(s.checked_at_utc ? "<br>"+(isVerifiedSub(s) ? "Verified" : "Last checked")+" "+esc(s.checked_at_utc.replace("T"," ").replace("Z"," UTC")) : "")+"</div>"; }},
     {key:"date_changed",label:"Date Changed",fmt:crDateCell},
     {key:"status",label:"Status",fmt:crStatusCell}
   ], rows, {empty:"No keyword changes proposed.", rowAttrs:function(r){ return {"data-key":r.key, "class":isDirty(r)?"is-dirty":""}; }});
-  document.getElementById("c7").textContent = rows.filter(function(r){ return r.status!=="Proposed"; }).length+" confirmed of "+rows.length+" records";
+  document.getElementById("c7").textContent = rows.length+" records · "+rows.filter(function(r){ return r.status==="Live-verified"; }).length+" live-verified · "
+    +rows.filter(function(r){ return r.status==="Proposed" && r.submission; }).length+" POST accepted, pending verification · "
+    +rows.filter(function(r){ return isMonitored(r.status); }).length+" monitoring/completed";
   document.getElementById("storeNote").innerHTML = storageOk
     ? "<b>Where saves are kept:</b> in this browser on this computer (browser storage for this report file). They survive refresh and reopening the file. To keep them in the next weekly build or move them to another computer, use <b>Export saved records</b> and place the file at <code>data/change_records.json</code>."
     : "<b>Browser storage is blocked</b> (private window or storage disabled), so saves cannot be kept here. Use <b>Import records</b> with an exported file, or open the report in a normal browser window.";
@@ -530,6 +588,8 @@ function refreshRow(key){  /* update one row in place so typing in other rows is
 function validateDraft(row, d){
   if(STATUSES.indexOf(d.status)<0) return "Choose a status.";
   if(d.status==="Proposed"){ return d.date ? "A Proposed change has no Date Changed. Set Status to Monitoring to record an applied change, or clear the date." : null; }
+  if(d.status==="Live-verified" && !isVerifiedSub(row.submission)) return "Live-verified is set only when the Listing Management Tool shows the proposed keywords.";
+  if(isMonitored(d.status) && row.submission && !isVerifiedSub(row.submission)) return "This POST is still pending live verification, so it cannot enter monitoring yet.";
   if(!d.date) return "Enter the actual Date Changed before setting Status to "+d.status+".";
   if(!/^\d{4}-\d{2}-\d{2}$/.test(d.date) || isNaN(Date.parse(d.date+"T00:00:00Z"))) return "Date Changed is not a valid date.";
   if(d.date > todayIso()) return "Date Changed cannot be in the future.";
@@ -585,8 +645,8 @@ document.getElementById("crImport").addEventListener("change", function(e){
 
 /* ---------- 8. 7-Day Monitoring Report (from saved Change Records) ---------- */
 function renderMonitoring(rows){
-  document.getElementById("s8lead").innerHTML = "One row per change saved as Monitoring or Completed in Section 7. For a saved Date Changed <b>D</b>: Pre-Change = <b>D−7 → D−1</b>, Post-Change = <b>D+1 → D+7</b>. Orders are ASIN-level daily Business Report orders (both accounts). Daily data in this build: "+fmtDate(MD.daily_from)+" → <b>"+fmtDate(MD.available_through)+"</b>.";
-  var mrows = rows.filter(function(r){ return r.status!=="Proposed" && r.date_changed; }).map(function(r){
+  document.getElementById("s8lead").innerHTML = "One row per live-verified change saved as Monitoring or Completed in Section 7. For a saved Date Changed <b>D</b>: Pre-Change = <b>D−7 → D−1</b>, Post-Change = <b>D+1 → D+7</b>. Orders are ASIN-level daily Business Report orders (both accounts). Daily data in this build: "+fmtDate(MD.daily_from)+" → <b>"+fmtDate(MD.available_through)+"</b>.";
+  var mrows = rows.filter(function(r){ return isMonitored(r.status) && r.date_changed; }).map(function(r){
     var m = r.mon; return {key:r.key, asin:r.asin, sku:r.sku, status:r.status, date_changed:r.date_changed, m:m,
       pre_orders:m.pre_orders, post_orders:m.post_orders, order_chg:m.order_chg,
       pre_impressions:m.pre_impressions, post_impressions:m.post_impressions, impression_chg:m.impression_chg,
@@ -605,7 +665,11 @@ function renderMonitoring(rows){
       var note = !r.m.complete ? (r.m.reason || "Post-change figures appear when all 7 days are loaded")
                : (r.status==="Completed" ? "Completed" : "7/7 days loaded · mark Completed in Section 7");
       return '<span class="pill '+c+'">'+esc(v)+'</span><div class="sub2 sub2-wrap">'+esc(note)+"</div>"; }}
-  ], mrows, {empty:"No confirmed keyword changes yet. Record the actual Date Changed in Section 7 (Status = Monitoring) to start monitoring."});
+  ], mrows, {empty: KPI.posts_accepted
+    ? "Monitoring has not started (0 monitoring rows). "+KPI.live_verified+" live-verified listing(s) are eligible to begin monitoring: "
+      +rows.filter(function(r){ return r.status==="Live-verified"; }).map(function(r){ return esc(r.asin)+" / "+esc(r.sku); }).join(", ")
+      +". The other "+KPI.live_verification_pending+" cannot enter monitoring until they are live-verified. Pre/Post-change figures stay “"+DASH+"” until a verified change has its 7 post-change days loaded."
+    : "No confirmed keyword changes yet. Record the actual Date Changed in Section 7 (Status = Monitoring) to start monitoring."});
 }
 
 /* ---------- 9. Weekly Workflow ---------- */
@@ -616,11 +680,13 @@ var ap = KPI.finetune_completed_verified;
  ["Compare","Compare current 7D vs previous 7D","Done",P.length+" ASINs compared"],
  ["Check Content","Confirm visible listing content is correct","Done","Amazon listing-issue feed checked"],
  ["Review Keywords","Identify duplicate/repeated backend terms","Done",K.length+" listing rows reviewed"],
- ["Fine-Tune","Remove unnecessary duplication","Proposed",review.length+" cleaned fields proposed"],
- ["Upload","Upload refined backend search terms", ap?"Done":"Pending", ap ? ap+" change(s) confirmed in Section 7" : "Confirm in Section 7"],
- ["Monitor","Track next 7-day performance", KPI.under_monitoring?"Proposed":(ap?"Done":"Pending"), KPI.under_monitoring+" ASIN(s) under monitoring"],
- ["Measure","Compare post-change results", KPI.completed?"Done":"Pending", KPI.completed+" change(s) completed"]].forEach(function(s,i){
-  var c = s[2]==="Done"?"good":(s[2]==="Proposed"?"info":"warn"), label = (i===6 && s[2]==="Proposed") ? "In progress" : s[2];
+ ["Fine-Tune","Remove unnecessary duplication", KPI.posts_accepted?"Done":"Proposed", review.length+" cleaned backend keyword fields prepared"],
+ ["Upload","Upload refined backend search terms", KPI.posts_accepted ? (KPI.live_verification_pending?"Proposed":"Done") : (ap?"Done":"Pending"),
+   KPI.posts_accepted ? KPI.posts_accepted+" Amazon POSTs accepted · Live verification: "+KPI.live_verified+"/"+KPI.posts_accepted+" verified · Pending: "+KPI.live_verification_pending+"/"+KPI.posts_accepted+" still pending"
+   : (ap ? ap+" change(s) confirmed in Section 7" : "Confirm in Section 7")],
+ ["Monitor","Track next 7-day performance", KPI.under_monitoring?"Proposed":(KPI.completed?"Done":"Pending"), KPI.monitoring_rows ? KPI.under_monitoring+" ASIN(s) under monitoring" : "Not started"+(KPI.live_verified ? " · "+KPI.live_verified+" live-verified eligible" : "")],
+ ["Measure","Compare post-change results", KPI.completed?"Done":"Pending", KPI.completed ? KPI.completed+" change(s) completed" : "Pending"]].forEach(function(s,i){
+  var c = s[2]==="Done"?"good":(s[2]==="Proposed"?"info":"warn"), label = ((i===6 || i===5) && s[2]==="Proposed") ? "In progress" : s[2];
   box.appendChild(el("div",{"class":"step"},
     '<div class="k">Step '+(i+1)+'</div><div class="t">'+s[0]+'</div><div class="o">'+s[1]+'</div><span class="pill '+c+'">'+label+'</span> <span class="k">'+esc(s[3])+"</span>"));
 });
@@ -640,15 +706,18 @@ new Table("t10", [{key:"k",label:"KPI",sort:false},{key:"f",label:"Formula",sort
 /* ---------- 11. Management Summary ---------- */
 function renderManagement(){
 new Table("t11", [{key:"a",label:"Area",sort:false},{key:"s",label:"Summary",sort:false}], [
-  {a:"Problem Identified", s: KPI.performance_drop+" of "+KPI.top_moving_reviewed+" top-moving UK ASINs had fewer orders in "+range(M.current_7d)+" than in "+range(M.previous_7d)+"."},
+  {a:"Problem Identified", s: KPI.performance_drop+" of "+KPI.top_moving_reviewed+" top-moving "+M.ph_scope.name+" UK ASINs had fewer orders in "+range(M.current_7d)+" than in "+range(M.previous_7d)+"."},
   {a:"Listing Content", s:"Amazon listing-issue feed checked for each drop ASIN. Visible content is not changed by this task."},
   {a:"Main Action", s:"Backend keyword review and fine-tuning"},
   {a:"Keyword Action", s:"Duplicate/repeated words removed from "+KPI.finetune_proposed+" backend keyword field(s), "+KPI.duplicate_words_removed+" duplicate words in total. All unique words kept."},
   {a:"Visible Content Changes", s:"None"},
   {a:"Change Level", s:"Minor / Fine-Tuning"},
-  {a:"Monitoring Period", s:"7 Days: D+1 → D+7 after the user-saved Date Changed (baseline D−7 → D−1)"},
+  {a:"Monitoring Period", s:"7 Days after live verification: D+1 → D+7 after the Date Changed (baseline D−7 → D−1)"},
   {a:"Success Measurement", s:"Compare post-change performance against the Pre-Change 7-day baseline"},
-  {a:"Current Status", s: KPI.finetune_completed_verified+" of "+KPI.finetune_proposed+" proposed changes confirmed by the user · "+KPI.under_monitoring+" ASIN(s) under monitoring · "+KPI.completed+" completed."}
+  {a:"Current Status", s: KPI.posts_accepted
+    ? KPI.posts_accepted+" cleaned backend keyword fields were submitted to Amazon. "+KPI.live_verified+" of "+KPI.posts_accepted+" have been live-verified in the Listing Management Tool. The remaining "+KPI.live_verification_pending+" still show their original backend keywords and remain pending live verification. No visible listing content was changed. "
+      +(KPI.monitoring_rows ? KPI.under_monitoring+" ASIN(s) are under 7-day monitoring." : "7-day monitoring has not started.")
+    : KPI.finetune_proposed+" changes proposed · "+KPI.finetune_completed_verified+" completed · "+KPI.under_monitoring+" ASIN(s) under monitoring."}
 ]);
 }
 document.getElementById("mgmtNote").innerHTML = "<b>Management Note.</b> The objective is to recover potential search performance without unnecessarily changing a correctly optimized listing. When a sudden decline is detected, the existing backend search terms are reviewed and cleaned by removing duplicate or unnecessary words. The refined keywords are uploaded, and the ASIN is monitored for the following 7 days to measure the impact of the fine-tuning.";
@@ -660,16 +729,20 @@ list("srcNotes", [
   "Impressions / Clicks: <code>business_reports.amz_catalog_performance_data</code> (<code>impression_count</code>, <code>click_count</code>), weekly Sunday–Saturday rows, one row per ASIN-week (verified).",
   "SKU / listing rows: <code>listings.amazon_listings</code> (UK, not ended, prefer child rows and <code>wrong_sku=0</code>).",
   "Backend keywords: <code>listings.amazon_listing_search_engine_keywords</code> (joined on <code>product_id = amazon_listings.id</code>, ordered by <code>view_order</code>).",
-  "Content Status: <code>listings.amazon_listing_issues</code> (UK marketplace A1F83G8C2ARO7P)."
+  "Content Status: <code>listings.amazon_listing_issues</code> (UK marketplace A1F83G8C2ARO7P).",
+  "Live verification: the Listing Management Tool's own read API (<code>GET /api/get-all-active-listings-data</code>, field <code>amz_platinum_keywords</code>), one listing per paced GET. Evidence: <code>evidence/07_live_keyword_verification</code> (all "+KPI.posts_accepted+" submissions) and <code>evidence/09_remaining_20_live_verification</code> (the pending re-check). PostgreSQL (<code>listings.*</code>) is the mirror/audit source only."
 ]);
 list("ruleNotes", [
-  "<b>Top-moving (derived):</b> top "+M.top_moving_n+" UK ASINs by total orders over "+range([M.baseline_weeks[0], M.previous_7d[1]])+" (the "+M.baseline_weeks.length+" weeks before Current 7D). No documented Amazon top-moving rule exists. The “50” is from the requirement's example.",
+  "<b>Top-moving (derived):</b> top "+M.top_moving_n+" UK ASINs of PH "+M.ph_scope.name+" (staff.ph_category_products; other PHs excluded) by total orders over "+range([M.baseline_weeks[0], M.previous_7d[1]])+" (the "+M.baseline_weeks.length+" weeks before Current 7D). No documented Amazon top-moving rule exists. The “50” is from the requirement's example.",
   "<b>Performance drop:</b> Current 7D Orders &lt; Previous 7D Orders (no invented threshold). All "+M.drop_sensitivity["order_change_lt_0"]+" drops are also ≤ −10%, so the result does not change under the existing WLPAF (−10%) or Before/After (−5%) conventions.",
   "<b>Issue Detected (derived):</b> “Overall Performance Drop” when Impression, CTR and CVR all fell. Otherwise the most negative of Impression / CTR / CVR change (Orders = Impressions × CTR × CVR).",
   "<b>Keyword fine-tuning:</b> remove a word already used earlier in the same field (case-insensitive) and whole repeated entries. Everything else is kept in original order. No stop-word, byte-limit or relevance pruning (no documented rule)."
 ]);
 list("limNotes", [
-  "No backend-keyword upload / change log is readable (<code>listing_generator.*</code>, <code>staging_ai.*</code> deny access), so Date Changed and Status come only from what the user saves in Section 7. They are not verified against Amazon.",
+  "No backend-keyword upload / change log is readable (<code>listing_generator.*</code>, <code>staging_ai.*</code> deny access). Status is Live-verified only when the Listing Management Tool shows the proposed keywords, and Date Changed is then the Amazon POST date (2026-09-28). Monitoring / Completed come only from what the user saves in Section 7.",
+  "<b>Latest verification (2026-09-29):</b> the "+KPI.live_verification_pending+" pending listings were re-checked at about 03:41–03:43 UTC. All were found, all identity checks passed (ASIN, SKU, account, UK site), 0 mismatches, 0 not found, 0 verification failures, and all still show their original backend keywords. The "+KPI.live_verified+" live-verified listings (B0DH4KYFPD, B0GXB7RGZK) show the proposed keywords. No POSTs were sent and no sync was triggered during verification.",
+  "<b>Status rule:</b> a listing-status representation change (<code>BUYABLE</code> → <code>Active</code>, seen on B0DH4KYFPD, B0GXB7RGZK and B0C43N2F3D after the 29 Sep refresh) with matching identity and <code>is_ended = 0</code> is recorded as an observation, not a keyword-update failure.",
+  "<b>PostgreSQL mirror:</b> the ledsone mirror lags the Listing Management Tool. At 03:31 UTC on 29 Sep it still held the original keywords for all "+KPI.posts_accepted+" listings; by the 03:45–03:48 UTC check it held the proposed keywords for the "+KPI.live_verified+" verified listings and still the original keywords for the "+KPI.live_verification_pending+" pending ones. Mirror lag is not treated as a failed update.",
   "Saved Change Records are kept in this browser's storage for this report file. They are not shared with other people or computers. Clearing browser data removes them. Export them to <code>data/change_records.json</code> to keep them in the next weekly build.",
   "Pre/Post-Change Impressions cannot be calculated: Amazon impressions exist only as Sunday–Saturday weekly totals, and D−7→D−1 / D+1→D+7 never both align with those weeks. They are shown as “"+DASH+"”, not estimated.",
   "Monitoring days count only after Amazon Business Report data is loaded for both accounts (usually 1–2 days behind). Amazon can revise recent days afterwards.",
@@ -706,6 +779,147 @@ window.__showTab__ = showTab;
 var startId = (location.hash||"").replace(/^#(view-)?/, "");
 showTab(document.getElementById("tab-"+startId) ? startId : "s1", false);
 
+/* ---------- 12. Full Optimization Review Monitoring (ledger from performance_alert.py) ---------- */
+var AM = D.alert_monitoring || {cycles:[], alerts:[], test_email:null};
+function alertOf(c){ var id = c.streak_status==="awaiting_full_optimization" ? c.alert_cycle_id : c.cycle_id;
+  for(var i=0;i<AM.alerts.length;i++){ var x=AM.alerts[i]; if(x.asin===c.asin && x.cycle_id===id) return x; } return null; }
+/* Display only: the rule is applied by performance_alert.py. An alert is raised on the cycle where a
+   streak reaches 2 consecutive eligible declines (Current 7D Orders < Previous 7D Orders); the streak
+   then closes (no weekly repeats) until the team records the completed Full Optimization, which
+   starts a new baseline; 2 new consecutive declines after it raise a new alert. */
+function optFor(c){  /* the Full Optimization record that answers this ASIN's latest alert (if any) */
+  var os = (AM.optimizations||[]).filter(function(o){ return o.asin===c.asin; });
+  return os.length ? os[os.length-1] : null;
+}
+function nextSunday(iso){ var d=new Date(iso+"T00:00:00Z"), add=(7-d.getUTCDay())%7||7; d.setUTCDate(d.getUTCDate()+add); return d.toISOString().slice(0,10); }
+function foState(c){
+  var a = alertOf(c), n = c.consecutive_decline_count || 0, st = c.streak_status;
+  if(st==="alert" || st==="awaiting_full_optimization"){
+    var alertEnd = (st==="alert" ? c.current_7d_end : (c.alert_cycle_id||"").slice(11));
+    var o = optFor(c), kc = o && o.keyword_cleanup;
+    if(o && o.completed_on >= alertEnd){        /* the team answered this alert: show the clean-up progress */
+      var failed = kc && /Failed/.test(kc.status);
+      return {k: failed ? "cleanup_failed" : "cleanup", cls: failed ? "bad" : "warn",
+        label:"User Optimization Completed ("+fmtDate(o.completed_on)+") · "+((kc && kc.status) || "User Optimization Completed")};
+    }
+    if(st==="alert") return a && a.alert_status==="SENT"
+      ? {k:"sent", cls:"info", label:"⚠️ Full Optimization Review Required · Alert sent"}
+      : {k:"required", cls:"bad", label:"⚠️ Full Optimization Review Required"};
+    return {k:"awaiting", cls:"bad", label:"⚠️ Alert "+(a && a.alert_status==="SENT" ? "sent" : "pending")+" · Awaiting User Optimization"};
+  }
+  if(st==="baseline" && c.baseline_type==="Full Optimization") return {k:"optimized", cls:"good",
+    label:"Monitoring Active · new cycle after clean-up live-verified "+fmtDate(c.last_full_optimization_date)};
+  if(!c.eligible_after_live_verification) return {k:"waiting", cls:"", label:"Awaiting first eligible cycle"};
+  if(c.performance_drop===null || c.performance_drop===undefined) return {k:"nodata", cls:"", label:"No data this cycle (streak reset)"};
+  if(n === 1) return {k:"one", cls:"warn", label:"One consecutive decline (no alert)"};
+  return {k:"normal", cls:"good", label:"Normal / improving"};
+}
+function perfStatus(c){
+  if(c.performance_drop===true) return '<span class="pill bad">Decline</span>';
+  if(c.performance_drop===false) return '<span class="pill good">'+(c.current_orders>c.previous_orders ? "Improved" : "Stable")+'</span>';
+  return '<span class="na">'+DASH+'</span>';
+}
+function alertCell(c){
+  var a = alertOf(c);
+  if(!a) return c.streak_status==="alert" || c.streak_status==="awaiting_full_optimization" ? '<span class="pill warn">Pending</span>' : '<span class="pill">Not required</span>';
+  var ref = c.streak_status==="awaiting_full_optimization" ? sub("alert cycle "+esc(c.alert_cycle_id)) : "";
+  if(a.alert_status==="SENT") return '<span class="pill info">Sent</span>'+sub(esc(a.alert_sent_at ? a.alert_sent_at.replace("T"," ") : ""))+sub("Gmail id "+esc(a.message_id||DASH))+ref;
+  if(a.alert_status==="FAILED") return '<span class="pill bad">Failed</span>'+sub("retried next run")+ref;
+  return '<span class="pill warn">'+esc(a.alert_status)+'</span>'+ref;
+}
+function fmtDM(s){ return new Date(s+"T00:00:00Z").toLocaleDateString("en-GB",{day:"2-digit",month:"short",timeZone:"UTC"}); }
+function renderAlertMonitoring(){
+  var latest = {};
+  AM.cycles.forEach(function(c){ if(!latest[c.asin] || c.cycle_id > latest[c.asin].cycle_id) latest[c.asin] = c; });
+  var rows = Object.keys(latest).sort().map(function(k){ var c = latest[k], st = foState(c);
+    return Object.assign({}, c, {state:st.label, state_k:st.k, state_cls:st.cls}); });
+  document.getElementById("s13lead").innerHTML = "Every ASIN whose backend keyword fine-tuning is <b>live verified</b> is monitored each 7-day cycle, "
+    +"including after it leaves the top 50. A cycle counts only if its Current 7D window starts <b>after</b> the latest live verification. "
+    +"<b>One</b> declining cycle (Current 7D Orders &lt; Previous 7D Orders) never raises an alert; <b>two consecutive</b> declining eligible cycles raise "
+    +"⚠️ Full Optimization Review Required and one e-mail to both recipients. The streak then <b>closes</b>: no weekly repeat alerts. The ASIN stays monitored "
+    +"and shows <i>awaiting manual Full Optimization</i> until the team records the completed optimization; that date starts a <b>new baseline</b> "
+    +"(count 0), and two new consecutive declines after it raise a new alert. An improving cycle resets the count to 0; a missing or no-data cycle breaks "
+    +"the streak. Submitted but not yet live-verified changes are not monitored.";
+  var req = rows.filter(function(r){ return r.state_k==="required" || r.state_k==="sent" || r.state_k==="awaiting" || r.state_k==="cleanup_failed"; });
+  document.getElementById("foBanner").innerHTML = req.length ? '<div class="fo-banner">⚠️ FULL OPTIMIZATION REVIEW REQUIRED: '+req.map(function(r){ return esc(r.asin)+(r.state_k==="required" ? " (alert pending)" : r.state_k==="cleanup_failed" ? " (weekly keyword check failed: retry with --retry-keyword-cleanup)" : r.state_k==="cleanup" ? " (optimization recorded: awaiting the next weekly keyword check)" : " (alert sent, awaiting user optimization)"); }).join(", ")
+    +" · Full Optimization is manual. When done, record it: <code>python scripts/performance_alert.py --record-optimization ASIN --date YYYY-MM-DD</code></div>" : "";
+  var order = [["normal","good","Normal / improving"],["one","warn","One consecutive decline"],["required","bad","⚠️ Full Optimization Review Required"],["sent","info","Alert sent"],["awaiting","bad","Awaiting User Optimization"],["cleanup","warn","Keyword clean-up in progress"],["cleanup_failed","bad","Update / Verification Failed"],["optimized","good","New cycle after clean-up live-verified"],["waiting","","Awaiting first eligible cycle"],["nodata","","No data this cycle"]];
+  var mix = document.getElementById("foMix"); mix.innerHTML = "";
+  order.forEach(function(o){ var n = rows.filter(function(r){ return r.state_k===o[0]; }).length;
+    mix.appendChild(el("span",{"class":"pill "+o[1],"data-state":o[0]}, esc(o[2])+": "+n)); });
+  var t = new Table("t13", [
+    {key:"asin",label:"ASIN / SKU",cls:"mono",fmt:function(v,r){ return esc(v)+sub(esc(r.sku||DASH)); }},
+    {key:"account",label:"Amazon Account",fmt:function(v,r){ return esc(v||DASH)+sub(esc(r.marketplace||DASH)); }},
+    {key:"current_orders",label:"Current 7D Orders",num:1,fmt:function(v,r){ return fmtInt(v)+sub(fmtDM(r.current_7d_start)+" → "+fmtDM(r.current_7d_end)); }},
+    {key:"previous_orders",label:"Previous 7D Orders",num:1,fmt:function(v,r){ return fmtInt(v)+sub(fmtDM(r.previous_7d_start)+" → "+fmtDM(r.previous_7d_end)); }},
+    {key:"order_change_pct",label:"Order Change %",num:1,fmt:function(v,r){ return fmtPct(v)+'<div class="sub2">'+perfStatus(r)+"</div>"+(r.in_top_moving===false ? sub("outside top 50 · still monitored") : ""); }},
+    {key:"monitoring_start_date",label:"Fine-Tuning & Monitoring",fmt:function(v,r){
+      return '<div class="sub2 sub2-wrap" style="margin-top:0;min-width:130px">Fine-tuned '+(r.last_fine_tuning_date?fmtDate(r.last_fine_tuning_date):DASH)
+        +"<br>Live verified "+(r.last_live_verification_date?fmtDate(r.last_live_verification_date):DASH)
+        +"<br>Monitoring from "+(v?fmtDate(v):DASH)
+        +(r.last_full_optimization_date ? "<br><b>Clean-up live-verified "+fmtDate(r.last_full_optimization_date)+"</b> (new baseline)" : "")
+        +"<br>"+(r.monitoring_cycle_number ? "Current cycle #"+r.monitoring_cycle_number : "Latest cycle not yet eligible")+"</div>"; }},
+    {key:"consecutive_decline_count",label:"Consecutive Declines",num:1,fmt:function(v){ return fmtInt(v||0); }},
+    {key:"backend_keyword_status",label:"Keyword Status",fmt:function(v,r){ return '<span class="pill">'+esc(v||DASH)+"</span>"+sub("duplicate words removed: "+(r.duplicate_words_removed==null?DASH:r.duplicate_words_removed)); }},
+    {key:"state",label:"Full Optimization Review",fmt:function(v,r){ return '<span class="pill '+r.state_cls+'" data-state="'+r.state_k+'">'+esc(v)+"</span>"; }},
+    {key:"alert",label:"Alert Status",sort:false,fmt:function(v,r){ return alertCell(r); }}
+  ], rows, {counter:"c13", empty:"No live-verified fine-tuning yet: nothing is being monitored.", rowAttrs:function(r){ return {"data-asin":r.asin,"data-state":r.state_k}; }});
+  bindSearch("q13", t, ["asin","sku"]);
+  var KR = AM.keyword_rows || {}, orows = [];
+  Object.keys(KR).sort().forEach(function(k){
+    var r = KR[k], h = (r.history||[]).filter(function(e){ return e.event==="weekly check"; }), last = h.length ? h[h.length-1] : (r.last_dry_run||null);
+    var posts = (r.history||[]).filter(function(e){ return e.action==="POST" || e.event==="original submission"; });
+    var os = (AM.optimizations||[]).filter(function(o){ return o.asin===r.asin; });
+    orows.push(Object.assign({}, last||{}, {asin:r.asin, sku:r.sku, account:r.account, row:r, last:last, posts:posts,
+      opt: os.length ? os[os.length-1] : null, row_status: r.status, state_key: r.status}));
+  });
+  var cyclesBy = {}; rows.forEach(function(r){ cyclesBy[r.asin] = r; });
+  function meta(m){ return m ? (m.entries!=null ? m.entries+" entr. · " : "")+m.words+" words · "+m.bytes+" bytes" : DASH; }
+  function stCls(s){ return /Failed/.test(s||"") ? "bad" : (s==="Live Verified" ? "good" : "warn"); }
+  new Table("t13o", [
+    {key:"asin",label:"ASIN / SKU",cls:"mono",fmt:function(v,r){ return esc(v)+'<div class="sub2 sub2-wrap" style="min-width:0;max-width:170px">'+esc(r.sku||DASH)+" · "+esc(r.account||"")+"</div>"; }},
+    {key:"row_status",label:"Status / Weekly Check",fmt:function(v,r){
+      var h = r.last ? "checked "+esc((r.last.at||"").replace("T"," "))+(r.last.mode==="dry_run" ? " (dry run)" : "") : "not checked yet";
+      var o = r.opt ? '<div class="sub2 sub2-wrap">Full Optimization '+fmtDate(r.opt.completed_on)+": "+esc((r.opt.keyword_cleanup||{}).status||"User Optimization Completed")+"</div>" : "";
+      return '<span class="pill '+stCls(v)+'">'+esc(v)+'</span><div class="sub2 sub2-wrap">'+h+" · next due "+(r.row.next_due ? fmtDate(r.row.next_due) : "next run")+"</div>"+o
+        +(r.detail ? '<div class="sub2 sub2-wrap">'+esc(r.detail)+"</div>" : ""); }},
+    {key:"live_before",label:"Latest Live Backend Keywords",sort:false,fmt:function(v){ return v ? '<div class="sub2 sub2-wrap" style="margin-top:0;color:var(--text)">'+esc(v)+"</div>" : '<span class="na">'+DASH+'</span>'; }},
+    {key:"duplicate_issue",label:"Duplicates · Live → Cleaned",fmt:function(v,r){ if(v==null) return '<span class="na">'+DASH+'</span>';
+      return (v ? '<span class="pill warn">Yes</span>' : '<span class="pill good">No</span>')
+        +'<div class="sub2 sub2-wrap">'+(r.removed_words||[]).length+" word(s), "+(r.repeated_entries||[]).length+" repeated entr.</div>"
+        +((r.removed_words||[]).length ? '<div class="sub2 sub2-wrap">removed: '+esc(r.removed_words.join(" "))+"</div>" : "")
+        +'<div class="sub2 sub2-wrap">'+meta(r.original_meta)+" → "+meta(r.cleaned_meta)+"</div>"
+        +((r.warnings||[]).map(function(w){ return '<div class="sub2 sub2-wrap" style="color:var(--warn)">⚠ '+esc(w)+"</div>"; }).join("")); }},
+    {key:"action",label:"POST Attempts",fmt:function(v,r){
+      var lastPost = r.posts.length ? r.posts[r.posts.length-1] : null;
+      return esc(String(r.row.post_attempts||0))+" attempt(s)"+(lastPost ? '<div class="sub2 sub2-wrap">last '+esc((lastPost.at||"").replace("T"," "))+(lastPost.submission_id ? " · "+esc(lastPost.submission_id) : "")+(lastPost.post_http ? " · HTTP "+lastPost.post_http : "")+"</div>" : "")
+        +(r.last ? '<div class="sub2 sub2-wrap">this check: '+esc(r.last.action||DASH)+"</div>" : ""); }},
+    {key:"verified_at",label:"Live Verification · Monitoring",fmt:function(v,r){
+      var f = r.row.first_verified_at, l = r.row.last_verified_at, b = r.opt && r.opt.monitoring_baseline_date, cur = cyclesBy[r.asin];
+      return (f ? '<span class="pill good">Live Verified</span><div class="sub2 sub2-wrap">first '+esc(f.replace("T"," "))+(l && l!==f ? " · last "+esc(l.replace("T"," ")) : "")+"</div>"
+                : (/Pending/.test(r.row_status) ? '<span class="pill warn">Live Verification Pending</span>' : '<span class="na">'+DASH+'</span>'))
+        +(r.last && r.last.live_after ? '<div class="sub2 sub2-wrap">final live: '+esc(r.last.live_after)+"</div>" : "")
+        +'<div class="sub2 sub2-wrap">'+(b ? "New 7-day cycle from "+fmtDate(nextSunday(b)) : (f ? "Monitoring from "+fmtDate(nextSunday(f.slice(0,10))) : "Monitoring starts after live verification"))
+        +(cur ? " · "+esc(cur.state) : "")+"</div>"; }}
+  ], orows, {empty:"No report rows in the weekly keyword scope yet.",
+             rowAttrs:function(r){ return {"data-asin":r.asin,"data-cleanup":r.sku,"data-status":r.row_status}; }});
+  var hist = AM.cycles.map(function(c){ return Object.assign({}, c, {state:foState(c).label}); });
+  new Table("t13h", [
+    {key:"asin",label:"ASIN",cls:"mono"},
+    {key:"cycle_id",label:"Cycle (Current 7D)",fmt:function(v,r){ return range([r.current_7d_start,r.current_7d_end]); }},
+    {key:"current_orders",label:"Orders (Cur / Prev)",num:1,fmt:function(v,r){ return fmtInt(r.current_orders)+" / "+fmtInt(r.previous_orders); }},
+    {key:"performance_drop",label:"Performance Status",fmt:function(v,r){ return perfStatus(r); }},
+    {key:"eligible_after_live_verification",label:"Eligible",fmt:function(v,r){ return v ? (r.streak_status==="awaiting_full_optimization" ? "Yes (streak closed, not counted)" : "Yes")
+      : (r.baseline_type==="Full Optimization" ? "No (baseline week: clean-up live-verified "+fmtDate(r.last_full_optimization_date)+")" : "No (starts before/at live verification)"); }},
+    {key:"consecutive_decline_count",label:"Consecutive Declines",num:1,fmt:function(v){ return fmtInt(v||0); }},
+    {key:"state",label:"State",fmt:function(v){ return esc(v); }}
+  ], hist, {empty:"No monitoring cycles recorded yet."});
+  var te = AM.test_email;
+  document.getElementById("s13test").innerHTML = te ? "A separate delivery <b>TEST</b> e-mail was sent "+esc((te.sent_at||"").replace("T"," "))+" to "+esc((te.to||[]).join(", "))
+    +" (Gmail id "+esc(te.gmail_message_id||DASH)+"). It is not a production alert: it is not in the alert ledger and does not affect any count." : "";
+}
+renderAlertMonitoring();
+
 /* ---------- Everything that depends on saved Change Records ---------- */
 function renderDynamic(){
   var rows = allRows();
@@ -713,7 +927,7 @@ function renderDynamic(){
   renderSummary(); renderClassification(); renderChangeRecord(); renderMonitoring(rows); renderWorkflow(); renderManagement();
   K5.forEach(function(k){ k.final_status = finalStatus(k); }); t5.render();
   document.getElementById("foot").textContent = "Generated from report_dataset.json · "+P.length+" performance rows · "+K.length+" keyword rows · "
-    +rows.length+" change records · "+rows.filter(function(r){ return r.status!=="Proposed"; }).length+" monitoring rows. Standalone file: no network requests.";
+    +rows.length+" change records · "+KPI.monitoring_rows+" monitoring rows. Standalone file: no network requests.";
 }
 renderDynamic();
 })();

@@ -1,0 +1,98 @@
+{
+ "run_at": "2026-09-29T16:04:03",
+ "mode": "fake DB/Listing Management reads, temp evidence copies; read-only path",
+ "passed": 15,
+ "failed": 0,
+ "results": [
+  {
+   "id": "P1",
+   "test": "already-verified submission is kept as is and NOT re-read",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "P2",
+   "test": "pending whose live keywords now = proposed payload -> UPDATED / VERIFIED, verification date recorded",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "P3",
+   "test": "live still original -> stays pending (POST_ACCEPTED_PENDING_SYNC), no verification date",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "P4",
+   "test": "live matches neither -> not verified (MISMATCH), re-checked next week",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "P5",
+   "test": "identity mismatch (Listing Management SKU differs) blocks verification even though keywords match",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "P6",
+   "test": "title changed since the POST: recorded as an observation, keywords match -> verified",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "P7",
+   "test": "every submission accounted for (history preserved), 5 re-checked + 1 kept",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "P8",
+   "test": "next week: previously verified are not re-read and keep their FIRST verification date",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "P9",
+   "test": "next week: the still-pending one is re-checked and now verifies (dated this run)",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "P10",
+   "test": "read-only: keyword_live_verify.py contains no POST / write request",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "P11",
+   "test": "weekly 07 verified beats stale 09 pending; a verification is final (09 verified not undone by 07 pending)",
+   "result": "PASS",
+   "detail": "{'X|1': {'state': 'UPDATED / VERIFIED', 'checked_at_utc': '2026-10-02T04:00:00Z', 'evidence': '07.json', 'verified_at_utc': '2026-10-02T04:00:00Z'}, 'Y|1': {'state': 'UPDATED / VERIFIED', 'checked_at_utc': '2026-09-29T08:50:00Z', 'evidence': '09.json', 'verified_at_utc': '2026-09-29T08:50:00Z'}}"
+  },
+  {
+   "id": "P12",
+   "test": "build: newly verified pending submission -> Live-verified, dated by the verification; 22-submission history kept",
+   "result": "PASS",
+   "detail": "('Live-verified', 3)"
+  },
+  {
+   "id": "P13",
+   "test": "it enters normal monitoring: tracked, new 7-day cycle from the verification (next Sunday 4 Oct)",
+   "result": "PASS",
+   "detail": "{'skus': ['WCB6BM2PK'], 'last_live_verification_date': '2026-10-02', 'last_fine_tuning_date': '2026-09-28'}"
+  },
+  {
+   "id": "P14",
+   "test": "the other pending submissions stay unverified (not tracked for monitoring yet)",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "P15",
+   "test": "pending rows are handled by the weekly keyword check (fresh GET + POST if needed); no separate read-only stage",
+   "result": "PASS",
+   "detail": ""
+  }
+ ]
+}

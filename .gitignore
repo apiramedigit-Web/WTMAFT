@@ -7,3 +7,6 @@ credentials.json
 service-account.json
 __pycache__/
 *.pyc
+client_secret*.json
+gmail_token*.json
+logs/

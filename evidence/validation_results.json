@@ -1,6 +1,6 @@
 {
- "validated_at": "2026-09-25T12:29:48",
- "passed": 31,
+ "validated_at": "2026-09-29T16:04:58",
+ "passed": 47,
  "failed": 0,
  "checks": [
   {
@@ -12,6 +12,11 @@
    "check": "13b. Daily order data present for all 14 days, both accounts",
    "result": "PASS",
    "detail": "{6: 14, 8: 14}"
+  },
+  {
+   "check": "PH scope: every row is a Paulroshan ASIN (no other PH)",
+   "result": "PASS",
+   "detail": "50/50 rows, 569 PH ASINs in extract"
   },
   {
    "check": "Top-moving selection reproduces independently",
@@ -26,7 +31,7 @@
   {
    "check": "12. Division by zero -> null (never 0/NaN/Inf)",
    "result": "PASS",
-   "detail": "prev_orders=0 rows: 2"
+   "detail": "prev_orders=0 rows: 11"
   },
   {
    "check": "6/7. No NaN / Infinity in dataset",
@@ -46,27 +51,57 @@
   {
    "check": "16. Keyword rows map to the correct ASIN/SKU (via product_id)",
    "result": "PASS",
-   "detail": "26 rows"
+   "detail": "24 rows"
   },
   {
    "check": "Keyword principle: every unique original word kept, nothing added, only duplicates removed",
    "result": "PASS",
-   "detail": "25 fields verified"
+   "detail": "22 fields verified"
   },
   {
    "check": "12. KPI summary reconciles to dataset rows",
    "result": "PASS",
-   "detail": "{'top_moving_reviewed': 50, 'performance_drop': 23, 'keyword_review_required': 21, 'finetune_proposed': 24, 'duplicate_words_removed': 662, 'under_monitoring': 0}"
+   "detail": "{'top_moving_reviewed': 50, 'performance_drop': 23, 'keyword_review_required': 19, 'finetune_proposed': 20, 'duplicate_words_removed': 487, 'under_monitoring': 0}"
   },
   {
    "check": "Change Record rows = proposed changes (+ saved records carried forward), keys unique",
    "result": "PASS",
-   "detail": "24 rows"
+   "detail": "22 rows"
   },
   {
-   "check": "18/19. Build never sets an upload / change date / monitoring status (only user saves do)",
+   "check": "18/19. Build sets Live-verified + POST date only for Listing Management-verified submissions; all else Proposed, no date",
    "result": "PASS",
-   "detail": "24 change records, all Proposed; 0 user-saved record(s) embedded"
+   "detail": "22 change records: {'Proposed': 20, 'Live-verified': 2}; 0 user-saved record(s) embedded"
+  },
+  {
+   "check": "Submissions: every POSTed record is in the Change Record with its submissionId; ids unique",
+   "result": "PASS",
+   "detail": "22 rows with a submission / 22 POSTed"
+  },
+  {
+   "check": "Skipped ASINs stay skipped: not submitted, no change proposed",
+   "result": "PASS",
+   "detail": "['B0CBLWLZ4W', 'B0DTTKL6KX']"
+  },
+  {
+   "check": "Submission state = latest Listing Management verification (weekly 07 over legacy 09; verified is final); KPIs reconcile",
+   "result": "PASS",
+   "detail": "accepted 22, live-verified 2, pending 20, states {'POST_ACCEPTED_PENDING_SYNC': 20, 'UPDATED / VERIFIED': 2}"
+  },
+  {
+   "check": "Evidence 09: the 20 non-verified submissions re-checked, all identity checks pass, the 2 verified excluded",
+   "result": "PASS",
+   "detail": "{'POST_ACCEPTED_PENDING_SYNC': 20}"
+  },
+  {
+   "check": "Status reconciliation: all 22 submissions accounted for (verified / pending / mismatch / failed shown as they are); 0 monitoring rows; duplicate words = rows",
+   "result": "PASS",
+   "detail": "{'submitted': 22, 'live_verified': 2, 'pending': 20, 'accounted (verified + pending + mismatch + failed + not found)': 22, 'completed = live-verified': 2, 'monitoring rows': 0, 'duplicate words removed': 487}"
+  },
+  {
+   "check": "No post-change metrics / monitoring started (no Monitoring/Completed, 0 under monitoring, nothing user-saved)",
+   "result": "PASS",
+   "detail": ""
   },
   {
    "check": "17b. Daily monitoring series reconciles to the weekly Current 7D orders (same source)",
@@ -76,7 +111,7 @@
   {
    "check": "17c. Loaded days are contiguous and cover both comparison weeks",
    "result": "PASS",
-   "detail": "2026-07-12 -> 2026-09-23 (74 days)"
+   "detail": "2026-07-12 -> 2026-09-27 (78 days)"
   },
   {
    "check": "20. No fabricated thresholds: drop rule is orders < previous (no numeric cut-off)",
@@ -84,14 +119,34 @@
    "detail": ""
   },
   {
+   "check": "Monitoring continuity: every change-record / ledger ASIN has weekly metrics (in or outside the top 50)",
+   "result": "PASS",
+   "detail": "21 monitored ASINs, 0 outside top 50"
+  },
+  {
+   "check": "Monitored-ASIN metrics recompute from raw extract and equal Section 3 for top-50 ASINs",
+   "result": "PASS",
+   "detail": "all match"
+  },
+  {
+   "check": "Ledger integrity: declines count only on eligible declining cycles; alerts only at >= 2 consecutive declines; no TEST in ledger",
+   "result": "PASS",
+   "detail": "2 cycles, 0 alert records"
+  },
+  {
+   "check": "PH attribution matches live staff.ph_category_products (one PH per ASIN, none guessed)",
+   "result": "PASS",
+   "detail": "50 mapped / 0 unmapped"
+  },
+  {
    "check": "Live DB spot-check (8 random ASINs: orders, impressions, clicks)",
    "result": "PASS",
-   "detail": "['B0D7944QDY', 'B09L11514G', 'B0CN376GSP', 'B07F9SH71F', 'B0H9XM38LC', 'B0DCFXBYJG', 'B0F1D3FS5C', 'B0BLZFGY38']"
+   "detail": "['B09MQSJ72N', 'B0D59MHSXN', 'B08XXWJWVZ', 'B0GXB7RGZK', 'B0DMDV1BF9', 'B0D94627RM', 'B0D9RXR847', 'B0CCJSK84F']"
   },
   {
    "check": "1. HTML file exists",
    "result": "PASS",
-   "detail": "141844 bytes"
+   "detail": "209282 bytes"
   },
   {
    "check": "9/10/11. No external CSS/JS/network references",
@@ -99,7 +154,7 @@
    "detail": "[]"
   },
   {
-   "check": "8. Embedded JSON parses and equals dataset",
+   "check": "8. Embedded JSON parses and equals dataset (+ monitoring ledger for Section 12)",
    "result": "PASS",
    "detail": ""
   },
@@ -116,7 +171,7 @@
   {
    "check": "3. Required sections present",
    "result": "PASS",
-   "detail": "['1. Report Purpose', '2. Weekly Performance Summary', '3. ASIN Performance Comparison', '4. Backend Keyword Analysis', '5. Keyword Change Details', '6. Optimization Classification', '7. Change Record', '8. 7-Day Monitoring Report', '9. Weekly Workflow', '10. KPI Formulas', '11. Management Summary', 'Data & Evidence Notes']"
+   "detail": "['1. Report Purpose', '2. Weekly Performance Summary', '3. ASIN Performance Comparison', '4. Backend Keyword Analysis', '5. Keyword Change Details', '6. Optimization Classification', '7. Change Record', '8. 7-Day Monitoring Report', '9. Weekly Workflow', '10. KPI Formulas', '11. Management Summary', '12. Full Optimization Review Monitoring', 'Data & Evidence Notes']"
   },
   {
    "check": "4/5. Required columns, KPI names and workflow steps present (exact terminology)",
@@ -126,12 +181,22 @@
   {
    "check": "12b. KPI cards (computed in page) = dataset KPI",
    "result": "PASS",
-   "detail": "{'Top-Moving ASINs Reviewed': '50', 'ASINs Showing Performance Drop': '23', 'ASINs Requiring Backend Keyword Review': '21', 'Backend Keyword Fine-Tuning Completed': '0', 'Visible Listing Content Changed': '0', 'Duplicate Keywords Removed': '662', 'ASINs Under Monitoring': '0', 'Monitoring Period': 'Next 7 Days', 'Next Review': 'After 7 Days'}"
+   "detail": "{'Top-Moving ASINs Reviewed': '50', 'ASINs Showing Performance Drop': '23', 'ASINs Requiring Backend Keyword Review': '19', 'Backend Keyword Fine-Tuning Completed': '2', 'Backend Keyword POSTs Accepted': '22', 'Live Verification Pending': '20', 'Visible Listing Content Changed': '0', 'Duplicate Keywords Removed': '487', 'ASINs Under Monitoring': '0', 'Monitoring Period': '7 Days', 'Next Review': 'After Verification'}"
   },
   {
    "check": "Displayed row counts = dataset row counts",
    "result": "PASS",
-   "detail": "{'t3 (drop filter)': (23, 23), 't4': (26, 26), 't5': (26, 26), 't6': (9, 9), 't7': (24, 24), 't8': (0, 0)}"
+   "detail": "{'t3 (drop filter)': (23, 23), 't4': (24, 24), 't5': (24, 24), 't6': (9, 9), 't7': (22, 22), 't8': (0, 0)}"
+  },
+  {
+   "check": "Page shows submission status: pending pills, only the verified marked Live-verified, 0 monitoring rows, KPI cards match",
+   "result": "PASS",
+   "detail": "{'t7 pending pills': 20, 't5 pending status': 20, 't8 monitoring rows': 0, 't5 live-verified status': 0, 't7 Live-verified status': 2, 't7 Monitoring/Completed status': 0, 'Completed card': '2', 'Pending card': '20', 'POSTs Accepted card': '22', 'Under Monitoring card': '0'}"
+  },
+  {
+   "check": "No '22 completed / updated / live' wording; Section 8 shows no post-change results",
+   "result": "PASS",
+   "detail": "clean"
   },
   {
    "check": "6b. No NaN / Infinity / undefined rendered",
@@ -141,22 +206,37 @@
   {
    "check": "Struck-through words in Keyword Change Details = removed-word counts",
    "result": "PASS",
-   "detail": "[('B0DH4KYFPD', 15, 15), ('B094R3M2DC', 35, 35), ('B094R3M2DC', 35, 35), ('B0B9Y5MRSK', 21, 21)]"
+   "detail": "[('B0DH4KYFPD', 0, 0), ('B0D7944QDY', 16, 16), ('B0C43LY8DB', 18, 18), ('B0GXB7RGZK', 0, 0)]"
+  },
+  {
+   "check": "Section 12: one row per monitored ASIN; state = ledger (FOR Required only on the alert cycle at 2 consecutive declines); manual notice shown",
+   "result": "PASS",
+   "detail": "{'shown': {'B0DH4KYFPD': 'waiting', 'B0GXB7RGZK': 'waiting'}, 'expected': {'B0DH4KYFPD': 'waiting', 'B0GXB7RGZK': 'waiting'}}"
+  },
+  {
+   "check": "Section 12: weekly keyword rows = ledger keyword_rows (scope listings, status per ASIN-SKU; not hard-coded)",
+   "result": "PASS",
+   "detail": "{'shown': [('B07RTY1TFK', 'WCGEBNCR-A', 'POST Accepted — Live Verification Pending'), ('B084RL7K8J', 'LSBLP4BSR', 'POST Accepted — Live Verification Pending'), ('B08VGPPCY1', 'WCDTBM+RPR44WH R', 'POST Accepted — Live Verification Pending'), ('B09MQSJ72N', 'WCB4BC+RPR44WH', 'POST Accepted — Live Verification Pending'), ('B0C43L42DK', 'WCDTRE+RPR44WH', 'POST Accepted — Live Verification Pending'), ('B0C43LY8DB', 'WCDTYE+RPR44WH', 'POST Accepted — Live Verification Pending'), ('B0C43N2F3D', 'WCDTWH+RPR44WH', 'POST Accepted — Live Verification Pending'), ('B0CBLWLZ4W', 'WCWDBM2PK+RPR44WH2PK', 'Awa"
+  },
+  {
+   "check": "Section 12: cycle history rows = ledger cycles",
+   "result": "PASS",
+   "detail": "2 rows / 2 cycles"
   },
   {
    "check": "Tabs: clicking each tab shows only that section, no page scroll",
    "result": "PASS",
-   "detail": "12 tabs"
+   "detail": "13 tabs"
   },
   {
    "check": "Controls: filter, search and sort work",
    "result": "PASS",
-   "detail": "all=50, search=1->1, sorted=48 values"
+   "detail": "all=50, search=1->1, sorted=39 values"
   },
   {
    "check": "No horizontal scrollbar (page or table) on any tab at 1920/1366/1024/800/390px",
    "result": "PASS",
-   "detail": "all 60 tab x width combinations = 0"
+   "detail": "all 65 tab x width combinations = 0"
   }
  ]
 }

@@ -1,0 +1,194 @@
+{
+ "run_at": "2026-09-29T16:03:55",
+ "mode": "deterministic: temp ledgers, fake Listing Management GET/POST, fake Gmail, temp dashboards; no real POST, no real e-mail, no network",
+ "passed": 31,
+ "failed": 0,
+ "results": [
+  {
+   "case": "B",
+   "test": "before the listing's 7-day due date -> no GET, no POST; its own next due date is recorded",
+   "result": "PASS",
+   "detail": "2026-10-06"
+  },
+  {
+   "case": "C",
+   "test": "first due Monday: fresh GET of the live keywords (source of truth)",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "D",
+   "test": "cleaned with the existing rules: every relevant word kept, repeated entry removed, nothing added",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "D",
+   "test": "cleaned != live -> ONE POST of the freshly cleaned value (sku/sub_source/site/backend_keywords only), then Live Verified",
+   "result": "PASS",
+   "detail": "[{'sku': 'WCE2E2PK', 'sub_source': '8', 'site': 'UK', 'backend_keywords': 'Wire Cage Pendant Light shade industrial lamp'}]"
+  },
+  {
+   "case": "AUDIT",
+   "test": "audit history records the GET value, cleaned value, POST attempt, verification and final live value",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "M",
+   "test": "same weekly cycle re-run -> not due (no second GET/POST)",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "E",
+   "test": "next Monday: fresh GET; cleaned == live -> NO POST, Live Verified (weekly recurrence)",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "E",
+   "test": "routine re-verification does not move the monitoring start (first_verified_at unchanged)",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "P1",
+   "test": "pending row: not re-processed before 7 days after its last POST",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "P2",
+   "test": "pending row, due: fresh GET -> live still has duplicates -> cleaned differs -> POST (from this GET) -> still pending",
+   "result": "PASS",
+   "detail": "(['GET', 'GET', 'POST', 'GET'], 'POST Accepted — Live Verification Pending')"
+  },
+  {
+   "case": "P3",
+   "test": "next due week: fresh GET again and repeat (a 2nd POST, each POST preceded by a GET in the same run)",
+   "result": "PASS",
+   "detail": "['GET', 'GET', 'POST', 'GET', 'GET', 'GET', 'POST', 'GET']"
+  },
+  {
+   "case": "P4",
+   "test": "cleaned == live and it equals the previously proposed value -> NO POST, Live Verified ('proposed value is live')",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "P5",
+   "test": "verification date recorded and 7-day monitoring starts from it (listing becomes tracked)",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "P6",
+   "test": "every attempt is in the audit history (original submission, 2 POSTs, final no-POST verification)",
+   "result": "PASS",
+   "detail": "['original submission', 'POST', 'POST', 'no POST']"
+  },
+  {
+   "case": "P7",
+   "test": "user changed the keywords: cleaned from the NEW live value (their new words kept), old proposal never sent",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "R1",
+   "test": "rejected update -> Update Failed; next due week retried from a fresh GET (GET precedes each POST) -> Live Verified",
+   "result": "PASS",
+   "detail": "('Update Failed', ['GET', 'GET', 'POST', 'GET', 'GET', 'POST', 'GET'])"
+  },
+  {
+   "case": "L",
+   "test": "read-back matches neither value -> Verification Failed (no verification date)",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "K",
+   "test": "keywords changed between the GET and the POST -> not sent",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "A",
+   "test": "optimization recorded -> no check / Amazon update until the next weekly cycle",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "A",
+   "test": "next Monday: user's keywords cleaned, POSTed once, verified -> optimization completed, baseline set",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "H",
+   "test": "streak reset: baseline week not counted, next week count 1, no alert",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "I",
+   "test": "later pair of consecutive declines -> NEW alert",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "D2",
+   "test": "keyword check + clean-up also when performance improved (no alert involved)",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "F/G",
+   "test": "one decline -> no alert; two consecutive -> alert (unchanged)",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "SCOPE",
+   "test": "a listing that is not in the report scope is never read or updated",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "SCOPE",
+   "test": "identity mismatch (account) -> Update Failed, no POST",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "DRY",
+   "test": "dry run: GET + clean + validate, NO POST, status unchanged; the production run the same Monday still sends once",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "SAFE",
+   "test": "> 249 bytes -> warning only, not truncated; dropping/adding a word blocks the POST",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "TC8",
+   "test": "weekly keyword rows show the ledger status per ASIN-SKU (two different ledgers)",
+   "result": "PASS",
+   "detail": "([('B0E2ETEST01', 'WCE2E2PK', 'POST Accepted — Live Verification Pending')], [('B0E2ETEST01', 'WCE2E2PK', 'Live Verified')])"
+  },
+  {
+   "case": "TC8",
+   "test": "displayed counts, removed words, attempts and submission id come from the ledger",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "case": "SAFETY",
+   "test": "production ledger / dataset / extract / TEST-mail record unchanged",
+   "result": "PASS",
+   "detail": ""
+  }
+ ]
+}

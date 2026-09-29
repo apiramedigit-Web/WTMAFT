@@ -1,0 +1,859 @@
+{
+ "cycles": {
+  "B0DH4KYFPD|2026-09-13_2026-09-19": {
+   "cycle_id": "2026-09-13_2026-09-19",
+   "asin": "B0DH4KYFPD",
+   "sku": "WCDTBM2PK+RPR44WH2PK",
+   "account": "amazon Ledsone",
+   "marketplace": "Amazon UK",
+   "current_7d_start": "2026-09-13",
+   "current_7d_end": "2026-09-19",
+   "previous_7d_start": "2026-09-06",
+   "previous_7d_end": "2026-09-12",
+   "previous_orders": 14,
+   "current_orders": 4,
+   "order_change_pct": -71.4,
+   "previous_impressions": 4630,
+   "current_impressions": 6300,
+   "impression_change_pct": 36.1,
+   "previous_clicks": 33,
+   "current_clicks": 38,
+   "ctr_change_pct": -15.4,
+   "cvr_change_pct": -75.2,
+   "performance_drop": true,
+   "data_status": "ok",
+   "in_top_moving": true,
+   "backend_keyword_status": "No Duplicates Found",
+   "duplicate_words_removed": 15,
+   "monitoring_start_date": "2026-10-04",
+   "last_fine_tuning_date": "2026-09-28",
+   "last_live_verification_date": "2026-09-29",
+   "recorded_at": "2026-09-29T16:04:51",
+   "baseline_date": "2026-09-29",
+   "baseline_type": "live verification",
+   "last_full_optimization_date": null,
+   "eligible_after_live_verification": false,
+   "alert_cycle_id": null,
+   "consecutive_decline_count": 0,
+   "monitoring_cycle_number": null,
+   "streak_status": "baseline",
+   "full_optimization_alert_status": "Not required",
+   "alert_sent_at": null,
+   "alert_recipients": null
+  },
+  "B0GXB7RGZK|2026-09-13_2026-09-19": {
+   "cycle_id": "2026-09-13_2026-09-19",
+   "asin": "B0GXB7RGZK",
+   "sku": "WCBSF90FG2PK+RPR44WH2PK",
+   "account": "amazon Ledsone",
+   "marketplace": "Amazon UK",
+   "current_7d_start": "2026-09-13",
+   "current_7d_end": "2026-09-19",
+   "previous_7d_start": "2026-09-06",
+   "previous_7d_end": "2026-09-12",
+   "previous_orders": 5,
+   "current_orders": 2,
+   "order_change_pct": -60.0,
+   "previous_impressions": 2507,
+   "current_impressions": 3019,
+   "impression_change_pct": 20.4,
+   "previous_clicks": 50,
+   "current_clicks": 57,
+   "ctr_change_pct": -5.3,
+   "cvr_change_pct": -64.9,
+   "performance_drop": true,
+   "data_status": "ok",
+   "in_top_moving": true,
+   "backend_keyword_status": "No Duplicates Found",
+   "duplicate_words_removed": 4,
+   "monitoring_start_date": "2026-10-04",
+   "last_fine_tuning_date": "2026-09-28",
+   "last_live_verification_date": "2026-09-29",
+   "recorded_at": "2026-09-29T16:04:51",
+   "baseline_date": "2026-09-29",
+   "baseline_type": "live verification",
+   "last_full_optimization_date": null,
+   "eligible_after_live_verification": false,
+   "alert_cycle_id": null,
+   "consecutive_decline_count": 0,
+   "monitoring_cycle_number": null,
+   "streak_status": "baseline",
+   "full_optimization_alert_status": "Not required",
+   "alert_sent_at": null,
+   "alert_recipients": null
+  }
+ },
+ "alerts": {},
+ "optimizations": {},
+ "keyword_checks": {
+  "B0DH4KYFPD": [],
+  "B0GXB7RGZK": []
+ },
+ "keyword_monitor": {
+  "B0DH4KYFPD": {
+   "listings": [
+    {
+     "product_id": 836394,
+     "sku": "WCDTBM2PK+RPR44WH2PK",
+     "sub_source": 8,
+     "account": "amazon Ledsone"
+    }
+   ],
+   "verified_date": "2026-09-29",
+   "next_due": "2026-10-06",
+   "last_check_week": null,
+   "due_this_run": false
+  },
+  "B0GXB7RGZK": {
+   "listings": [
+    {
+     "product_id": 990096,
+     "sku": "WCBSF90FG2PK+RPR44WH2PK",
+     "sub_source": 8,
+     "account": "amazon Ledsone"
+    }
+   ],
+   "verified_date": "2026-09-29",
+   "next_due": "2026-10-06",
+   "last_check_week": null,
+   "due_this_run": false
+  }
+ },
+ "keyword_retry": {},
+ "keyword_rows": {
+  "B0DH4KYFPD|WCDTBM2PK+RPR44WH2PK|8": {
+   "asin": "B0DH4KYFPD",
+   "sku": "WCDTBM2PK+RPR44WH2PK",
+   "sub_source": 8,
+   "account": "amazon Ledsone",
+   "product_id": 836394,
+   "report_row": "B0DH4KYFPD|WCDTBM2PK+RPR44WH2PK",
+   "submission_id": "85692fe943e24cc98603443ba73fbbdb",
+   "proposed": "Lampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Lamp Shades Indoor Geometric Wall Kitchen Living Room Hallway",
+   "status": "Live Verified",
+   "first_verified_at": "2026-09-29T04:14:40Z",
+   "last_verified_at": "2026-09-29T04:14:40Z",
+   "last_post_at": "2026-09-28 (run 1)",
+   "last_check_week": null,
+   "post_attempts": 1,
+   "history": [
+    {
+     "event": "original submission",
+     "at": "2026-09-28 (run 1)",
+     "submission_id": "85692fe943e24cc98603443ba73fbbdb",
+     "proposed": "Lampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Lamp Shades Indoor Geometric Wall Kitchen Living Room Hallway",
+     "state_at_seed": "UPDATED / VERIFIED"
+    }
+   ],
+   "next_due": "2026-10-06"
+  },
+  "B0D7944QDY|WCB6BM2PK|8": {
+   "asin": "B0D7944QDY",
+   "sku": "WCB6BM2PK",
+   "sub_source": 8,
+   "account": "amazon Ledsone",
+   "product_id": 451949,
+   "report_row": "B0D7944QDY|WCB6BM2PK",
+   "submission_id": "1ed6331c7dd04d4dbbb98b0220fb70cc",
+   "proposed": "Unique and Beautiful Matte Black Metal Forest Design Table Lamp | The Light Escapes Through Gaps Casts Against Lampshade Drum with Flower Pattern for Pendant Lamps Shades 4.7×7.9in Floor",
+   "status": "POST Accepted — Live Verification Pending",
+   "first_verified_at": null,
+   "last_verified_at": null,
+   "last_post_at": "2026-09-28T17:21:17",
+   "last_check_week": null,
+   "post_attempts": 1,
+   "history": [
+    {
+     "event": "original submission",
+     "at": "2026-09-28T17:21:17",
+     "submission_id": "1ed6331c7dd04d4dbbb98b0220fb70cc",
+     "proposed": "Unique and Beautiful Matte Black Metal Forest Design Table Lamp | The Light Escapes Through Gaps Casts Against Lampshade Drum with Flower Pattern for Pendant Lamps Shades 4.7×7.9in Floor",
+     "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
+    }
+   ],
+   "next_due": "2026-10-05"
+  },
+  "B0C43LY8DB|WCDTYE+RPR44WH|8": {
+   "asin": "B0C43LY8DB",
+   "sku": "WCDTYE+RPR44WH",
+   "sub_source": 8,
+   "account": "amazon Ledsone",
+   "product_id": 456875,
+   "report_row": "B0C43LY8DB|WCDTYE+RPR44WH",
+   "submission_id": "36280bfb109843989e6db5c4e9ac1e52",
+   "proposed": "Black Ceiling Light Wire Basket Metal Pendant Lighting Shade,Black Industrial Style for Indoor Kitchen Islands Living Room 1X E27 Base AC 220V Set of 2 Vintage Fitting, 16cm Geometric Cage Hanging Fixture Chandelier Lamp Shade Bedroom Dining 1-Light)",
+   "status": "POST Accepted — Live Verification Pending",
+   "first_verified_at": null,
+   "last_verified_at": null,
+   "last_post_at": "2026-09-28T17:21:32",
+   "last_check_week": null,
+   "post_attempts": 1,
+   "history": [
+    {
+     "event": "original submission",
+     "at": "2026-09-28T17:21:32",
+     "submission_id": "36280bfb109843989e6db5c4e9ac1e52",
+     "proposed": "Black Ceiling Light Wire Basket Metal Pendant Lighting Shade,Black Industrial Style for Indoor Kitchen Islands Living Room 1X E27 Base AC 220V Set of 2 Vintage Fitting, 16cm Geometric Cage Hanging Fixture Chandelier Lamp Shade Bedroom Dining 1-Light)",
+     "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
+    }
+   ],
+   "next_due": "2026-10-05"
+  },
+  "B0GXB7RGZK|WCBSF90FG2PK+RPR44WH2PK|8": {
+   "asin": "B0GXB7RGZK",
+   "sku": "WCBSF90FG2PK+RPR44WH2PK",
+   "sub_source": 8,
+   "account": "amazon Ledsone",
+   "product_id": 990096,
+   "report_row": "B0GXB7RGZK|WCBSF90FG2PK+RPR44WH2PK",
+   "submission_id": "493f948b0dea4b4abbfa9699b1f04d1b",
+   "proposed": "Modern Sun Flower French Gold Crystal Pendant Light Shade, Jewels Easy Fit Ceiling with Diameter 9 cm - Height 14 Lamp Shades for Bedroom Kitchen Living Room",
+   "status": "Live Verified",
+   "first_verified_at": "2026-09-29T04:15:00Z",
+   "last_verified_at": "2026-09-29T04:15:00Z",
+   "last_post_at": "2026-09-28T17:21:47",
+   "last_check_week": null,
+   "post_attempts": 1,
+   "history": [
+    {
+     "event": "original submission",
+     "at": "2026-09-28T17:21:47",
+     "submission_id": "493f948b0dea4b4abbfa9699b1f04d1b",
+     "proposed": "Modern Sun Flower French Gold Crystal Pendant Light Shade, Jewels Easy Fit Ceiling with Diameter 9 cm - Height 14 Lamp Shades for Bedroom Kitchen Living Room",
+     "state_at_seed": "UPDATED / VERIFIED"
+    }
+   ],
+   "next_due": "2026-10-06"
+  },
+  "B0D59MHSXN|WCB3WH2PK+RPR44WH2PK VD|6": {
+   "asin": "B0D59MHSXN",
+   "sku": "WCB3WH2PK+RPR44WH2PK VD",
+   "sub_source": 6,
+   "account": "amazon Dcvoltage",
+   "product_id": 604366,
+   "report_row": "B0D59MHSXN|WCB3WH2PK+RPR44WH2PK VD",
+   "submission_id": "6493b493a71b4f01ae41096d064644b4",
+   "proposed": "Lampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Easy Fit Modern Indoor Geometric Wall Kitchen Living Room Hallway",
+   "status": "POST Accepted — Live Verification Pending",
+   "first_verified_at": null,
+   "last_verified_at": null,
+   "last_post_at": "2026-09-28T17:22:03",
+   "last_check_week": null,
+   "post_attempts": 1,
+   "history": [
+    {
+     "event": "original submission",
+     "at": "2026-09-28T17:22:03",
+     "submission_id": "6493b493a71b4f01ae41096d064644b4",
+     "proposed": "Lampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Easy Fit Modern Indoor Geometric Wall Kitchen Living Room Hallway",
+     "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
+    }
+   ],
+   "next_due": "2026-10-05"
+  },
+  "B0CBLWLZ4W|WCWDBM2PK+RPR44WH2PK|6": {
+   "asin": "B0CBLWLZ4W",
+   "sku": "WCWDBM2PK+RPR44WH2PK",
+   "sub_source": 6,
+   "account": "amazon Dcvoltage",
+   "product_id": 808718,
+   "report_row": "B0CBLWLZ4W|WCWDBM2PK+RPR44WH2PK, WCWDBM2PK+RPR44WH2PK_AMD, WCWDBM2PK+RPR44WH2PK_DCVV",
+   "submission_id": null,
+   "proposed": null,
+   "status": "Awaiting first weekly check",
+   "first_verified_at": null,
+   "last_verified_at": null,
+   "last_post_at": null,
+   "last_check_week": null,
+   "post_attempts": 0,
+   "history": [],
+   "next_due": null,
+   "last_dry_run": {
+    "event": "weekly check",
+    "week": "2026-09-28",
+    "at": "2026-09-29T16:04:24",
+    "mode": "dry_run",
+    "status_before": "Awaiting first weekly check",
+    "live_before": "",
+    "live_entries": [],
+    "cleaned": "",
+    "duplicate_issue": false,
+    "issue": "No duplicate or repeated terms",
+    "removed_words": [],
+    "repeated_entries": [],
+    "original_meta": {
+     "entries": 0,
+     "words": 0,
+     "bytes": 0
+    },
+    "cleaned_meta": {
+     "entries": 0,
+     "words": 0,
+     "bytes": 0
+    },
+    "status_after": "No backend keywords (nothing to clean)",
+    "action": "no POST",
+    "detail": "the live listing has no backend keywords"
+   }
+  },
+  "B0CBLWLZ4W|WCWDBM2PK+RPR44WH2PK_AMD|6": {
+   "asin": "B0CBLWLZ4W",
+   "sku": "WCWDBM2PK+RPR44WH2PK_AMD",
+   "sub_source": 6,
+   "account": "amazon Dcvoltage",
+   "product_id": 918601,
+   "report_row": "B0CBLWLZ4W|WCWDBM2PK+RPR44WH2PK, WCWDBM2PK+RPR44WH2PK_AMD, WCWDBM2PK+RPR44WH2PK_DCVV",
+   "submission_id": null,
+   "proposed": null,
+   "status": "Awaiting first weekly check",
+   "first_verified_at": null,
+   "last_verified_at": null,
+   "last_post_at": null,
+   "last_check_week": null,
+   "post_attempts": 0,
+   "history": [],
+   "next_due": null,
+   "last_dry_run": {
+    "event": "weekly check",
+    "week": "2026-09-28",
+    "at": "2026-09-29T16:04:24",
+    "mode": "dry_run",
+    "status_before": "Awaiting first weekly check",
+    "live_before": "",
+    "live_entries": [],
+    "cleaned": "",
+    "duplicate_issue": false,
+    "issue": "No duplicate or repeated terms",
+    "removed_words": [],
+    "repeated_entries": [],
+    "original_meta": {
+     "entries": 0,
+     "words": 0,
+     "bytes": 0
+    },
+    "cleaned_meta": {
+     "entries": 0,
+     "words": 0,
+     "bytes": 0
+    },
+    "status_after": "No backend keywords (nothing to clean)",
+    "action": "no POST",
+    "detail": "the live listing has no backend keywords"
+   }
+  },
+  "B0CBLWLZ4W|WCWDBM2PK+RPR44WH2PK_DCVV|8": {
+   "asin": "B0CBLWLZ4W",
+   "sku": "WCWDBM2PK+RPR44WH2PK_DCVV",
+   "sub_source": 8,
+   "account": "amazon Ledsone",
+   "product_id": 1015230,
+   "report_row": "B0CBLWLZ4W|WCWDBM2PK+RPR44WH2PK, WCWDBM2PK+RPR44WH2PK_AMD, WCWDBM2PK+RPR44WH2PK_DCVV",
+   "submission_id": null,
+   "proposed": null,
+   "status": "Awaiting first weekly check",
+   "first_verified_at": null,
+   "last_verified_at": null,
+   "last_post_at": null,
+   "last_check_week": null,
+   "post_attempts": 0,
+   "history": [],
+   "next_due": null,
+   "last_dry_run": {
+    "event": "weekly check",
+    "week": "2026-09-28",
+    "at": "2026-09-29T16:04:24",
+    "mode": "dry_run",
+    "status_before": "Awaiting first weekly check",
+    "status_after": "Read Failed (not in the Listing Management feed / identity mismatch)",
+    "detail": "listing not in the Listing Management active feed"
+   }
+  },
+  "B0DTHZ1JX5|WCDTBM3PK+RPR44WH3PK AM|8": {
+   "asin": "B0DTHZ1JX5",
+   "sku": "WCDTBM3PK+RPR44WH3PK AM",
+   "sub_source": 8,
+   "account": "amazon Ledsone",
+   "product_id": 835201,
+   "report_row": "B0DTHZ1JX5|WCDTBM3PK+RPR44WH3PK AM",
+   "submission_id": "b425b459ece84d8e9addd106f09a71b7",
+   "proposed": "black wire lampshade, light shade, cage metal shades ceiling, lamp ceilings, geometric industrial",
+   "status": "POST Accepted — Live Verification Pending",
+   "first_verified_at": null,
+   "last_verified_at": null,
+   "last_post_at": "2026-09-28T17:22:18",
+   "last_check_week": null,
+   "post_attempts": 1,
+   "history": [
+    {
+     "event": "original submission",
+     "at": "2026-09-28T17:22:18",
+     "submission_id": "b425b459ece84d8e9addd106f09a71b7",
+     "proposed": "black wire lampshade, light shade, cage metal shades ceiling, lamp ceilings, geometric industrial",
+     "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
+    }
+   ],
+   "next_due": "2026-10-05"
+  },
+  "B0D9RQQZYB|WCDCBM3PK+RPR44WH3PK M|8": {
+   "asin": "B0D9RQQZYB",
+   "sku": "WCDCBM3PK+RPR44WH3PK M",
+   "sub_source": 8,
+   "account": "amazon Ledsone",
+   "product_id": 765699,
+   "report_row": "B0D9RQQZYB|WCDCBM3PK+RPR44WH3PK M",
+   "submission_id": "170bd2f642ab4e1d887d54134782267d",
+   "proposed": "lamp shades ceiling light shade lampshades for lights fittings ceilings lampshade rattan living room iron wire cages gold lamps metal black copper",
+   "status": "POST Accepted — Live Verification Pending",
+   "first_verified_at": null,
+   "last_verified_at": null,
+   "last_post_at": "2026-09-28T17:22:34",
+   "last_check_week": null,
+   "post_attempts": 1,
+   "history": [
+    {
+     "event": "original submission",
+     "at": "2026-09-28T17:22:34",
+     "submission_id": "170bd2f642ab4e1d887d54134782267d",
+     "proposed": "lamp shades ceiling light shade lampshades for lights fittings ceilings lampshade rattan living room iron wire cages gold lamps metal black copper",
+     "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
+    }
+   ],
+   "next_due": "2026-10-05"
+  },
+  "B0D9RQQZYB|WCDCBM3PK+RPR44WH3PK_AB|8": {
+   "asin": "B0D9RQQZYB",
+   "sku": "WCDCBM3PK+RPR44WH3PK_AB",
+   "sub_source": 8,
+   "account": "amazon Ledsone",
+   "product_id": 879893,
+   "report_row": "B0D9RQQZYB|WCDCBM3PK+RPR44WH3PK_AB",
+   "submission_id": "f8b4f746eae247109cd3f23433283284",
+   "proposed": "Metal Lamp Shades, Wire Cage Light Shade, Lip-Less Cover, Replacement for Pendant Wall Sconce, Black Ceiling Basket Lighting Fitting & Industrial Style Indoor",
+   "status": "POST Accepted — Live Verification Pending",
+   "first_verified_at": null,
+   "last_verified_at": null,
+   "last_post_at": "2026-09-28T17:22:49",
+   "last_check_week": null,
+   "post_attempts": 1,
+   "history": [
+    {
+     "event": "original submission",
+     "at": "2026-09-28T17:22:49",
+     "submission_id": "f8b4f746eae247109cd3f23433283284",
+     "proposed": "Metal Lamp Shades, Wire Cage Light Shade, Lip-Less Cover, Replacement for Pendant Wall Sconce, Black Ceiling Basket Lighting Fitting & Industrial Style Indoor",
+     "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
+    }
+   ],
+   "next_due": "2026-10-05"
+  },
+  "B0DTPB2YC2|WCB2BM3PK+RPR44WH3PK BM_|8": {
+   "asin": "B0DTPB2YC2",
+   "sku": "WCB2BM3PK+RPR44WH3PK BM_",
+   "sub_source": 8,
+   "account": "amazon Ledsone",
+   "product_id": 1010014,
+   "report_row": "B0DTPB2YC2|WCB2BM3PK+RPR44WH3PK BM_",
+   "submission_id": "754e70406993415dbb306e72e623c75b",
+   "proposed": "Matte Black and Acrylic Gem Moroccan Style Chandelier Pendant Light Shade Fitting with Clear Beads | 11w | 24cm Diameter by Unique Designed Metal Circular Floral Decor | 30cm | Maximum 11watt LED Allowed",
+   "status": "POST Accepted — Live Verification Pending",
+   "first_verified_at": null,
+   "last_verified_at": null,
+   "last_post_at": "2026-09-28T17:23:04",
+   "last_check_week": null,
+   "post_attempts": 1,
+   "history": [
+    {
+     "event": "original submission",
+     "at": "2026-09-28T17:23:04",
+     "submission_id": "754e70406993415dbb306e72e623c75b",
+     "proposed": "Matte Black and Acrylic Gem Moroccan Style Chandelier Pendant Light Shade Fitting with Clear Beads | 11w | 24cm Diameter by Unique Designed Metal Circular Floral Decor | 30cm | Maximum 11watt LED Allowed",
+     "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
+    }
+   ],
+   "next_due": "2026-10-05"
+  },
+  "B0CDBYNK9B|WCB3BS+RPR44WH C|8": {
+   "asin": "B0CDBYNK9B",
+   "sku": "WCB3BS+RPR44WH C",
+   "sub_source": 8,
+   "account": "amazon Ledsone",
+   "product_id": 455983,
+   "report_row": "B0CDBYNK9B|WCB3BS+RPR44WH C",
+   "submission_id": "404230ccfa88456ab256934669708bbf",
+   "proposed": "Metal Lampshade Drum with Flower Pattern for Pendant Lamps Black Lamp Shades 4.7×7.9in Table Floor Light Modern Ornate Shabby Chic Ceiling Shade | Lights, Home Décor & Improvement Essential | 18cm Width Unique and Beautiful Matte Forest Design | Escapes Through The Gaps Casts Against Walls by",
+   "status": "POST Accepted — Live Verification Pending",
+   "first_verified_at": null,
+   "last_verified_at": null,
+   "last_post_at": "2026-09-28T17:23:19",
+   "last_check_week": null,
+   "post_attempts": 1,
+   "history": [
+    {
+     "event": "original submission",
+     "at": "2026-09-28T17:23:19",
+     "submission_id": "404230ccfa88456ab256934669708bbf",
+     "proposed": "Metal Lampshade Drum with Flower Pattern for Pendant Lamps Black Lamp Shades 4.7×7.9in Table Floor Light Modern Ornate Shabby Chic Ceiling Shade | Lights, Home Décor & Improvement Essential | 18cm Width Unique and Beautiful Matte Forest Design | Escapes Through The Gaps Casts Against Walls by",
+     "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
+    }
+   ],
+   "next_due": "2026-10-05"
+  },
+  "B09MQSJ72N|WCB4BC+RPR44WH|8": {
+   "asin": "B09MQSJ72N",
+   "sku": "WCB4BC+RPR44WH",
+   "sub_source": 8,
+   "account": "amazon Ledsone",
+   "product_id": 452939,
+   "report_row": "B09MQSJ72N|WCB4BC+RPR44WH",
+   "submission_id": "6a06940215214800ba0091b8bf563c2e",
+   "proposed": "Modern Ornate Shabby Chic Ceiling Light Shade | Pendant Lights, Home Décor & Improvement Essential | 18cm Width Metal Lampshade Drum with Flower Pattern for Lamps Black Lamp Shades 4.7×7.9in Table Floor lampshades Industrial UK cages Hanging Bedroom",
+   "status": "POST Accepted — Live Verification Pending",
+   "first_verified_at": null,
+   "last_verified_at": null,
+   "last_post_at": "2026-09-28T17:23:35",
+   "last_check_week": null,
+   "post_attempts": 1,
+   "history": [
+    {
+     "event": "original submission",
+     "at": "2026-09-28T17:23:35",
+     "submission_id": "6a06940215214800ba0091b8bf563c2e",
+     "proposed": "Modern Ornate Shabby Chic Ceiling Light Shade | Pendant Lights, Home Décor & Improvement Essential | 18cm Width Metal Lampshade Drum with Flower Pattern for Lamps Black Lamp Shades 4.7×7.9in Table Floor lampshades Industrial UK cages Hanging Bedroom",
+     "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
+    }
+   ],
+   "next_due": "2026-10-05"
+  },
+  "B0C43N2F3D|WCDTWH+RPR44WH|8": {
+   "asin": "B0C43N2F3D",
+   "sku": "WCDTWH+RPR44WH",
+   "sub_source": 8,
+   "account": "amazon Ledsone",
+   "product_id": 456872,
+   "report_row": "B0C43N2F3D|WCDTWH+RPR44WH",
+   "submission_id": "324c34a464c24b439fa5da5b5ea0e1cd",
+   "proposed": "hanging lamp shade bulb cover wire ceiling lampshade cage for diy style industrial wall light fitting lampshades stylish metallic birds slim inside one oversized japanese designer cages elegant lighshade steel jewel scandi cube lamo coloured spiderman lavender patterned through crushed centre study moon binding wide cottage vintage shafe shades lights fittings hallway bathroom black bedroom",
+   "status": "POST Accepted — Live Verification Pending",
+   "first_verified_at": null,
+   "last_verified_at": null,
+   "last_post_at": "2026-09-28T17:23:50",
+   "last_check_week": null,
+   "post_attempts": 1,
+   "history": [
+    {
+     "event": "original submission",
+     "at": "2026-09-28T17:23:50",
+     "submission_id": "324c34a464c24b439fa5da5b5ea0e1cd",
+     "proposed": "hanging lamp shade bulb cover wire ceiling lampshade cage for diy style industrial wall light fitting lampshades stylish metallic birds slim inside one oversized japanese designer cages elegant lighshade steel jewel scandi cube lamo coloured spiderman lavender patterned through crushed centre study moon binding wide cottage vintage shafe shades lights fittings hallway bathroom black bedroom",
+     "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
+    }
+   ],
+   "next_due": "2026-10-05"
+  },
+  "B0D59PP6PC|WCB1BM2PK+RPR44WH2PK VD|6": {
+   "asin": "B0D59PP6PC",
+   "sku": "WCB1BM2PK+RPR44WH2PK VD",
+   "sub_source": 6,
+   "account": "amazon Dcvoltage",
+   "product_id": 604336,
+   "report_row": "B0D59PP6PC|WCB1BM2PK+RPR44WH2PK VD",
+   "submission_id": "0ac83a65a93c42bfa828518068fea615",
+   "proposed": "Lampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Lamp Shades Indoor Geometric Wall Kitchen Living Room Hallway",
+   "status": "POST Accepted — Live Verification Pending",
+   "first_verified_at": null,
+   "last_verified_at": null,
+   "last_post_at": "2026-09-28T17:24:05",
+   "last_check_week": null,
+   "post_attempts": 1,
+   "history": [
+    {
+     "event": "original submission",
+     "at": "2026-09-28T17:24:05",
+     "submission_id": "0ac83a65a93c42bfa828518068fea615",
+     "proposed": "Lampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Lamp Shades Indoor Geometric Wall Kitchen Living Room Hallway",
+     "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
+    }
+   ],
+   "next_due": "2026-10-05"
+  },
+  "B0C43L42DK|WCDTRE+RPR44WH|8": {
+   "asin": "B0C43L42DK",
+   "sku": "WCDTRE+RPR44WH",
+   "sub_source": 8,
+   "account": "amazon Ledsone",
+   "product_id": 456874,
+   "report_row": "B0C43L42DK|WCDTRE+RPR44WH",
+   "submission_id": "7287d2fc89474d549a74bb5b3e02e572",
+   "proposed": "Metal Ceiling Lamp Shade, Geometric Lampshade with Reducer Ring, Pendant Wire Cage Light for Kitchen, Dinning Room, Bedroom, Hallway, Rose Gold",
+   "status": "POST Accepted — Live Verification Pending",
+   "first_verified_at": null,
+   "last_verified_at": null,
+   "last_post_at": "2026-09-28T17:24:20",
+   "last_check_week": null,
+   "post_attempts": 1,
+   "history": [
+    {
+     "event": "original submission",
+     "at": "2026-09-28T17:24:20",
+     "submission_id": "7287d2fc89474d549a74bb5b3e02e572",
+     "proposed": "Metal Ceiling Lamp Shade, Geometric Lampshade with Reducer Ring, Pendant Wire Cage Light for Kitchen, Dinning Room, Bedroom, Hallway, Rose Gold",
+     "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
+    }
+   ],
+   "next_due": "2026-10-05"
+  },
+  "B0D93PN1ZS|WCDTGR2PK+RPR44WH2PK|8": {
+   "asin": "B0D93PN1ZS",
+   "sku": "WCDTGR2PK+RPR44WH2PK",
+   "sub_source": 8,
+   "account": "amazon Ledsone",
+   "product_id": 838000,
+   "report_row": "B0D93PN1ZS|WCDTGR2PK+RPR44WH2PK",
+   "submission_id": "b4bdbebf01b14927bf6cd5ee6e46853b",
+   "proposed": "cage light shade geometric lampshade copper wire industrial black metal lamp shades ceiling ceilings pendant",
+   "status": "POST Accepted — Live Verification Pending",
+   "first_verified_at": null,
+   "last_verified_at": null,
+   "last_post_at": "2026-09-28T17:24:41",
+   "last_check_week": null,
+   "post_attempts": 1,
+   "history": [
+    {
+     "event": "original submission",
+     "at": "2026-09-28T17:24:41",
+     "submission_id": "b4bdbebf01b14927bf6cd5ee6e46853b",
+     "proposed": "cage light shade geometric lampshade copper wire industrial black metal lamp shades ceiling ceilings pendant",
+     "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
+    }
+   ],
+   "next_due": "2026-10-05"
+  },
+  "B084RL7K8J|LSBLP4BSR|8": {
+   "asin": "B084RL7K8J",
+   "sku": "LSBLP4BSR",
+   "sub_source": 8,
+   "account": "amazon Ledsone",
+   "product_id": 460124,
+   "report_row": "B084RL7K8J|LSBLP4BSR",
+   "submission_id": "fa2860ea03a249598872ddde467b1b1c",
+   "proposed": "geometric lampshade black cage light pendant Lampshades Ceiling shade shades Chandelier Hanging",
+   "status": "POST Accepted — Live Verification Pending",
+   "first_verified_at": null,
+   "last_verified_at": null,
+   "last_post_at": "2026-09-28T17:24:56",
+   "last_check_week": null,
+   "post_attempts": 1,
+   "history": [
+    {
+     "event": "original submission",
+     "at": "2026-09-28T17:24:56",
+     "submission_id": "fa2860ea03a249598872ddde467b1b1c",
+     "proposed": "geometric lampshade black cage light pendant Lampshades Ceiling shade shades Chandelier Hanging",
+     "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
+    }
+   ],
+   "next_due": "2026-10-05"
+  },
+  "B08VGPPCY1|WCDTBM+RPR44WH R|6": {
+   "asin": "B08VGPPCY1",
+   "sku": "WCDTBM+RPR44WH R",
+   "sub_source": 6,
+   "account": "amazon Dcvoltage",
+   "product_id": 682202,
+   "report_row": "B08VGPPCY1|WCDTBM+RPR44WH R",
+   "submission_id": "e2238e75a41a4e5f8b3214e6cce379d5",
+   "proposed": "lamp shades ceiling light shade lampshades for lights fittings ceilings lampshade rattan living room",
+   "status": "POST Accepted — Live Verification Pending",
+   "first_verified_at": null,
+   "last_verified_at": null,
+   "last_post_at": "2026-09-28T17:25:11",
+   "last_check_week": null,
+   "post_attempts": 1,
+   "history": [
+    {
+     "event": "original submission",
+     "at": "2026-09-28T17:25:11",
+     "submission_id": "e2238e75a41a4e5f8b3214e6cce379d5",
+     "proposed": "lamp shades ceiling light shade lampshades for lights fittings ceilings lampshade rattan living room",
+     "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
+    }
+   ],
+   "next_due": "2026-10-05"
+  },
+  "B0FXFMZLWV|WCBCFBM2PK|8": {
+   "asin": "B0FXFMZLWV",
+   "sku": "WCBCFBM2PK",
+   "sub_source": 8,
+   "account": "amazon Ledsone",
+   "product_id": 931322,
+   "report_row": "B0FXFMZLWV|WCBCFBM2PK",
+   "submission_id": "f0a2027aa7e2461fbc783631b39ed586",
+   "proposed": "black ceiling light shade modern pendant metal cage lampshade industrial lamp easy fit E27 30cm decorative lighting for bedroom kitchen set cover wire home drum minimalist fixture retro",
+   "status": "POST Accepted — Live Verification Pending",
+   "first_verified_at": null,
+   "last_verified_at": null,
+   "last_post_at": "2026-09-28T17:25:26",
+   "last_check_week": null,
+   "post_attempts": 1,
+   "history": [
+    {
+     "event": "original submission",
+     "at": "2026-09-28T17:25:26",
+     "submission_id": "f0a2027aa7e2461fbc783631b39ed586",
+     "proposed": "black ceiling light shade modern pendant metal cage lampshade industrial lamp easy fit E27 30cm decorative lighting for bedroom kitchen set cover wire home drum minimalist fixture retro",
+     "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
+    }
+   ],
+   "next_due": "2026-10-05"
+  },
+  "B0CCDR7C3Y|WCVCBS2PK+RPR44WH2PK|8": {
+   "asin": "B0CCDR7C3Y",
+   "sku": "WCVCBS2PK+RPR44WH2PK",
+   "sub_source": 8,
+   "account": "amazon Ledsone",
+   "product_id": 456123,
+   "report_row": "B0CCDR7C3Y|WCVCBS2PK+RPR44WH2PK",
+   "submission_id": "787608fcdf404f23aa81d56efcfc4fdb",
+   "proposed": "Black Ceiling Light Wire Basket Metal Pendant Lighting Shade,Black Industrial Style for Indoor Kitchen Islands Living Room 1X E27 Base AC 220V Lamp Guard, Vintage Cage Lights, Antique Holders, Fixture Shade Iron Diamonds Shape Pack of 3 cages shades lampshade gold lamps copper",
+   "status": "POST Accepted — Live Verification Pending",
+   "first_verified_at": null,
+   "last_verified_at": null,
+   "last_post_at": "2026-09-28T17:25:42",
+   "last_check_week": null,
+   "post_attempts": 1,
+   "history": [
+    {
+     "event": "original submission",
+     "at": "2026-09-28T17:25:42",
+     "submission_id": "787608fcdf404f23aa81d56efcfc4fdb",
+     "proposed": "Black Ceiling Light Wire Basket Metal Pendant Lighting Shade,Black Industrial Style for Indoor Kitchen Islands Living Room 1X E27 Base AC 220V Lamp Guard, Vintage Cage Lights, Antique Holders, Fixture Shade Iron Diamonds Shape Pack of 3 cages shades lampshade gold lamps copper",
+     "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
+    }
+   ],
+   "next_due": "2026-10-05"
+  },
+  "B0GXB1RGJB|WCBSF90FG+RPR44WH|8": {
+   "asin": "B0GXB1RGJB",
+   "sku": "WCBSF90FG+RPR44WH",
+   "sub_source": 8,
+   "account": "amazon Ledsone",
+   "product_id": 990095,
+   "report_row": "B0GXB1RGJB|WCBSF90FG+RPR44WH",
+   "submission_id": "9aee1ad5fb29401783bd825eedf8a048",
+   "proposed": "Gold Easy Fit Metal Cut Out Lampshade Acrylic Jewel Drum Ceiling Light Shade | Shades, Home Décor & Improvement EGold | & Essential | Included LED Bulb ssential | 24cm Width,,",
+   "status": "POST Accepted — Live Verification Pending",
+   "first_verified_at": null,
+   "last_verified_at": null,
+   "last_post_at": "2026-09-28T17:25:57",
+   "last_check_week": null,
+   "post_attempts": 1,
+   "history": [
+    {
+     "event": "original submission",
+     "at": "2026-09-28T17:25:57",
+     "submission_id": "9aee1ad5fb29401783bd825eedf8a048",
+     "proposed": "Gold Easy Fit Metal Cut Out Lampshade Acrylic Jewel Drum Ceiling Light Shade | Shades, Home Décor & Improvement EGold | & Essential | Included LED Bulb ssential | 24cm Width,,",
+     "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
+    }
+   ],
+   "next_due": "2026-10-05"
+  },
+  "B07RTY1TFK|WCGEBNCR-A|6": {
+   "asin": "B07RTY1TFK",
+   "sku": "WCGEBNCR-A",
+   "sub_source": 6,
+   "account": "amazon Dcvoltage",
+   "product_id": 764505,
+   "report_row": "B07RTY1TFK|WCGEBNCR-A",
+   "submission_id": "9401fc116b1140ed924011122686f5ed",
+   "proposed": "ceiling lampshades for bedroom, Brushed copper wire lampshade, pendant light shade, Diamond cage lamp shades ceilings, metal hall hallway shape bedroom,ceiling living room, bathroom",
+   "status": "POST Accepted — Live Verification Pending",
+   "first_verified_at": null,
+   "last_verified_at": null,
+   "last_post_at": "2026-09-28T17:26:12",
+   "last_check_week": null,
+   "post_attempts": 1,
+   "history": [
+    {
+     "event": "original submission",
+     "at": "2026-09-28T17:26:12",
+     "submission_id": "9401fc116b1140ed924011122686f5ed",
+     "proposed": "ceiling lampshades for bedroom, Brushed copper wire lampshade, pendant light shade, Diamond cage lamp shades ceilings, metal hall hallway shape bedroom,ceiling living room, bathroom",
+     "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
+    }
+   ],
+   "next_due": "2026-10-05"
+  },
+  "B0CCDKF18M|WCB3B+RPR44WH|8": {
+   "asin": "B0CCDKF18M",
+   "sku": "WCB3B+RPR44WH",
+   "sub_source": 8,
+   "account": "amazon Ledsone",
+   "product_id": 456129,
+   "report_row": "B0CCDKF18M|WCB3B+RPR44WH",
+   "submission_id": "a49e28c0e10940d8a7c3f01d240de28a",
+   "proposed": "vintage lamp shade industrial metal cage wire light black ceiling pendant retro loft style lighting e27 diy home dining room bedroom kitchen hallway bar",
+   "status": "POST Accepted — Live Verification Pending",
+   "first_verified_at": null,
+   "last_verified_at": null,
+   "last_post_at": "2026-09-28T17:26:28",
+   "last_check_week": null,
+   "post_attempts": 1,
+   "history": [
+    {
+     "event": "original submission",
+     "at": "2026-09-28T17:26:28",
+     "submission_id": "a49e28c0e10940d8a7c3f01d240de28a",
+     "proposed": "vintage lamp shade industrial metal cage wire light black ceiling pendant retro loft style lighting e27 diy home dining room bedroom kitchen hallway bar",
+     "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
+    }
+   ],
+   "next_due": "2026-10-05"
+  },
+  "B0DTTKL6KX|WCVCBM3PK+RPR44WH3P BM|6": {
+   "asin": "B0DTTKL6KX",
+   "sku": "WCVCBM3PK+RPR44WH3P BM",
+   "sub_source": 6,
+   "account": "amazon Dcvoltage",
+   "product_id": 805644,
+   "report_row": "B0DTTKL6KX|WCVCBM3PK+RPR44WH3P BM",
+   "submission_id": null,
+   "proposed": null,
+   "status": "Awaiting first weekly check",
+   "first_verified_at": null,
+   "last_verified_at": null,
+   "last_post_at": null,
+   "last_check_week": null,
+   "post_attempts": 0,
+   "history": [],
+   "next_due": null,
+   "last_dry_run": {
+    "event": "weekly check",
+    "week": "2026-09-28",
+    "at": "2026-09-29T16:04:24",
+    "mode": "dry_run",
+    "status_before": "Awaiting first weekly check",
+    "live_before": "",
+    "live_entries": [],
+    "cleaned": "",
+    "duplicate_issue": false,
+    "issue": "No duplicate or repeated terms",
+    "removed_words": [],
+    "repeated_entries": [],
+    "original_meta": {
+     "entries": 0,
+     "words": 0,
+     "bytes": 0
+    },
+    "cleaned_meta": {
+     "entries": 0,
+     "words": 0,
+     "bytes": 0
+    },
+    "status_after": "No backend keywords (nothing to clean)",
+    "action": "no POST",
+    "detail": "the live listing has no backend keywords"
+   }
+  }
+ }
+}

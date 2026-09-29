@@ -1,0 +1,201 @@
+{
+ "run_at": "2026-09-29T16:04:04",
+ "transport": "Gmail API (OAuth 2.0)",
+ "mode": "safe test mode: fake Gmail/Google transport, fake tokens, temp credential files; no real e-mail, no network",
+ "passed": 32,
+ "failed": 0,
+ "results": [
+  {
+   "id": "A1",
+   "test": "WTMA_GMAIL_CLIENT_FILE missing -> AlertConfigError",
+   "result": "PASS",
+   "detail": "WTMA_GMAIL_CLIENT_FILE is not set (a file path outside the repository)."
+  },
+  {
+   "id": "A2",
+   "test": "token not yet authorized -> AlertConfigError naming gmail_authorize.py",
+   "result": "PASS",
+   "detail": "Gmail token not found at WTMA_GMAIL_TOKEN_FILE: run scripts/gmail_authorize.py once."
+  },
+  {
+   "id": "A3",
+   "test": "CLI --validate without config -> exit 2 + CONFIG ERROR line, no traceback",
+   "result": "PASS",
+   "detail": "CONFIG ERROR: WTMA_GMAIL_CLIENT_FILE is not set (a file path outside the repository).\n"
+  },
+  {
+   "id": "B1",
+   "test": "token path inside the repository -> refused",
+   "result": "PASS",
+   "detail": "WTMA_GMAIL_TOKEN_FILE points inside the repository; credentials must be stored outside it."
+  },
+  {
+   "id": "B2",
+   "test": "relative credential path -> refused",
+   "result": "PASS",
+   "detail": "WTMA_GMAIL_CLIENT_FILE must be an absolute path."
+  },
+  {
+   "id": "B3",
+   "test": "client file missing -> refused",
+   "result": "PASS",
+   "detail": "WTMA_GMAIL_CLIENT_FILE does not exist."
+  },
+  {
+   "id": "B4",
+   "test": "token rejected by Google -> not ready",
+   "result": "PASS",
+   "detail": "{'sender_expected': 'apiramedigit@gmail.com', 'authorized_account': None, 'email_verified': None, 'gmail_send_scope': None, 'scopes_granted': None, 'token_outside_repo': None, 'gmail_api_reachable': None, 'recipients': ['apiramedigit@gmail.com', 'roshandigitweb@gmail.com'], 'ready': False, 'blocker': 'Google rejected the access token (tokeninfo HTTP 400).'}"
+  },
+  {
+   "id": "B5",
+   "test": "authorized account is not apiramedigit@gmail.com -> not ready",
+   "result": "PASS",
+   "detail": "Authorized account is 'someone.else@gmail.com', not apiramedigit@gmail.com."
+  },
+  {
+   "id": "B6",
+   "test": "gmail.send scope missing -> not ready",
+   "result": "PASS",
+   "detail": "gmail.send scope not granted."
+  },
+  {
+   "id": "B7",
+   "test": "Gmail API disabled in project -> not ready",
+   "result": "PASS",
+   "detail": "{'sender_expected': 'apiramedigit@gmail.com', 'authorized_account': 'apiramedigit@gmail.com', 'email_verified': True, 'gmail_send_scope': True, 'scopes_granted': ['email', 'https://www.googleapis.com/auth/gmail.send', 'openid'], 'token_outside_repo': None, 'gmail_api_reachable': False, 'recipients': ['apiramedigit@gmail.com', 'roshandigitweb@gmail.com'], 'ready': False, 'blocker': 'Gmail API not u"
+  },
+  {
+   "id": "B8",
+   "test": "correct sender + gmail.send + API reachable -> ready",
+   "result": "PASS",
+   "detail": "{'sender_expected': 'apiramedigit@gmail.com', 'authorized_account': 'apiramedigit@gmail.com', 'email_verified': True, 'gmail_send_scope': True, 'scopes_granted': ['email', 'https://www.googleapis.com/auth/gmail.send', 'openid'], 'token_outside_repo': None, 'gmail_api_reachable': True, 'recipients': ['apiramedigit@gmail.com', 'roshandigitweb@gmail.com'], 'ready': True, 'blocker': None, 'gmail_api_p"
+  },
+  {
+   "id": "B9",
+   "test": "validation report contains no token",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "C0",
+   "test": "cycle overlapping the verification date is not counted",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "C1",
+   "test": "one decline cycle after live verification -> count 1, no alert",
+   "result": "PASS",
+   "detail": "{'cycle_id': '2026-10-04_2026-10-10', 'tracked': 1, 'due': 0, 'results': []}"
+  },
+  {
+   "id": "D1",
+   "test": "two consecutive decline cycles -> alert condition generated (dry run, not sent)",
+   "result": "PASS",
+   "detail": "[{'asin': 'B0TEST00001', 'cycle_id': '2026-10-11_2026-10-17', 'sku': 'WCTEST2PK', 'consecutive_decline_count': 2, 'subject': '⚠️ Full Optimization Review Required – ASIN B0TEST00001 – 2 Consecutive 7D Performance Drops', 'recipients': ['apiramedigit@gmail.com', 'roshandigitweb@gmail.com'], 'alert_status': 'DRY_RUN (not sent)', 'alert_sent_at': None, 'message_id': None, 'error': None, 'attempted_at"
+  },
+  {
+   "id": "D2",
+   "test": "alert subject exact",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "D3",
+   "test": "e-mail content has every required field + the no-visible-change message",
+   "result": "PASS",
+   "detail": "[]"
+  },
+  {
+   "id": "D4",
+   "test": "decline, improve, decline -> count 1, no alert",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "D5",
+   "test": "decline, missing week, decline -> not consecutive, no alert",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "D6",
+   "test": "week without performance data breaks the streak",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "E1",
+   "test": "first send -> SENT",
+   "result": "PASS",
+   "detail": "[{'asin': 'B0TEST00001', 'cycle_id': '2026-10-11_2026-10-17', 'sku': 'WCTEST2PK', 'consecutive_decline_count': 2, 'subject': '⚠️ Full Optimization Review Required – ASIN B0TEST00001 – 2 Consecutive 7D Performance Drops', 'recipients': ['apiramedigit@gmail.com', 'roshandigitweb@gmail.com'], 'alert_status': 'SENT', 'alert_sent_at': '2026-09-29T16:04:03', 'message_id': 'fake-gmail-0001', 'error': Non"
+  },
+  {
+   "id": "E2",
+   "test": "same ASIN/cycle again -> BLOCKED_DUPLICATE, no second Gmail request",
+   "result": "PASS",
+   "detail": "([{'asin': 'B0TEST00001', 'cycle_id': '2026-10-11_2026-10-17', 'sku': 'WCTEST2PK', 'consecutive_decline_count': 2, 'subject': '⚠️ Full Optimization Review Required – ASIN B0TEST00001 – 2 Consecutive 7D Performance Drops', 'recipients': ['apiramedigit@gmail.com', 'roshandigitweb@gmail.com'], 'alert_status': 'SENT', 'alert_sent_at': '2026-09-29T16:04:03', 'message_id': 'fake-gmail-0001', 'error': No"
+  },
+  {
+   "id": "F1",
+   "test": "ONE Gmail message with BOTH recipients in To",
+   "result": "PASS",
+   "detail": "apiramedigit@gmail.com, roshandigitweb@gmail.com"
+  },
+  {
+   "id": "F2",
+   "test": "From = apiramedigit@gmail.com; subject exact; key header set",
+   "result": "PASS",
+   "detail": "{'From': 'apiramedigit@gmail.com', 'To': 'apiramedigit@gmail.com, roshandigitweb@gmail.com', 'Subject': '⚠️ Full Optimization Review Required – ASIN B0TEST00001 – 2 Consecutive 7D Performance Drops', 'X-WTMA-Alert-Key': 'wtma-foa-B0TEST00001-2026-10-11_2026-10-17', 'MIME-Version': '1.0', 'Content-Type': 'multipart/alternative; boundary=\"===============9024240915332014334==\"'}"
+  },
+  {
+   "id": "F3",
+   "test": "body keeps the Full Optimization warning + alert fields",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "F4",
+   "test": "recipient list must be exactly the two addresses",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "H1",
+   "test": "Gmail response recorded: message id, sent time, recipients, status",
+   "result": "PASS",
+   "detail": "{'asin': 'B0TEST00001', 'cycle_id': '2026-10-11_2026-10-17', 'sku': 'WCTEST2PK', 'consecutive_decline_count': 2, 'subject': '⚠️ Full Optimization Review Required – ASIN B0TEST00001 – 2 Consecutive 7D Performance Drops', 'recipients': ['apiramedigit@gmail.com', 'roshandigitweb@gmail.com'], 'alert_status': 'SENT', 'alert_sent_at': '2026-09-29T16:04:03', 'message_id': 'fake-gmail-0001', 'error': None"
+  },
+  {
+   "id": "E3",
+   "test": "failed send -> FAILED (retried next run, not marked sent)",
+   "result": "PASS",
+   "detail": "[{'asin': 'B0TEST00001', 'cycle_id': '2026-10-11_2026-10-17', 'sku': 'WCTEST2PK', 'consecutive_decline_count': 2, 'subject': '⚠️ Full Optimization Review Required – ASIN B0TEST00001 – 2 Consecutive 7D Performance Drops', 'recipients': ['apiramedigit@gmail.com', 'roshandigitweb@gmail.com'], 'alert_status': 'FAILED', 'alert_sent_at': None, 'message_id': None, 'error': '{\"error\": {\"code\": 401, \"messa"
+  },
+  {
+   "id": "G1",
+   "test": "no access token / refresh token / client secret in stdout, ledger or evidence",
+   "result": "PASS",
+   "detail": "[]"
+  },
+  {
+   "id": "G2",
+   "test": "secrets echoed in an API error are redacted",
+   "result": "PASS",
+   "detail": "{\"error\": {\"code\": 401, \"message\": \"bad Bearer [REDACTED] \\\"refresh_token\\\": \\\"[REDACTED]\\\" [REDACTED]\"}}"
+  },
+  {
+   "id": "G3",
+   "test": "redact() masks token-shaped strings and JSON secret fields",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "R1",
+   "test": "real dataset (13-19 Sep): tracked = live-verified ASINs, 0 alerts due",
+   "result": "PASS",
+   "detail": "{'cycle_id': '2026-09-13_2026-09-19', 'tracked': 2, 'due': 0, 'results': []}"
+  }
+ ]
+}

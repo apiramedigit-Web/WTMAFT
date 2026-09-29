@@ -28,7 +28,11 @@ REAL = BASE / "output" / "weekly_top_moving_asin_backend_keyword_fine_tuning_rep
 DS = json.loads((BASE / "data" / "report_dataset.json").read_text(encoding="utf-8"))
 OUT = BASE / "evidence" / "change_tracking_test_results.json"
 MD = DS["monitoring_data"]
-ROW0 = DS["change_record"][0]
+VERIFIED = [c for c in DS["change_record"] if c["status"] == "Live-verified"]  # only these may enter monitoring
+PENDING = [c for c in DS["change_record"] if c["status"] == "Proposed" and c.get("submission")]
+ROW0, ROW1 = VERIFIED[0], VERIFIED[1]
+ROW0_NEEDS_CHANGE = any(k["needs_change"] for k in DS["keyword_analysis"]
+                        if f'{k["asin"]}|{k["sku"]}' == ROW0["key"])
 AVAIL = set(MD["available_dates"])
 results = []
 
@@ -106,27 +110,34 @@ key = ROW0["key"]
 with sync_playwright() as p:
     br = p.chromium.launch()
 
-    # T1 - Proposed record (default) -----------------------------------------------------------
+    # T1 - build status (default): Live-verified only for verified submissions, else Proposed -----
     ctx, pg, errs = open_page(br, REAL)
-    statuses = pg.eval_on_selector_all("#t7 select.cr-status", "e => e.map(s => s.value)")
-    m = pg.evaluate("window.__wtma__.monitor({asin:'%s', status:'Proposed', date_changed:'2026-09-22'})" % ROW0["asin"])
-    check("T1 Proposed: every record starts Proposed, not monitored, Section 8 empty",
-          set(statuses) == {"Proposed"} and m["active"] is False
-          and pg.locator("#t8 tbody td.empty").count() == 1
-          and pg.evaluate("window.__REPORT_KPI__.finetune_completed_verified") == 0,
-          {"statuses": set(statuses), "monitor": m})
+    statuses = dict(zip(pg.eval_on_selector_all("#t7 select.cr-status", "e => e.map(s => s.dataset.key)"),
+                        pg.eval_on_selector_all("#t7 select.cr-status", "e => e.map(s => s.value)")))
+    m = pg.evaluate("window.__wtma__.monitor({asin:'%s', status:'Live-verified', date_changed:'2026-09-28'})" % ROW0["asin"])
+    check("T1 Default: the 2 verified rows start Live-verified, all others Proposed; nothing monitored, Section 8 empty",
+          statuses == {c["key"]: c["status"] for c in DS["change_record"]}
+          and sorted(k for k, v in statuses.items() if v == "Live-verified") == sorted(c["key"] for c in VERIFIED)
+          and m["active"] is False and pg.locator("#t8 tbody td.empty").count() == 1
+          and pg.evaluate("window.__REPORT_KPI__.finetune_completed_verified") == len(VERIFIED),
+          {"statuses": sorted(set(statuses.values())), "monitor": m})
 
     # T2 - validation: nothing invalid is saved ------------------------------------------------
-    edit(pg, key, status="Monitoring"); save(pg, key)
+    edit(pg, key, date="", status="Monitoring"); save(pg, key)
     e1 = row(pg, key).locator(".cr-msg").inner_text()
     edit(pg, key, date="2026-09-22", status="Proposed"); save(pg, key)
     e2 = row(pg, key).locator(".cr-msg").inner_text()
     edit(pg, key, date="2099-01-01", status="Monitoring"); save(pg, key)
     e3 = row(pg, key).locator(".cr-msg").inner_text()
+    pk = PENDING[0]["key"]
+    edit(pg, pk, date="2026-09-28", status="Monitoring"); save(pg, pk)
+    e4 = row(pg, pk).locator(".cr-msg").inner_text()
+    lv_disabled = row(pg, pk).locator('select.cr-status option[value="Live-verified"]').is_disabled()
     stored = pg.evaluate("localStorage.getItem('wtma.changeRecords.v1')")
-    check("T2 Validation: no date / Proposed+date / future date are rejected and not stored",
+    check("T2 Validation: no date / Proposed+date / future date / pending POST into monitoring are rejected and not stored",
           "Enter the actual Date Changed" in e1 and "Proposed change has no Date Changed" in e2
-          and "cannot be in the future" in e3 and stored is None, [e1, e2, e3, stored])
+          and "cannot be in the future" in e3 and "pending live verification" in e4 and lv_disabled
+          and stored is None, [e1, e2, e3, e4, lv_disabled, stored])
     ctx.close()
 
     # T3 - REAL workflow: 22-Sep + Monitoring -> Save -> refresh persists -> X/7 ---------------
@@ -158,8 +169,11 @@ with sync_playwright() as p:
           and "23 Sept 2026 → 29 Sept 2026" in t8[0][2], [t8[0][1], live_pre])
     check("T3f Completed cannot be chosen before 7/7 days", completed_disabled)
     check("T3g KPI + Section 5 follow the saved record",
-          kpi["finetune_completed_verified"] == 1 and kpi["under_monitoring"] == 1
-          and s5 and "Uploaded (user-confirmed 22 Sept 2026)" in s5, [kpi, s5])
+          kpi["finetune_completed_verified"] == len(VERIFIED) and kpi["under_monitoring"] == 1
+          # Section 5 reflects this week's keywords: once the listing's live keywords are clean it shows
+          # "No change required"; while duplicates remain it shows the user-confirmed upload
+          and s5 and (("Uploaded (user-confirmed 22 Sept 2026)" in s5) if ROW0_NEEDS_CHANGE
+                      else ("No change required" in s5)), [kpi, s5])
     check("T3h Impressions shown as '—' with reason (weekly-only source), never estimated",
           all(t8[0][i].startswith("—") and "weekly data only" in t8[0][i] for i in (4, 5, 6)), t8[0][4:7])
 
@@ -176,22 +190,31 @@ with sync_playwright() as p:
           all(v <= 0 for v in ov.values()), {k: v for k, v in ov.items() if v > 0} or "all 0")
 
     # T4 - 0/7 days and T5 partial -------------------------------------------------------------
-    k2 = DS["change_record"][1]["key"]
+    # Only 2 rows are live-verified, so T4 and T5 re-save the second verified row.
+    k2 = ROW1["key"]
+
+    def t8_result(r):
+        res = {rw[0].split("\n")[0] + "|" + rw[0].split("\n")[1].split(" · ")[0]: rw[7] for rw in t8_texts(pg)}
+        return res.get(r["asin"] + "|" + r["sku"], "")
     pg.click('nav.toc a[href="#s7"]')
     edit(pg, k2, date=MD["available_through"], status="Monitoring"); save(pg, k2)
-    k3 = DS["change_record"][2]["key"]
-    edit(pg, k3, date="2026-09-18", status="Monitoring"); save(pg, k3)
     pg.click('nav.toc a[href="#s8"]')
-    res = {rw[0].split("\n")[0] + "|" + rw[0].split("\n")[1].split(" · ")[0]: rw[7] for rw in t8_texts(pg)}
-    exp_partial = sum(1 for d in days("2026-09-18", 1, 7) if d in AVAIL)
-    r2 = res.get(DS["change_record"][1]["asin"] + "|" + DS["change_record"][1]["sku"], "")
-    r3 = res.get(DS["change_record"][2]["asin"] + "|" + DS["change_record"][2]["sku"], "")
+    r2 = t8_result(ROW1)
+    pg.click('nav.toc a[href="#s7"]')
+    # partial = last loaded day - 5 -> always 5 of the 7 post-change days loaded (was a fixed
+    # 18 Sep, which stopped being partial once the daily data reached 25 Sep)
+    partial_d = (dt.date.fromisoformat(MD["available_through"]) - dt.timedelta(days=5)).isoformat()
+    edit(pg, k2, date=partial_d, status="Monitoring"); save(pg, k2)
+    pg.click('nav.toc a[href="#s8"]')
+    r3 = t8_result(ROW1)
+    exp_partial = sum(1 for d in days(partial_d, 1, 7) if d in AVAIL)
     check("T4 Monitoring with 0/7 days (Date Changed = last loaded day)", "Monitoring — 0/7 days" in r2, r2)
-    check(f"T5 Monitoring with partial days (18 Sept -> {exp_partial}/7)", f"Monitoring — {exp_partial}/7 days" in r3, r3)
+    check(f"T5 Monitoring with partial days ({partial_d} -> {exp_partial}/7)",
+          0 < exp_partial < 7 and f"Monitoring — {exp_partial}/7 days" in r3, r3)
 
     # T6 - dirty guard: leaving with unsaved input asks first ----------------------------------
     pg.click('nav.toc a[href="#s7"]')
-    edit(pg, DS["change_record"][3]["key"], date="2026-09-20")
+    edit(pg, PENDING[0]["key"], date="2026-09-20")
     dialogs = []
     pg.on("dialog", lambda d: (dialogs.append(d.type), d.dismiss()))
     pg.close(run_before_unload=True)

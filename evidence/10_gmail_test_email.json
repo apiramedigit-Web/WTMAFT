@@ -1,0 +1,24 @@
+{
+ "type": "TEST (not a production alert; not in data/monitoring_cycles.json)",
+ "status": "SENT",
+ "sent_at": "2026-09-29T11:47:04",
+ "from": "apiramedigit@gmail.com",
+ "to": [
+  "apiramedigit@gmail.com"
+ ],
+ "subject": "[TEST] ⚠️ Full Optimization Review Required – ASIN B0GXB7RGZK – 2 Consecutive 7D Performance Drops",
+ "sample_row": {
+  "asin": "B0GXB7RGZK",
+  "cycle_id": "2026-09-13_2026-09-19",
+  "consecutive_decline_count": 0
+ },
+ "http_status": 200,
+ "gmail_message_id": "1a0ebcf45b96f251",
+ "gmail_thread_id": "1a0ebcf45b96f251",
+ "gmail_labels": [
+  "UNREAD",
+  "SENT",
+  "INBOX"
+ ],
+ "error": null
+}

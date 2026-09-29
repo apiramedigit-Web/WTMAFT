@@ -1,0 +1,44 @@
+{
+ "validated_at": "2026-09-29T16:04:59",
+ "file": "output\\weekly_top_moving_asin_backend_keyword_fine_tuning_report.html",
+ "bytes": 209282,
+ "passed": 7,
+ "failed": 0,
+ "checks": [
+  {
+   "check": "<!DOCTYPE html> first",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "html lang, meta charset utf-8, viewport, title",
+   "result": "PASS",
+   "detail": "{'lang': 'en', 'charset': 'utf-8', 'viewport': True}"
+  },
+  {
+   "check": "all non-void tags balanced",
+   "result": "PASS",
+   "detail": "([], [])"
+  },
+  {
+   "check": "element ids unique",
+   "result": "PASS",
+   "detail": "{}"
+  },
+  {
+   "check": "every tab link targets an existing section (incl. #s13 Full Optimization)",
+   "result": "PASS",
+   "detail": "[]"
+  },
+  {
+   "check": "embedded JSON parses and carries monitoring data",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "no token / client-secret / API-key shaped strings in the dashboard",
+   "result": "PASS",
+   "detail": "[]"
+  }
+ ]
+}
