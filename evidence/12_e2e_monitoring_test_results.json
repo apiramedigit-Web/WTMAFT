@@ -1,314 +1,189 @@
 {
- "run_at": "2026-09-29T16:04:02",
- "mode": "deterministic dry-run: temp fixtures + temp ledger + fake Gmail transport + temp dashboards; no real e-mail, no network, no Amazon keyword update",
- "passed": 51,
+ "run_at": "2026-10-05T10:16:01",
+ "rule": "POST Accepted starts monitoring (common anchor 2026-09-29 for the 22 original submissions); Week 1 / Week 2; GET audit only; no e-mail (2026-10-05)",
+ "mode": "deterministic: temp fixtures + temp ledger + fake Listing Management + temp dashboards; no network, no real POST, no e-mail",
+ "passed": 30,
  "failed": 0,
  "results": [
   {
-   "case": "TC1",
-   "test": "week 1 down: consecutive decline count = 1",
+   "case": "M1",
+   "test": "anchor = the common update date 29 Sep for the accepted original submission (POST 28 Sep and the report week are NOT used)",
+   "result": "PASS",
+   "detail": "{'B0E2ETEST01|2026-09-29': {'key': 'B0E2ETEST01|2026-09-29', 'kind': 'cycle', 'asin': 'B0E2ETEST01', 'skus': ['WCE2E2PK'], 'sku': 'WCE2E2PK', 'backend_keyword_status': 'Live-verified', 'live_update_date': '2026-09-29', 'live_confirmed_at': '2026-09-28T17:00:00', 'live_update_source': 'original submission POST Accepted (common monitoring anchor)', 'monitoring_status': 'Live-verified — monitoring not yet started', 'week1_start': '2026-09-29', 'week1_end': '2026-10-05', 'week1_valid': True, 'week1_"
+  },
+  {
+   "case": "M1",
+   "test": "Week 1 = 29 Sep..5 Oct, Week 2 = 6..12 Oct (7 days each, the update day included)",
    "result": "PASS",
    "detail": ""
   },
   {
-   "case": "TC1",
-   "test": "NO Gmail alert (no alert due, no send request)",
+   "case": "M2",
+   "test": "no day of Week 1 loaded yet -> not started, no orders, no verdict",
+   "result": "PASS",
+   "detail": "{'key': 'B0E2ETEST01|2026-09-29', 'kind': 'cycle', 'asin': 'B0E2ETEST01', 'skus': ['WCE2E2PK'], 'sku': 'WCE2E2PK', 'backend_keyword_status': 'Live-verified', 'live_update_date': '2026-09-29', 'live_confirmed_at': '2026-09-28T17:00:00', 'live_update_source': 'original submission POST Accepted (common monitoring anchor)', 'monitoring_status': 'Live-verified — monitoring not yet started', 'week1_start': '2026-09-29', 'week1_end': '2026-10-05', 'week1_valid': True, 'week1_days_loaded': 0, 'week1_com"
+  },
+  {
+   "case": "M3",
+   "test": "Week 1 in progress (4/7 days): 'Monitoring — Week 1', orders not totalled (8 so far), no verdict",
+   "result": "PASS",
+   "detail": "{'key': 'B0E2ETEST01|2026-09-29', 'kind': 'cycle', 'asin': 'B0E2ETEST01', 'skus': ['WCE2E2PK'], 'sku': 'WCE2E2PK', 'backend_keyword_status': 'Live-verified', 'live_update_date': '2026-09-29', 'live_confirmed_at': '2026-09-28T17:00:00', 'live_update_source': 'original submission POST Accepted (common monitoring anchor)', 'monitoring_status': 'Monitoring — Week 1', 'week1_start': '2026-09-29', 'week1_end': '2026-10-05', 'week1_valid': True, 'week1_days_loaded': 4, 'week1_complete': False, 'week1_o"
+  },
+  {
+   "case": "M4",
+   "test": "Week 1 complete (14), Week 2 4/7 days: 'Monitoring — Week 2', NO decline computed although Week 2 is lower so far",
+   "result": "PASS",
+   "detail": "{'key': 'B0E2ETEST01|2026-09-29', 'kind': 'cycle', 'asin': 'B0E2ETEST01', 'skus': ['WCE2E2PK'], 'sku': 'WCE2E2PK', 'backend_keyword_status': 'Live-verified', 'live_update_date': '2026-09-29', 'live_confirmed_at': '2026-09-28T17:00:00', 'live_update_source': 'original submission POST Accepted (common monitoring anchor)', 'monitoring_status': 'Monitoring — Week 2', 'week1_start': '2026-09-29', 'week1_end': '2026-10-05', 'week1_valid': True, 'week1_days_loaded': 7, 'week1_complete': True, 'week1_or"
+  },
+  {
+   "case": "M4",
+   "test": "a missing (not loaded) day inside Week 2 keeps it incomplete (6/7) - never a partial total",
+   "result": "PASS",
+   "detail": "{'key': 'B0E2ETEST01|2026-09-29', 'kind': 'cycle', 'asin': 'B0E2ETEST01', 'skus': ['WCE2E2PK'], 'sku': 'WCE2E2PK', 'backend_keyword_status': 'Live-verified', 'live_update_date': '2026-09-29', 'live_confirmed_at': '2026-09-28T17:00:00', 'live_update_source': 'original submission POST Accepted (common monitoring anchor)', 'monitoring_status': 'Monitoring — Week 2', 'week1_start': '2026-09-29', 'week1_end': '2026-10-05', 'week1_valid': True, 'week1_days_loaded': 7, 'week1_complete': True, 'week1_or"
+  },
+  {
+   "case": "M5",
+   "test": "Week 2 complete and lower (14 -> 7): Monitoring Complete, Performance Decline, -50.0%",
+   "result": "PASS",
+   "detail": "{'key': 'B0E2ETEST01|2026-09-29', 'kind': 'cycle', 'asin': 'B0E2ETEST01', 'skus': ['WCE2E2PK'], 'sku': 'WCE2E2PK', 'backend_keyword_status': 'Live-verified', 'live_update_date': '2026-09-29', 'live_confirmed_at': '2026-09-28T17:00:00', 'live_update_source': 'original submission POST Accepted (common monitoring anchor)', 'monitoring_status': 'Monitoring Complete / Performance Comparison Available', 'week1_start': '2026-09-29', 'week1_end': '2026-10-05', 'week1_valid': True, 'week1_days_loaded': 7"
+  },
+  {
+   "case": "M5",
+   "test": "Week 2 higher (21) -> Performance Improved; equal (14 = 14) -> Performance Stable",
    "result": "PASS",
    "detail": ""
   },
   {
-   "case": "TC1",
-   "test": "production alert log has no alert",
+   "case": "M6",
+   "test": "a completed cycle is frozen: later daily-data windows never rewrite its Week 1 / Week 2 figures",
    "result": "PASS",
    "detail": ""
   },
   {
-   "case": "TC1",
-   "test": "dashboard = one consecutive decline, NO Full Optimization Review alert",
+   "case": "M7",
+   "test": "POST Accepted with the audit GET still showing the previous keywords -> monitored from 29 Sep, no 'Update Pending' entry, ledger status not 'Live Verification Pending'",
    "result": "PASS",
-   "detail": "{'state': 'one', 'row': 'B0E2ETEST01\\nWCE2E2PK\\n\\t\\namazon Ledsone\\nAmazon UK\\n\\t\\n6\\n04 Oct → 10 Oct\\n\\t\\n10\\n27 Sept → 03 Oct\\n\\t\\n-40.0%\\nDecline\\n\\t\\nFine-tuned 28 Sept 2026\\nLive verified 29 Sept 2026\\nMonitoring from 04 Oct 2026\\nCurrent cycle #1\\n\\t\\n1\\n\\t\\nNo Duplicates Found\\nduplicate words removed: 9\\n\\t\\nOne consecutive decline (no alert)\\n\\t\\nNot required', 'banner': '', 'section': \"12.\\nFull Optimization Review Monitoring\\n\\nEvery ASIN whose backend keyword fine-tuning is live veri"
+   "detail": "({'B0E2ETEST01|2026-09-29': {'key': 'B0E2ETEST01|2026-09-29', 'kind': 'cycle', 'asin': 'B0E2ETEST01', 'skus': ['WCE2E2PK'], 'sku': 'WCE2E2PK', 'backend_keyword_status': 'Live-verified', 'live_update_date': '2026-09-29', 'live_confirmed_at': '2026-09-28T17:00:00', 'live_update_source': 'original submission POST Accepted (common monitoring anchor)', 'monitoring_status': 'Monitoring Complete / Performance Comparison Available', 'week1_start': '2026-09-29', 'week1_end': '2026-10-05', 'week1_valid': "
   },
   {
-   "case": "TC2",
-   "test": "week 2 down: consecutive decline count = 2",
+   "case": "M8",
+   "test": "GET shows the accepted keywords -> NO POST, audit Live Verified, anchor stays 29 Sep (no new cycle)",
+   "result": "PASS",
+   "detail": "[{'date': '2026-09-29', 'confirmed_at': '2026-09-28T17:00:00', 'source': 'original submission POST Accepted (common monitoring anchor)', 'user_reported_date': None, 'value': 'wire cage pendant light'}]"
+  },
+  {
+   "case": "M9",
+   "test": "GET still shows the keywords from before the accepted POST -> the same payload is NOT re-POSTed; audit only, status POST Accepted — Monitoring, anchor stays 29 Sep",
+   "result": "PASS",
+   "detail": "([], 'POST Accepted — Monitoring', 'audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor')"
+  },
+  {
+   "case": "M9",
+   "test": "a genuinely NEW live value with duplicates -> cleaned from the fresh GET, POSTed once; POST Accepted starts a new cycle on the POST date even though the read-back still shows the old value (audit)",
+   "result": "PASS",
+   "detail": "([{'sku': 'WCE2E2PK', 'sub_source': '8', 'site': 'UK', 'backend_keywords': 'brass cage pendant industrial lamp'}], 'POST Accepted — Monitoring', [{'date': '2026-09-29', 'confirmed_at': '2026-09-28T17:00:00', 'source': 'original submission POST Accepted (common monitoring anchor)', 'user_reported_date': None, 'value': 'wire cage pendant light'}, {'date': '2026-10-12', 'confirmed_at': '2026-10-12T12:00:00', 'source': 'cleaned keywords POSTed (POST Accepted)', 'user_reported_date': None, 'value': '"
+  },
+  {
+   "case": "M9",
+   "test": "next due week: GET still shows the value from before THAT accepted POST -> not re-sent (still 1 POST)",
    "result": "PASS",
    "detail": ""
   },
   {
-   "case": "TC2",
-   "test": "dashboard shows ⚠️ Full Optimization Review Required (+ banner, + manual notice)",
-   "result": "PASS",
-   "detail": "{'state': 'required', 'row': 'B0E2ETEST01\\nWCE2E2PK\\n\\t\\namazon Ledsone\\nAmazon UK\\n\\t\\n4\\n11 Oct → 17 Oct\\n\\t\\n6\\n04 Oct → 10 Oct\\n\\t\\n-33.3%\\nDecline\\n\\t\\nFine-tuned 28 Sept 2026\\nLive verified 29 Sept 2026\\nMonitoring from 04 Oct 2026\\nCurrent cycle #2\\n\\t\\n2\\n\\t\\nNo Duplicates Found\\nduplicate words removed: 9\\n\\t\\n⚠️ Full Optimization Review Required\\n\\t\\nDRY_RUN (not sent)', 'banner': '⚠️ FULL OPTIMIZATION REVIEW REQUIRED: B0E2ETEST01 (alert pending) · Full Optimization is manual. When don"
-  },
-  {
-   "case": "TC2",
-   "test": "Gmail Full Optimization Review alert triggered (one send, both recipients in To)",
-   "result": "PASS",
-   "detail": "[{'asin': 'B0E2ETEST01', 'cycle_id': '2026-10-11_2026-10-17', 'sku': 'WCE2E2PK', 'consecutive_decline_count': 2, 'subject': '⚠️ Full Optimization Review Required – ASIN B0E2ETEST01 – 2 Consecutive 7D Performance Drops', 'recipients': ['apiramedigit@gmail.com', 'roshandigitweb@gmail.com'], 'alert_status': 'SENT', 'alert_sent_at': '2026-09-29T16:03:57', 'message_id': 'fake-gmail-0001', 'error': None, 'attempted_at': '2026-09-29T16:03:57', 'http_status': 200, 'this_run': 'SENT'}]"
-  },
-  {
-   "case": "TC2",
-   "test": "alert recorded in the alert ledger (status, sent time, Gmail message id)",
-   "result": "PASS",
-   "detail": "{'asin': 'B0E2ETEST01', 'cycle_id': '2026-10-11_2026-10-17', 'sku': 'WCE2E2PK', 'consecutive_decline_count': 2, 'subject': '⚠️ Full Optimization Review Required – ASIN B0E2ETEST01 – 2 Consecutive 7D Performance Drops', 'recipients': ['apiramedigit@gmail.com', 'roshandigitweb@gmail.com'], 'alert_status': 'SENT', 'alert_sent_at': '2026-09-29T16:03:57', 'message_id': 'fake-gmail-0001', 'error': None, 'attempted_at': '2026-09-29T16:03:57', 'http_status': 200}"
-  },
-  {
-   "case": "TC2",
-   "test": "duplicate protection: same ASIN/cycle not sent twice",
-   "result": "PASS",
-   "detail": "[{'asin': 'B0E2ETEST01', 'cycle_id': '2026-10-11_2026-10-17', 'sku': 'WCE2E2PK', 'consecutive_decline_count': 2, 'subject': '⚠️ Full Optimization Review Required – ASIN B0E2ETEST01 – 2 Consecutive 7D Performance Drops', 'recipients': ['apiramedigit@gmail.com', 'roshandigitweb@gmail.com'], 'alert_status': 'SENT', 'alert_sent_at': '2026-09-29T16:03:57', 'message_id': 'fake-gmail-0001', 'error': None, 'attempted_at': '2026-09-29T16:03:57', 'http_status': 200, 'this_run': 'BLOCKED_DUPLICATE (already"
-  },
-  {
-   "case": "TC2",
-   "test": "dashboard after sending = review required + alert already sent, with message id",
-   "result": "PASS",
-   "detail": "{'state': 'sent', 'row': 'B0E2ETEST01\\nWCE2E2PK\\n\\t\\namazon Ledsone\\nAmazon UK\\n\\t\\n4\\n11 Oct → 17 Oct\\n\\t\\n6\\n04 Oct → 10 Oct\\n\\t\\n-33.3%\\nDecline\\n\\t\\nFine-tuned 28 Sept 2026\\nLive verified 29 Sept 2026\\nMonitoring from 04 Oct 2026\\nCurrent cycle #2\\n\\t\\n2\\n\\t\\nNo Duplicates Found\\nduplicate words removed: 9\\n\\t\\n⚠️ Full Optimization Review Required · Alert sent\\n\\t\\nSent\\n2026-09-29 16:03:57\\nGmail id fake-gmail-0001', 'banner': '⚠️ FULL OPTIMIZATION REVIEW REQUIRED: B0E2ETEST01 (alert sent, "
-  },
-  {
-   "case": "TC3",
-   "test": "week 2 improved: count resets to 0",
+   "case": "M10",
+   "test": "routine re-check of the accepted value: no POST, NO new anchor (stays 29 Sep)",
    "result": "PASS",
    "detail": ""
   },
   {
-   "case": "TC3",
-   "test": "NO alert",
+   "case": "M10",
+   "test": "manual change detected by the weekly GET: clean -> no POST; new live value = source of truth; new anchor 13 Oct",
    "result": "PASS",
    "detail": ""
   },
   {
-   "case": "TC3",
-   "test": "dashboard = normal / improving",
+   "case": "M10",
+   "test": "new cycle: Week 1 13..19 Oct, Week 2 20..26 Oct; old 29 Sep cycle kept (complete before the change, not mixed)",
    "result": "PASS",
-   "detail": "{'state': 'normal', 'row': 'B0E2ETEST01\\nWCE2E2PK\\n\\t\\namazon Ledsone\\nAmazon UK\\n\\t\\n9\\n11 Oct → 17 Oct\\n\\t\\n6\\n04 Oct → 10 Oct\\n\\t\\n+50.0%\\nImproved\\n\\t\\nFine-tuned 28 Sept 2026\\nLive verified 29 Sept 2026\\nMonitoring from 04 Oct 2026\\nCurrent cycle #2\\n\\t\\n0\\n\\t\\nNo Duplicates Found\\nduplicate words removed: 9\\n\\t\\nNormal / improving\\n\\t\\nNot required', 'banner': '', 'section': \"12.\\nFull Optimization Review Monitoring\\n\\nEvery ASIN whose backend keyword fine-tuning is live verified is monito"
+   "detail": "({'key': 'B0E2ETEST01|2026-09-29', 'kind': 'cycle', 'asin': 'B0E2ETEST01', 'skus': ['WCE2E2PK'], 'sku': 'WCE2E2PK', 'backend_keyword_status': 'Live-verified', 'live_update_date': '2026-09-29', 'live_confirmed_at': '2026-09-28T17:00:00', 'live_update_source': 'original submission POST Accepted (common monitoring anchor)', 'monitoring_status': 'Monitoring Complete / Performance Comparison Available', 'week1_start': '2026-09-29', 'week1_end': '2026-10-05', 'week1_valid': True, 'week1_days_loaded': "
   },
   {
-   "case": "TC4a",
-   "test": "missing week: streak breaks, count restarts at 1 (not 2), NO alert",
+   "case": "M10",
+   "test": "change during the old Week 2 -> old cycle 'Superseded', its Week 2 not evaluated (no mixed decline)",
+   "result": "PASS",
+   "detail": "({'key': 'B0E2ETEST01|2026-09-29', 'kind': 'cycle', 'asin': 'B0E2ETEST01', 'skus': ['WCE2E2PK'], 'sku': 'WCE2E2PK', 'backend_keyword_status': 'Live-verified', 'live_update_date': '2026-09-29', 'live_confirmed_at': '2026-09-28T17:00:00', 'live_update_source': 'original submission POST Accepted (common monitoring anchor)', 'monitoring_status': 'Superseded by a newer backend keyword update', 'week1_start': '2026-09-29', 'week1_end': '2026-10-05', 'week1_valid': True, 'week1_days_loaded': 7, 'week1_"
+  },
+  {
+   "case": "M11",
+   "test": "user's value has repetitions -> cleanup operates on the latest live value: relevant words kept, nothing invented, POST once, new anchor 6 Oct (POST Accepted date)",
+   "result": "PASS",
+   "detail": "([{'sku': 'WCE2E2PK', 'sub_source': '8', 'site': 'UK', 'backend_keywords': 'Vintage cage pendant brass holder'}], [{'date': '2026-09-29', 'confirmed_at': '2026-09-28T17:00:00', 'source': 'original submission POST Accepted (common monitoring anchor)', 'user_reported_date': None, 'value': 'wire cage pendant light'}, {'date': '2026-10-06', 'confirmed_at': '2026-10-06T12:00:00', 'source': 'cleaned keywords POSTed (POST Accepted)', 'user_reported_date': None, 'value': 'Vintage cage pendant brass hold"
+  },
+  {
+   "case": "M12",
+   "test": "user recorded a manual change on 3 Oct; the next fresh GET confirms it -> anchor 3 Oct (not the GET date)",
    "result": "PASS",
    "detail": ""
   },
   {
-   "case": "TC4b",
-   "test": "no-data cycle breaks the streak: next decline counts 1, NO alert",
+   "case": "M12",
+   "test": "change already detected on 6 Oct, user reports the real date 4 Oct -> the anchor is corrected to 4 Oct",
    "result": "PASS",
    "detail": ""
   },
   {
-   "case": "TC4b",
-   "test": "dashboard shows the no-data cycle (streak reset), not an alert",
+   "case": "M12",
+   "test": "future date, date before the current anchor and malformed date are rejected",
    "result": "PASS",
-   "detail": "{'state': 'nodata', 'row': 'B0E2ETEST01\\nWCE2E2PK\\n\\t\\n—\\nAmazon UK\\n\\t\\n—\\n11 Oct → 17 Oct\\n\\t\\n—\\n04 Oct → 10 Oct\\n\\t\\n—\\n—\\noutside top 50 · still monitored\\n\\t\\nFine-tuned 28 Sept 2026\\nLive verified 29 Sept 2026\\nMonitoring from 04 Oct 2026\\nCurrent cycle #2\\n\\t\\n0\\n\\t\\n—\\nduplicate words removed: 0\\n\\t\\nNo data this cycle (streak reset)\\n\\t\\nNot required', 'banner': '', 'section': \"12.\\nFull Optimization Review Monitoring\\n\\nEvery ASIN whose backend keyword fine-tuning is live verified is "
+   "detail": "[]"
   },
   {
-   "case": "TC4c",
-   "test": "non-eligible down week + eligible down week -> count 1, NO alert",
+   "case": "M13",
+   "test": "daily runs for 15 days (twice a day) while GET shows the previous keywords: 0 POSTs (no retry of the accepted payload), at most one check per Monday-week, monitoring never restarts (one 29 Sep cycle)",
+   "result": "PASS",
+   "detail": "(0, ['B0E2ETEST01|2026-09-29'])"
+  },
+  {
+   "case": "M13",
+   "test": "re-running the same day changes nothing; the anchor never restarts on routine daily checks (one cycle, 29 Sep)",
    "result": "PASS",
    "detail": ""
   },
   {
-   "case": "TC5",
-   "test": "week 3 and 4 down after the alert: NO repeat alert (streak closed), still exactly 1 e-mail",
+   "case": "M14",
+   "test": "performance_alert.py --send is REFUSED (exit 2, nothing sent); the module never imports the e-mail code",
    "result": "PASS",
-   "detail": "(1, ['B0E2ETEST01|2026-10-11_2026-10-17'])"
+   "detail": "REFUSED: e-mail alerting was removed from this workflow (business instruction 2026-10-02); the dashboard shows the performance status directly. Nothing was sent.\n"
   },
   {
-   "case": "TC5",
-   "test": "the ASIN stays monitored: weeks 3/4 recorded as 'awaiting manual Full Optimization', count 0",
+   "case": "M14",
+   "test": "a Performance Decline creates no alert / e-mail state (monitoring fields only, no alerts written)",
    "result": "PASS",
-   "detail": "('awaiting_full_optimization', 'awaiting_full_optimization')"
+   "detail": "['asin', 'backend_keyword_status', 'computed_at', 'cycle_number', 'data_through', 'key', 'kind', 'latest', 'live_confirmed_at', 'live_update_date', 'live_update_source', 'monitoring_detail', 'monitoring_status', 'order_change', 'order_change_pct', 'other_listings_pending', 'performance_status', 'sku', 'skus', 'superseded_by', 'week1_complete', 'week1_days_loaded', 'week1_end', 'week1_orders', 'week1_orders_so_far', 'week1_start', 'week1_valid', 'week2_complete', 'week2_days_loaded', 'week2_end',"
   },
   {
-   "case": "TC5",
-   "test": "dashboard shows 'Awaiting User Optimization' (with the sent alert), not a new alert",
+   "case": "M15",
+   "test": "Section 12 cycle history shows the 29 Sep cycle complete with both weeks' orders and the Decline result",
    "result": "PASS",
-   "detail": "{'state': 'awaiting', 'row': 'B0E2ETEST01\\nWCE2E2PK\\n\\t\\namazon Ledsone\\nAmazon UK\\n\\t\\n3\\n25 Oct → 31 Oct\\n\\t\\n4\\n18 Oct → 24 Oct\\n\\t\\n-25.0%\\nDecline\\n\\t\\nFine-tuned 28 Sept 2026\\nLive verified 29 Sept 2026\\nMonitoring from 04 Oct 2026\\nCurrent cycle #4\\n\\t\\n0\\n\\t\\nNo Duplicates Found\\nduplicate words removed: 9\\n\\t\\n⚠️ Alert sent · Awaiting User Optimization\\n\\t\\nSent\\n2026-09-29 16:03:58\\nGmail id fake-gmail-0001\\nalert cycle 2026-10-11_2026-10-17', 'banner': '⚠️ FULL OPTIMIZATION REVIEW REQ"
+   "detail": "['B0E2ETEST01WCE2E2PK29 Sept 2026cycle #1 (current)29 Sept 2026 → 05 Oct 202614 orders (7/7 days)06 Oct 2026 → 12 Oct 20267 orders (7/7 days)Monitoring Complete / Performance Comparison AvailablePerformance Decline']"
   },
   {
-   "case": "TC9",
-   "test": "Week 1 down -> count 1, no alert",
+   "case": "M15",
+   "test": "after a manual change: the history keeps the superseded 29 Sep cycle and shows the new 6 Oct cycle",
    "result": "PASS",
-   "detail": "(1, 0)"
+   "detail": "[('B0E2ETEST01', '2026-09-29', 'Superseded by a newer backend keyword update'), ('B0E2ETEST01', '2026-10-06', 'Monitoring — Week 2')]"
   },
   {
-   "case": "TC9",
-   "test": "Week 2 down -> count 2, Full Optimization alert",
+   "case": "M15",
+   "test": "keyword rows show the audit status (POST Accepted — Monitoring), no e-mail alert status, no JavaScript errors",
    "result": "PASS",
-   "detail": "(2, 1)"
-  },
-  {
-   "case": "TC9",
-   "test": "Full Optimization recorded against the week-2 alert",
-   "result": "PASS",
-   "detail": "{'asin': 'B0E2ETEST01', 'completed_on': '2026-10-21', 'alert_cycle_id': '2026-10-11_2026-10-17', 'recorded_by': 'E2E', 'note': None, 'recorded_at': '2026-10-21T10:00:00'}"
-  },
-  {
-   "case": "TC9",
-   "test": "Week 3 = new monitoring cycle (baseline after Full Optimization), count 0, decline not counted",
-   "result": "PASS",
-   "detail": "('baseline', 'optimized')"
-  },
-  {
-   "case": "TC9",
-   "test": "Week 4 down -> count 1, no alert (fresh streak after optimization)",
-   "result": "PASS",
-   "detail": "(1, 1)"
-  },
-  {
-   "case": "TC9",
-   "test": "Week 5 down -> count 2 -> NEW Full Optimization alert (new cycle key, 2nd e-mail)",
-   "result": "PASS",
-   "detail": "((2, 2), ['B0E2ETEST01|2026-10-11_2026-10-17', 'B0E2ETEST01|2026-11-01_2026-11-07'])"
-  },
-  {
-   "case": "TC9",
-   "test": "the ASIN stayed in weekly monitoring throughout (5 consecutive cycles recorded)",
-   "result": "PASS",
-   "detail": ""
-  },
-  {
-   "case": "TC9",
-   "test": "dashboard after week 5 shows the new alert",
-   "result": "PASS",
-   "detail": "{'state': 'sent', 'row': 'B0E2ETEST01\\nWCE2E2PK\\n\\t\\namazon Ledsone\\nAmazon UK\\n\\t\\n2\\n01 Nov → 07 Nov\\n\\t\\n3\\n25 Oct → 31 Oct\\n\\t\\n-33.3%\\nDecline\\n\\t\\nFine-tuned 28 Sept 2026\\nLive verified 29 Sept 2026\\nMonitoring from 04 Oct 2026\\nClean-up live-verified 21 Oct 2026 (new baseline)\\nCurrent cycle #2\\n\\t\\n2\\n\\t\\nNo Duplicates Found\\nduplicate words removed: 9\\n\\t\\n⚠️ Full Optimization Review Required · Alert sent\\n\\t\\nSent\\n2026-09-29 16:03:59\\nGmail id fake-gmail-0002', 'banner': '⚠️ FULL OPTI"
-  },
-  {
-   "case": "TC10",
-   "test": "late optimization: awaiting weeks never alert; baseline week, then 2 new declines -> new alert",
-   "result": "PASS",
-   "detail": "(['open', 'alert', 'awaiting_full_optimization', 'awaiting_full_optimization', 'baseline', 'open', 'alert'], 2)"
-  },
-  {
-   "case": "TC11",
-   "test": "no open alert -> recording rejected",
-   "result": "PASS",
-   "detail": ""
-  },
-  {
-   "case": "TC11",
-   "test": "future date rejected",
-   "result": "PASS",
-   "detail": ""
-  },
-  {
-   "case": "TC11",
-   "test": "date before the end of the alert cycle rejected",
-   "result": "PASS",
-   "detail": ""
-  },
-  {
-   "case": "TC11",
-   "test": "malformed date rejected",
-   "result": "PASS",
-   "detail": ""
-  },
-  {
-   "case": "TC11",
-   "test": "same date recorded twice is idempotent (one record)",
-   "result": "PASS",
-   "detail": ""
-  },
-  {
-   "case": "TC11",
-   "test": "a second, different date is rejected once the alert is resolved",
-   "result": "PASS",
-   "detail": ""
-  },
-  {
-   "case": "TC11",
-   "test": "CLI without --date -> clean error, exit 2",
-   "result": "PASS",
-   "detail": "ERROR: --date YYYY-MM-DD is required with --record-optimization\n"
-  },
-  {
-   "case": "TC12",
-   "test": "failed alert is retried next run (same cycle key), and no extra alert for the awaiting week",
-   "result": "PASS",
-   "detail": "('FAILED', [{'asin': 'B0E2ETEST01', 'cycle_id': '2026-10-11_2026-10-17', 'sku': 'WCE2E2PK', 'consecutive_decline_count': 2, 'subject': '⚠️ Full Optimization Review Required – ASIN B0E2ETEST01 – 2 Consecutive 7D Performance Drops', 'recipients': ['apiramedigit@gmail.com', 'roshandigitweb@gmail.com'], 'alert_status': 'SENT', 'alert_sent_at': '2026-09-29T16:04:00', 'message_id': 'fake-gmail-0001', 'error': None, 'attempted_at': '2026-09-29T16:04:00', 'http_status': 200, 'this_run': 'SENT'}])"
-  },
-  {
-   "case": "TC6",
-   "test": "pending (not live-verified) change: no monitoring cycle starts, nothing tracked",
-   "result": "PASS",
-   "detail": ""
-  },
-  {
-   "case": "TC6",
-   "test": "its declines do not count and no alert is sent",
-   "result": "PASS",
-   "detail": ""
-  },
-  {
-   "case": "TC6",
-   "test": "after live verification, earlier/overlapping declines still do not count (count 0, no alert)",
-   "result": "PASS",
-   "detail": ""
-  },
-  {
-   "case": "TC7",
-   "test": "outside the top 50: still monitored, decline counted (count 2) and alert sent",
-   "result": "PASS",
-   "detail": "{'cycle_id': '2026-10-11_2026-10-17', 'asin': 'B0E2ETEST01', 'sku': 'WCE2E2PK', 'account': 'amazon Ledsone', 'marketplace': 'Amazon UK', 'current_7d_start': '2026-10-11', 'current_7d_end': '2026-10-17', 'previous_7d_start': '2026-10-04', 'previous_7d_end': '2026-10-10', 'previous_orders': 6, 'current_orders': 4, 'order_change_pct': -33.3, 'previous_impressions': 1000, 'current_impressions': 950, 'impression_change_pct': -5.0, 'previous_clicks': 50, 'current_clicks': 45, 'ctr_change_pct': -5.3, '"
-  },
-  {
-   "case": "TC7",
-   "test": "dashboard keeps the ASIN and marks it 'outside top 50 · still monitored'",
-   "result": "PASS",
-   "detail": "{'state': 'sent', 'row': 'B0E2ETEST01\\nWCE2E2PK\\n\\t\\namazon Ledsone\\nAmazon UK\\n\\t\\n4\\n11 Oct → 17 Oct\\n\\t\\n6\\n04 Oct → 10 Oct\\n\\t\\n-33.3%\\nDecline\\noutside top 50 · still monitored\\n\\t\\nFine-tuned 28 Sept 2026\\nLive verified 29 Sept 2026\\nMonitoring from 04 Oct 2026\\nCurrent cycle #2\\n\\t\\n2\\n\\t\\nNo Duplicates Found\\nduplicate words removed: 9\\n\\t\\n⚠️ Full Optimization Review Required · Alert sent\\n\\t\\nSent\\n2026-09-29 16:04:00\\nGmail id fake-gmail-0001', 'banner': '⚠️ FULL OPTIMIZATION REVIEW R"
-  },
-  {
-   "case": "TC7",
-   "test": "ASIN already monitored in the ledger stays tracked even without a change record",
-   "result": "PASS",
-   "detail": ""
-  },
-  {
-   "case": "TC7",
-   "test": "build: ASIN outside the top 50 keeps its live-verified change record (carried forward) and weekly metrics",
-   "result": "PASS",
-   "detail": "{'in_top50': False, 'change_record': [{'key': 'B0GXB7RGZK|WCBSF90FG2PK+RPR44WH2PK', 'asin': 'B0GXB7RGZK', 'sku': 'WCBSF90FG2PK+RPR44WH2PK', 'issue_detected': 'Conversion Drop', 'optimization_action': 'Removed duplicates', 'change_type': 'Backend Keyword Fine-Tuning', 'date_changed': '2026-09-28', 'status': 'Live-verified', 'carried_forward': True, 'submission': {'submission_id': '493f948b0dea4b4abbfa9699b1f04d1b', 'api_status': 'ACCEPTED', 'post_timestamp': '2026-09-28T17:21:47', 'post_date': '2"
-  },
-  {
-   "case": "TC8",
-   "test": "TEST e-mail record is separate (evidence/10_gmail_test_email.json, to apiramedigit only)",
-   "result": "PASS",
-   "detail": ""
-  },
-  {
-   "case": "TC8",
-   "test": "production alert ledger has no TEST alert record",
-   "result": "PASS",
-   "detail": "{}"
-  },
-  {
-   "case": "TC8",
-   "test": "the alert logic never reads the TEST-mail record",
-   "result": "PASS",
-   "detail": ""
-  },
-  {
-   "case": "TC8",
-   "test": "TEST e-mail does not change any consecutive-decline count or create an alert",
-   "result": "PASS",
-   "detail": "({'B0DH4KYFPD|2026-09-13_2026-09-19': 0, 'B0GXB7RGZK|2026-09-13_2026-09-19': 0}, {'B0DH4KYFPD|2026-09-13_2026-09-19': 0, 'B0GXB7RGZK|2026-09-13_2026-09-19': 0})"
-  },
-  {
-   "case": "TC8",
-   "test": "dashboard shows the TEST e-mail only as a separate note; no monitored ASIN in an alert state",
-   "result": "PASS",
-   "detail": ""
-  },
-  {
-   "case": "ALL",
-   "test": "no JavaScript errors on any rendered dashboard",
-   "result": "PASS",
-   "detail": ""
+   "detail": "[[], [], [], [('B0E2ETEST01', 'WCE2E2PK', 'POST Accepted — Monitoring')]]"
   },
   {
    "case": "SAFETY",
-   "test": "production ledger, dataset, extract and TEST-mail record unchanged by the E2E run",
+   "test": "production ledger, dataset and extract unchanged by the E2E run",
    "result": "PASS",
-   "detail": "{'monitoring_cycles.json': True, 'report_dataset.json': True, 'extract.json': True, '10_gmail_test_email.json': True}"
+   "detail": "{'monitoring_cycles.json': True, 'report_dataset.json': True, 'extract.json': True}"
   }
  ]
 }

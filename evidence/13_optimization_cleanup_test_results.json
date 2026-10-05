@@ -1,7 +1,7 @@
 {
- "run_at": "2026-09-29T16:03:55",
- "mode": "deterministic: temp ledgers, fake Listing Management GET/POST, fake Gmail, temp dashboards; no real POST, no real e-mail, no network",
- "passed": 31,
+ "run_at": "2026-10-05T10:15:58",
+ "mode": "deterministic: temp ledgers, fake Listing Management GET/POST, temp dashboards; no real POST, no e-mail, no network",
+ "passed": 30,
  "failed": 0,
  "results": [
   {
@@ -54,39 +54,39 @@
   },
   {
    "case": "P1",
-   "test": "pending row: not re-processed before 7 days after its last POST",
+   "test": "accepted row: not re-checked before 7 days after its last POST",
    "result": "PASS",
    "detail": ""
   },
   {
    "case": "P2",
-   "test": "pending row, due: fresh GET -> live still has duplicates -> cleaned differs -> POST (from this GET) -> still pending",
+   "test": "due: fresh GET still shows the pre-POST keywords (with duplicates) -> NO POST (no retry of the accepted payload); audit only, status POST Accepted — Monitoring",
    "result": "PASS",
-   "detail": "(['GET', 'GET', 'POST', 'GET'], 'POST Accepted — Live Verification Pending')"
+   "detail": "(['GET'], 'POST Accepted — Monitoring')"
   },
   {
    "case": "P3",
-   "test": "next due week: fresh GET again and repeat (a 2nd POST, each POST preceded by a GET in the same run)",
+   "test": "next due week: fresh GET again, still the previous keywords -> still no POST",
    "result": "PASS",
-   "detail": "['GET', 'GET', 'POST', 'GET', 'GET', 'GET', 'POST', 'GET']"
+   "detail": ""
   },
   {
    "case": "P4",
-   "test": "cleaned == live and it equals the previously proposed value -> NO POST, Live Verified ('proposed value is live')",
+   "test": "GET shows the accepted value -> NO POST, audit Live Verified",
    "result": "PASS",
    "detail": ""
   },
   {
    "case": "P5",
-   "test": "verification date recorded and 7-day monitoring starts from it (listing becomes tracked)",
+   "test": "the monitoring anchor never moved: the common update date 2026-09-29 (GET dates are audit only)",
    "result": "PASS",
-   "detail": ""
+   "detail": "[{'date': '2026-09-29', 'confirmed_at': '2026-09-28T17:00:00', 'source': 'original submission POST Accepted (common monitoring anchor)', 'user_reported_date': None, 'value': 'wire cage pendant light'}]"
   },
   {
    "case": "P6",
-   "test": "every attempt is in the audit history (original submission, 2 POSTs, final no-POST verification)",
+   "test": "every check is in the audit history (original submission, 3 no-POST checks)",
    "result": "PASS",
-   "detail": "['original submission', 'POST', 'POST', 'no POST']"
+   "detail": "['original submission', 'no POST', 'no POST', 'no POST']"
   },
   {
    "case": "P7",
@@ -102,7 +102,7 @@
   },
   {
    "case": "L",
-   "test": "read-back matches neither value -> Verification Failed (no verification date)",
+   "test": "read-back matches neither value -> still POST Accepted — Monitoring (read-back is audit; no verification date), new anchor = POST date",
    "result": "PASS",
    "detail": ""
   },
@@ -113,38 +113,32 @@
    "detail": ""
   },
   {
-   "case": "A",
-   "test": "optimization recorded -> no check / Amazon update until the next weekly cycle",
+   "case": "A1",
+   "test": "manual change found by the weekly GET (clean) -> no POST, new anchor = that GET date",
    "result": "PASS",
    "detail": ""
   },
   {
-   "case": "A",
-   "test": "next Monday: user's keywords cleaned, POSTed once, verified -> optimization completed, baseline set",
+   "case": "A2",
+   "test": "manual change with duplicates -> cleaned from the latest live value, POSTed once -> anchor = POST Accepted date",
    "result": "PASS",
    "detail": ""
   },
   {
-   "case": "H",
-   "test": "streak reset: baseline week not counted, next week count 1, no alert",
+   "case": "A3",
+   "test": "next weekly re-check of the same live value -> no POST, NO new anchor",
    "result": "PASS",
    "detail": ""
   },
   {
-   "case": "I",
-   "test": "later pair of consecutive declines -> NEW alert",
+   "case": "A4",
+   "test": "monitoring: one cycle per confirmed live update; only the newest is current; Week 1 of the newest = its live date",
    "result": "PASS",
-   "detail": ""
+   "detail": "{'B0E2ETEST01|2026-09-29': 'Monitoring Complete / Performance Comparison Available', 'B0E2ETEST01|2026-10-19': 'Superseded by a newer backend keyword update', 'B0E2ETEST01|2026-10-26': 'Monitoring — Week 2'}"
   },
   {
    "case": "D2",
-   "test": "keyword check + clean-up also when performance improved (no alert involved)",
-   "result": "PASS",
-   "detail": ""
-  },
-  {
-   "case": "F/G",
-   "test": "one decline -> no alert; two consecutive -> alert (unchanged)",
+   "test": "keyword check + clean-up runs on every due week whatever the performance (no alert / e-mail involved)",
    "result": "PASS",
    "detail": ""
   },
@@ -176,7 +170,7 @@
    "case": "TC8",
    "test": "weekly keyword rows show the ledger status per ASIN-SKU (two different ledgers)",
    "result": "PASS",
-   "detail": "([('B0E2ETEST01', 'WCE2E2PK', 'POST Accepted — Live Verification Pending')], [('B0E2ETEST01', 'WCE2E2PK', 'Live Verified')])"
+   "detail": "([('B0E2ETEST01', 'WCE2E2PK', 'POST Accepted — Monitoring')], [('B0E2ETEST01', 'WCE2E2PK', 'Live Verified')])"
   },
   {
    "case": "TC8",
@@ -186,7 +180,7 @@
   },
   {
    "case": "SAFETY",
-   "test": "production ledger / dataset / extract / TEST-mail record unchanged",
+   "test": "production ledger / dataset / extract unchanged",
    "result": "PASS",
    "detail": ""
   }

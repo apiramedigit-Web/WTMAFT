@@ -7,8 +7,10 @@ Business rules (see evidence/02_data_mapping_and_rules.md):
   * Issue Detected          - most negative of Impression / CTR / CVR change;
                               "Overall Performance Drop" when all three declined.
   * Keyword review          - drop ASIN whose backend keywords contain duplicate/repeated terms.
-  * Upload / change date    - "Live-verified" + POST date only when the Listing Management Tool shows
-                              the proposed keywords (evidence/07 + 09); otherwise "Proposed", date "—".
+  * Upload / change date    - POST Accepted (evidence/06) = updated for the user -> status "Monitoring", Date Changed
+                              = the monitoring anchor from the ledger (the 22 original submissions: 2026-09-29;
+                              business rule 2026-10-05). Listing Management GET reads (evidence/07 + 09) are AUDIT
+                              only. Not submitted -> "Proposed", date "—".
 """
 import collections
 import datetime as dt
@@ -20,6 +22,7 @@ import sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from keyword_finetune import finetune  # noqa: E402
 from keyword_live_verify import latest_states  # noqa: E402  (read-only helper, no I/O at import)
+from optimization_cleanup import ORIGINAL_ANCHOR, SRC_ORIGINAL as ORIGINAL_SOURCE  # noqa: E402  (constants only)
 
 BASE = pathlib.Path(__file__).resolve().parent.parent
 SRC = BASE / "data" / "extract.json"
@@ -75,6 +78,18 @@ def classify(imp_chg, ctr_chg, cvr_chg):
         return min(neg, key=neg.get)
     return ("Order Drop (traffic stable)" if known
             else "Order Drop (no search data)")
+
+
+def anchor_of(key):
+    """Monitoring anchor of an accepted submission (ASIN|SKU): its original-submission anchor in the weekly
+    keyword-check ledger, else the common anchor of the 22 original submissions (business rule 2026-10-05)."""
+    if LEDGER.exists():
+        for r in json.loads(LEDGER.read_text(encoding="utf-8")).get("keyword_rows", {}).values():
+            if f'{r["asin"]}|{r["sku"]}' == key:
+                for u in r.get("live_updates") or []:
+                    if u["source"] == ORIGINAL_SOURCE:
+                        return u["date"]
+    return ORIGINAL_ANCHOR
 
 
 def main():
@@ -210,13 +225,28 @@ def main():
                 "issue_detected": row["issue_detected"], **f})
 
     review = [k for k in kw_rows if k["needs_change"]]
-    # Section 7 rows. Status/Date Changed are NOT decided here: they come only from records the
+    # Sections 5 and 7 = the 22 SUBMITTED backend keyword changes (evidence/06; business instruction 2026-10-05),
+    # not this week's new review candidates (those stay in Section 4 and the detection KPIs). Each row is the
+    # existing fine-tuning re-run on the keywords that were live before the POST: it reproduces the accepted payload.
+    upd_path = BASE / "evidence" / "06_live_keyword_update.json"
+    submitted = []
+    for r in (json.loads(upd_path.read_text(encoding="utf-8"))["records"] if upd_path.exists() else []):
+        if not r.get("submission_id"):
+            continue
+        f = finetune(r["live_entries"])
+        assert f["cleaned"] == r["proposed"], f'{r["asin"]}|{r["sku"]}: re-run fine-tuning differs from the accepted payload'
+        submitted.append({"asin": r["asin"], "sku": r["sku"], "account": r["account"], "product_id": r["product_id"],
+                          "backend_keyword_status": "Requires Review", "issue_found": r.get("issue_found") or f["issue"],
+                          "action_taken": r.get("fine_tuning_action") or f["action"],
+                          "issue_detected": r.get("issue_detected"), **f})
+    change_rows = submitted or review
+    # Section 7 rows. Status/Date Changed: POST Accepted -> Monitoring (set below); otherwise only records the
     # user saved in the report (browser storage) or exported to data/change_records.json.
     change_record = [{
         "key": f'{k["asin"]}|{k["sku"]}', "asin": k["asin"], "sku": k["sku"],
         "issue_detected": k["issue_detected"], "optimization_action": k["action_taken"],
         "change_type": "Backend Keyword Fine-Tuning", "date_changed": None, "status": "Proposed",
-        "carried_forward": False} for k in review]
+        "carried_forward": False} for k in change_rows]
     saved = validate_saved(load_saved_records())
     keys = {c["key"] for c in change_record}
     for s in saved:  # user-confirmed changes from earlier weeks stay tracked even if no longer proposed
@@ -229,8 +259,7 @@ def main():
 
     # Amazon API submissions (evidence/06) and the read-only Listing Management checks: evidence/07
     # (all submissions) overlaid by evidence/09 (latest re-check of the pending ones).
-    # Only a Listing Management read of the proposed keywords (UPDATED / VERIFIED) sets a row to
-    # "Live-verified", dated with its POST date; monitoring still starts only from a user save.
+    # POST Accepted starts monitoring (status "Monitoring", dated with the ledger anchor); the GET state is audit.
     submissions, sync_info = {}, None
     upd = BASE / "evidence" / "06_live_keyword_update.json"
     ver = BASE / "evidence" / "07_live_keyword_verification.json"
@@ -265,7 +294,9 @@ def main():
                               "post_timestamp": ts if ts[:1].isdigit() and "T" in ts else None,
                               "post_date": ts[:10],
                               "state": chk.get("state", r.get("final_status")),
-                              "checked_at_utc": chk.get("checked_at_utc"), "evidence": chk.get("evidence")}
+                              "checked_at_utc": chk.get("checked_at_utc"), "evidence": chk.get("evidence"),
+                              "get_verified_date": (chk.get("verified_at_utc") or "")[:10] or None,   # audit only
+                              "anchor_date": anchor_of(k)}
     keys = {c["key"] for c in change_record}
     # A submitted update stays tracked after its keywords are clean or the ASIN leaves the top 50
     # (monitoring continuity); it is carried forward exactly like a saved record.
@@ -281,13 +312,16 @@ def main():
     assert set(submissions) <= keys, f"submission for a row not in this build: {set(submissions) - keys}"
     for c in change_record:
         s = c["submission"] = submissions.get(c["key"])
-        if s and s["state"] == "UPDATED / VERIFIED":
-            dt.date.fromisoformat(s["post_date"])
-            c["status"], c["date_changed"] = "Live-verified", s["post_date"]
+        if s and s["api_status"] == "ACCEPTED":
+            dt.date.fromisoformat(s["anchor_date"])
+            c["status"], c["date_changed"] = "Monitoring", s["anchor_date"]
 
     # Daily ASIN orders (both accounts summed, same source as the weekly figures) for every
     # tracked ASIN; a date is "available" only when both accounts have Business Report rows.
-    tracked = sorted({c["asin"] for c in change_record})
+    # Tracked = change-record ASINs + every ASIN with a confirmed live keyword update in the weekly
+    # keyword-check ledger (e.g. a manual change), so its Week 1 / Week 2 orders can be measured.
+    led_rows = json.loads(LEDGER.read_text(encoding="utf-8")).get("keyword_rows", {}) if LEDGER.exists() else {}
+    tracked = sorted({c["asin"] for c in change_record} | {r["asin"] for r in led_rows.values() if r.get("live_updates")})
     daily = {a: {} for a in tracked}
     for r in d["daily_orders"]:
         if r["asin"] in daily:
@@ -296,12 +330,29 @@ def main():
     monitoring_data = {"daily_from": d["daily_from"], "available_dates": available,
                        "available_through": max(available) if available else None, "orders": daily}
 
+    # Section 3 Week 1 / Week 2 Orders: each report ASIN's ASIN-level daily orders (both accounts summed) over the
+    # monitoring weeks from the common anchor (Week 1 = D..D+6, Week 2 = D+7..D+13). A total exists only when all
+    # 7 days are loaded for both accounts (same rule as Section 8); otherwise None ("—"). Never a partial total.
+    anchor = dt.date.fromisoformat(ORIGINAL_ANCHOR)
+    weeks = {n: [(anchor + dt.timedelta(days=7 * (n - 1) + i)).isoformat() for i in range(7)] for n in (1, 2)}
+    avail_set, p_asins = set(available), {r["asin"] for r in perf_rows}
+    p_daily = collections.defaultdict(dict)
+    for r in d["daily_orders"]:
+        if r["asin"] in p_asins:
+            p_daily[r["asin"]][r["date"][:10]] = int(r["orders"])
+    week_days = {n: sum(1 for x in weeks[n] if x in avail_set) for n in (1, 2)}
+    monitoring_week_orders = {
+        "anchor": ORIGINAL_ANCHOR, "week1": [weeks[1][0], weeks[1][-1]], "week2": [weeks[2][0], weeks[2][-1]],
+        "week1_days_loaded": week_days[1], "week2_days_loaded": week_days[2],
+        "orders": {a: {f"week{n}": (sum(p_daily[a].get(x, 0) for x in weeks[n]) if week_days[n] == 7 else None)
+                       for n in (1, 2)} for a in sorted(p_asins)}}
+
     # Monitored ASINs = change-record ASINs + ASINs already in the monitoring-cycle ledger, so an
     # ASIN keeps being measured after it leaves the top 50. Same metric code as Section 3.
     monitored = set(tracked)
     if LEDGER.exists():
         led_ = json.loads(LEDGER.read_text(encoding="utf-8"))
-        monitored |= {c["asin"] for c in led_["cycles"].values()}
+        monitored |= {c["asin"] for c in led_.get("cycles", {}).values()}
         monitored |= {r["asin"] for r in led_.get("keyword_rows", {}).values() if r.get("first_verified_at")}
     top_set = set(top)
     fine_tuned = {}
@@ -327,17 +378,19 @@ def main():
         "top_moving_reviewed": len(perf_rows),
         "performance_drop": len(drops),
         "keyword_review_required": len({k["asin"] for k in review}),
-        "finetune_proposed": len(review),
-        "finetune_completed_verified": sum(1 for c in change_record if c["status"] != "Proposed"),
+        "finetune_proposed": len(change_rows),           # the submitted changes (Sections 5 / 7)
         "visible_content_changed": 0,
-        "duplicate_words_removed": sum(k["duplicate_words_removed"] for k in review),
-        "repeated_entries_removed": sum(len(k["repeated_entries"]) for k in review),
-        "under_monitoring": len({c["asin"] for c in change_record if c["status"] == "Monitoring"}),
+        "duplicate_words_removed": sum(k["duplicate_words_removed"] for k in change_rows),
+        "repeated_entries_removed": sum(len(k["repeated_entries"]) for k in change_rows),
+        # "ASINs under monitoring" comes from the automatic Week 1 / Week 2 cycles that performance_alert.py computes
+        # AFTER this build (data/monitoring_cycles.json -> monitoring); the dashboard derives it from them.
         "posts_accepted": sum(1 for s in submissions.values() if s["api_status"] == "ACCEPTED"),
-        "live_verified": sum(1 for s in submissions.values() if s["state"] == "UPDATED / VERIFIED"),
-        "live_verification_pending": sum(1 for s in submissions.values() if s["state"] == "POST_ACCEPTED_PENDING_SYNC"),
-        "monitoring_period": "7 days after live verification",
-        "next_review": "after live verification + 7-day monitoring period",
+        # POST Accepted = monitoring; nothing accepted waits for a GET. GET read-backs are audit counts only.
+        "live_verification_pending": sum(1 for s in submissions.values() if s["api_status"] == "ACCEPTED" and not s["anchor_date"]),
+        "get_audit_shows_submitted": sum(1 for s in submissions.values() if s["state"] == "UPDATED / VERIFIED"),
+        "get_audit_shows_previous": sum(1 for s in submissions.values() if s["state"] == "POST_ACCEPTED_PENDING_SYNC"),
+        "monitoring_period": "Week 1 + Week 2 (2 x 7 days) from the update date (POST Accepted anchor)",
+        "next_review": "after Week 2 is complete (Week 1 vs Week 2 orders)",
     }
     ds = {
         "meta": {
@@ -361,8 +414,8 @@ def main():
             "sync_info": sync_info,
         },
         "kpi": kpi, "performance": perf_rows, "keyword_analysis": kw_rows,
-        "change_record": change_record, "saved_change_records": saved,
-        "monitoring_data": monitoring_data,
+        "change_record": change_record, "saved_change_records": saved, "submitted_keyword_changes": submitted,
+        "monitoring_data": monitoring_data, "monitoring_week_orders": monitoring_week_orders,
         "monitoring_performance": monitoring_performance,
     }
     OUT.write_text(json.dumps(ds, indent=1, ensure_ascii=False), encoding="utf-8")

@@ -1,7 +1,7 @@
 {
- "validated_at": "2026-09-29T16:04:59",
+ "validated_at": "2026-10-05T10:15:34",
  "file": "output\\weekly_top_moving_asin_backend_keyword_fine_tuning_report.html",
- "bytes": 209282,
+ "bytes": 314765,
  "passed": 7,
  "failed": 0,
  "checks": [
@@ -31,7 +31,7 @@
    "detail": "[]"
   },
   {
-   "check": "embedded JSON parses and carries monitoring data",
+   "check": "embedded JSON parses and carries the Week 1 / Week 2 monitoring data (no e-mail alert record)",
    "result": "PASS",
    "detail": ""
   },

@@ -1,20 +1,26 @@
 {
- "run_at": "2026-09-29T16:04:05",
+ "run_at": "2026-10-05T10:15:55",
  "mode": "fake stage scripts in a temp folder",
- "passed": 12,
+ "passed": 13,
  "failed": 0,
  "results": [
   {
    "id": "S1",
-   "test": "production order = extract -> weekly_keyword_check --apply -> build_dataset -> performance_alert --send -> render -> validate",
+   "test": "production order = extract -> weekly_keyword_check --apply -> build_dataset -> performance_monitoring (no --send) -> render -> validate",
    "result": "PASS",
-   "detail": "[('extract', ['scripts/extract.py']), ('weekly_keyword_check', ['scripts/optimization_cleanup.py', '--apply']), ('build_dataset', ['scripts/build_dataset.py']), ('performance_alert', ['scripts/performance_alert.py', '--send']), ('render', ['scripts/render.py']), ('validate', ['scripts/validate.py'])]"
+   "detail": "[('extract', ['scripts/extract.py']), ('weekly_keyword_check', ['scripts/optimization_cleanup.py', '--apply']), ('build_dataset', ['scripts/build_dataset.py']), ('performance_monitoring', ['scripts/performance_alert.py']), ('render', ['scripts/render.py']), ('validate', ['scripts/validate.py'])]"
   },
   {
    "id": "S2",
-   "test": "--dry-run: keyword check without --apply (no POST) and alert without --send (no e-mail)",
+   "test": "--dry-run: keyword check without --apply (no POST); monitoring stage identical (it never e-mails)",
    "result": "PASS",
-   "detail": "[('extract', ['scripts/extract.py']), ('weekly_keyword_check', ['scripts/optimization_cleanup.py']), ('build_dataset', ['scripts/build_dataset.py']), ('performance_alert', ['scripts/performance_alert.py']), ('render', ['scripts/render.py']), ('validate', ['scripts/validate.py'])]"
+   "detail": "[('extract', ['scripts/extract.py']), ('weekly_keyword_check', ['scripts/optimization_cleanup.py']), ('build_dataset', ['scripts/build_dataset.py']), ('performance_monitoring', ['scripts/performance_alert.py']), ('render', ['scripts/render.py']), ('validate', ['scripts/validate.py'])]"
+  },
+  {
+   "id": "S2b",
+   "test": "an e-mail stage (performance_alert --send / email_alert) is REFUSED by the runner before anything runs",
+   "result": "PASS",
+   "detail": "(\"REFUSED: ['scripts/performance_alert.py', '--send'] is not part of the weekly pipeline\\n\", \"REFUSED: ['scripts/email_alert.py'] is not part of the weekly pipeline\\n\")"
   },
   {
    "id": "S3",
@@ -32,7 +38,7 @@
    "id": "S5",
    "test": "stage 3 fails -> run FAILED at 'c', exit 1, later stages NOT RUN",
    "result": "PASS",
-   "detail": "(1, [{'stage': 'a', 'command': 'python C:\\\\Users\\\\LED222~1\\\\AppData\\\\Local\\\\Temp\\\\tmpzl7cvoui\\\\ok.py', 'log': 'C:\\\\Users\\\\LED222~1\\\\AppData\\\\Local\\\\Temp\\\\tmpzl7cvoui\\\\logs\\\\20260929T160404_716092\\\\01_a.log', 'exit_code': 0, 'seconds': 0.0, 'status': 'OK', 'tail': 'stage ok'}, {'stage': 'b', 'command': 'python C:\\\\Users\\\\LED222~1\\\\AppData\\\\Local\\\\Temp\\\\tmpzl7cvoui\\\\ok.py', 'log': 'C:\\\\Users\\\\LED222"
+   "detail": "(1, [{'stage': 'a', 'command': 'python C:\\\\Users\\\\LED222~1\\\\AppData\\\\Local\\\\Temp\\\\tmpc_siw_hz\\\\ok.py', 'log': 'C:\\\\Users\\\\LED222~1\\\\AppData\\\\Local\\\\Temp\\\\tmpc_siw_hz\\\\logs\\\\20261005T101555_032959\\\\01_a.log', 'exit_code': 0, 'seconds': 0.0, 'status': 'OK', 'tail': 'stage ok'}, {'stage': 'b', 'command': 'python C:\\\\Users\\\\LED222~1\\\\AppData\\\\Local\\\\Temp\\\\tmpc_siw_hz\\\\ok.py', 'log': 'C:\\\\Users\\\\LED222"
   },
   {
    "id": "S6",
@@ -74,7 +80,7 @@
    "id": "S11",
    "test": "run_history.log has one line per completed run with status",
    "result": "PASS",
-   "detail": "['2026-09-29T16:04:04  production             SUCCESS  failed_stage=None  cycle=2026-09-13_2026-09-19  20260929T160404_371292', '2026-09-29T16:04:04  production             FAILED   failed_stage=c  cycle=2026-09-13_2026-09-19  20260929T160404_716092', '2026-09-29T16:04:05  production             FAILED   failed_stage=a  cycle=2026-09-13_2026-09-19  20260929T160405_024446', '2026-09-29T16:04:05  pr"
+   "detail": "['2026-10-05T10:15:54  production             SUCCESS  failed_stage=None  cycle=2026-09-20_2026-09-26  20261005T101554_735060', '2026-10-05T10:15:55  production             FAILED   failed_stage=c  cycle=2026-09-20_2026-09-26  20261005T101555_032959', '2026-10-05T10:15:55  production             FAILED   failed_stage=a  cycle=2026-09-20_2026-09-26  20261005T101555_317614', '2026-10-05T10:15:55  pr"
   }
  ]
 }

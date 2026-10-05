@@ -1,9 +1,16 @@
-"""Deterministic E2E dry-run tests of the monitoring / Full Optimization Review alert lifecycle.
+"""Deterministic E2E tests of the post-update monitoring lifecycle (business rule 2026-10-05):
 
-Temp fixtures only: synthetic weekly datasets, a temp cycle ledger, a FAKE Gmail transport (no real
-e-mail, no network, no Google library), temp dashboards rendered with the production template and
-checked in a headless browser. Production files are hashed before/after and must be unchanged.
-No Amazon keyword update is imported or run. Output: evidence/12_e2e_monitoring_test_results.json
+  POST Accepted = updated for the user -> monitoring starts on the update date D (the 22 original submissions:
+  2026-09-29) WITHOUT a GET gate -> Week 1 = D..D+6, Week 2 = D+7..D+13 (orders, both accounts) -> Week 2 compared
+  with Week 1 only when Week 2 is complete -> only a genuinely new update starts a new cycle; GET is audit only and
+  an accepted payload is never re-sent because a GET still shows the previous keywords.
+NO e-mail of any kind: the retired --send path is refused and nothing in the pipeline e-mails.
+
+Temp fixtures only: synthetic daily-order datasets, a temp ledger, a FAKE Listing Management Tool (GET + POST),
+temp dashboards rendered with the production template and checked in a headless browser. Production files are
+hashed before/after and must be unchanged. No network, no real POST, no e-mail.
+Output: evidence/12_e2e_monitoring_test_results.json
+(The helpers ASIN / LISTING / SCOPE_ROW / Box / Dash / FakeLM / sha / daily are shared with test_optimization_cleanup.py.)
 """
 import contextlib
 import copy
@@ -16,31 +23,21 @@ import sys
 import tempfile
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
-import build_dataset  # noqa: E402
-import email_alert  # noqa: E402
 import optimization_cleanup as oc  # noqa: E402
 import performance_alert as pa  # noqa: E402
 import render  # noqa: E402
-from test_email_alert import FakeGmail, fake_cfg  # noqa: E402
 
 BASE = pathlib.Path(__file__).resolve().parent.parent
-PROD_FILES = [BASE / "data" / n for n in ("monitoring_cycles.json", "report_dataset.json", "extract.json")] + \
-             [BASE / "evidence" / "10_gmail_test_email.json"]
+PROD_FILES = [BASE / "data" / n for n in ("monitoring_cycles.json", "report_dataset.json", "extract.json")]
 ASIN = "B0E2ETEST01"
 LISTING = {"product_id": 990001, "sku": "WCE2E2PK", "sub_source": 8, "account": "amazon Ledsone"}
-UPD = [{"asin": ASIN, "sku": "WCE2E2PK", "submission_id": "s-e2e", "product_id": 990001, "sub_source": 8}]
+ORIGINAL_ENTRIES = ["wire cage pendant light", "cage pendant"]          # live before the accepted POST (duplicates)
+ORIGINAL = " ".join(ORIGINAL_ENTRIES)
+PROPOSED = "wire cage pendant light"                                       # the accepted (cleaned) payload
 SCOPE_ROW = {"asin": ASIN, "sku": "WCE2E2PK", "sub_source": 8, "account": "amazon Ledsone", "product_id": 990001,
              "site": "UK", "report_row": f"{ASIN}|WCE2E2PK", "submission_id": "s-e2e",
-             "post_timestamp": "2026-09-28T17:00:00", "proposed": None}
-
-
-def prior_from_ds(ds):
-    """Submission state per ASIN|SKU as build_dataset exposes it (fixture change_record)."""
-    out = {}
-    for c in ds.get("change_record", []):
-        sub = c.get("submission") or {}
-        out[f'{c["asin"]}|{c["sku"]}'] = {"state": sub.get("state"), "verified_at_utc": sub.get("checked_at_utc")}
-    return out
+             "post_timestamp": "2026-09-28T17:00:00", "proposed": PROPOSED, "original": ORIGINAL}
+KEY = f"{ASIN}|WCE2E2PK"
 RESULTS = []
 
 
@@ -86,97 +83,93 @@ def sha(p):
     return hashlib.sha256(p.read_bytes()).hexdigest() if p.exists() else None
 
 
-def week(start, prev, cur, verified="2026-09-29", state="UPDATED / VERIFIED", in_top=True, has_data=True):
-    """One synthetic weekly dataset (the shape build_dataset.py writes)."""
+def days(start, n):
     s = dt.date.fromisoformat(start)
-    row = {"asin": ASIN, "account": "amazon Ledsone", "prev_orders": prev, "curr_orders": cur,
-           "order_chg": round((cur - prev) / prev * 100, 1) if prev else None, "prev_impressions": 1000,
-           "curr_impressions": 950, "impression_chg": -5.0, "prev_clicks": 50, "curr_clicks": 45, "ctr_chg": -5.3,
-           "cvr_chg": -2.0, "is_drop": cur < prev, "in_top_moving": in_top, "keyword_status": "No Duplicates Found",
-           "duplicate_words_removed_at_fine_tuning": 9}
-    return {"meta": {"marketplace": "Amazon UK", "current_7d": [start, (s + dt.timedelta(6)).isoformat()],
-                     "previous_7d": [(s - dt.timedelta(7)).isoformat(), (s - dt.timedelta(1)).isoformat()]},
-            "performance": [row] if (in_top and has_data) else [],
-            "monitoring_performance": [row] if has_data else [],
-            "keyword_analysis": [],
-            "change_record": [{"key": f"{ASIN}|WCE2E2PK", "asin": ASIN, "sku": "WCE2E2PK", "date_changed": "2026-09-28",
-                               "submission": {"state": state, "checked_at_utc": verified + "T04:00:00Z",
-                                              "post_date": "2026-09-28"}}]}
+    return [(s + dt.timedelta(i)).isoformat() for i in range(n)]
 
 
-def no_network(*a):
-    raise AssertionError("network used during a dry run")
+def daily(through, orders=None, start="2026-09-01", gaps=()):
+    """A dataset with only what the monitoring stage reads: daily ASIN orders, loaded for both accounts
+    from `start` to `through` (minus `gaps`)."""
+    av = [d for d in days(start, (dt.date.fromisoformat(through) - dt.date.fromisoformat(start)).days + 1) if d not in gaps]
+    return {"monitoring_data": {"daily_from": start, "available_dates": av, "available_through": through,
+                                "orders": {ASIN: {d: n for d, n in (orders or {}).items() if d in av}}}}
+
+
+def per_day(start, n, value):
+    return {d: value for d in days(start, n)}
+
+
+VERIFIED_29 = {f"{ASIN}|WCE2E2PK": {"state": oc.VERIFIED, "verified_at_utc": "2026-09-29T04:00:00Z"}}
+PENDING_P = {f"{ASIN}|WCE2E2PK": {"state": "POST_ACCEPTED_PENDING_SYNC"}}
 
 
 class Box:
-    """One isolated lifecycle: temp ledger + temp evidence dir + fake Gmail."""
-    def __init__(self):
+    """One isolated lifecycle: temp ledger + temp evidence dir. Nothing is shared with production."""
+    def __init__(self, prior=None, scope=None):
         self.dir = pathlib.Path(tempfile.mkdtemp())
-        self.ledger, self.data, self.gmail = self.dir / "cycles.json", self.dir / "ds.json", FakeGmail()
+        self.ledger, self.data = self.dir / "cycles.json", self.dir / "ds.json"
+        self.prior, self.scope = (VERIFIED_29 if prior is None else prior), scope or [SCOPE_ROW]
+        led = {}
+        oc.seed(led, self.scope, self.prior)
+        self.save(led)
 
-    def run(self, ds, mode="dry_run"):
-        self.last_ds = ds
-        self.data.write_text(json.dumps(ds), encoding="utf-8")
-        with contextlib.redirect_stdout(io.StringIO()):
-            return pa.run(mode, dataset=self.data, ledger_path=self.ledger, evid_dir=self.dir,
-                          cfg=fake_cfg() if mode == "send" else None,
-                          transport=self.gmail if mode == "send" else no_network)
+    def save(self, led):
+        self.ledger.write_text(json.dumps(led), encoding="utf-8")
 
     def led(self):
         return json.loads(self.ledger.read_text(encoding="utf-8"))
 
-    def cyc(self, start):
-        return next(c for c in self.led()["cycles"].values() if c["current_7d_start"] == start)
+    def run(self, ds, now="2026-12-31T12:00:00"):
+        """The monitoring stage (performance_alert.run) on a temp dataset + temp ledger."""
+        self.data.write_text(json.dumps(ds), encoding="utf-8")
+        with contextlib.redirect_stdout(io.StringIO()):
+            return pa.run(dataset=self.data, ledger_path=self.ledger, evid_dir=self.dir, now=dt.datetime.fromisoformat(now))
 
-    def sends(self):
-        return [c for c in self.gmail.calls if c["url"].endswith("/messages/send")]
+    def mon(self, live=None):
+        m = self.led().get("monitoring", {})
+        return m if live is None else m.get(f"{ASIN}|{live}")
 
-    def optimize(self, date, today="2026-12-31", lm=None, verify=True):
-        """Team records the optimization at 10:00; with verify=True that week's due weekly keyword check
-        runs at 12:00 (default: live keywords already clean -> verified on that read -> baseline = date)."""
-        led = self.led()
-        try:
-            at = dt.datetime.fromisoformat(date + "T10:00:00")
-        except ValueError:          # malformed date: let record_optimization's own validation reject it
-            at = None
-        rec = pa.record_optimization(led, ASIN, date, by="E2E", today=dt.date.fromisoformat(today), now=at)
-        self.ledger.write_text(json.dumps(led), encoding="utf-8")
-        if verify:
-            self.cleanup(lm or FakeLM(["wire cage pendant light"]), date)
-        return rec
+    def row(self):
+        return self.led()["keyword_rows"][oc.row_key(self.scope[0])]
 
-    def cleanup(self, lm, when, apply=True, ds=None, at="12:00:00", scope=None):
+    def cleanup(self, lm, when, apply=True, at="12:00:00", scope=None):
         """One weekly keyword-check run (optimization_cleanup.process) at `when`."""
         led = self.led()
-        res = oc.process(led, scope or [SCOPE_ROW], apply=apply, io=lm,
-                         now=dt.datetime.fromisoformat(f"{when}T{at}"), prior=prior_from_ds(ds or self.last_ds))
-        self.ledger.write_text(json.dumps(led), encoding="utf-8")
+        res = oc.process(led, scope or self.scope, apply=apply, io=lm, now=dt.datetime.fromisoformat(f"{when}T{at}"),
+                         prior=self.prior)
+        self.save(led)
         return res
 
-    def opt(self):
-        return self.led()["optimizations"][ASIN][-1]
+    def record(self, date, today="2026-12-31", sku=None):
+        led = self.led()
+        e = oc.record_live_update(led, self.scope, ASIN, date, sku, "e2e", today=dt.date.fromisoformat(today),
+                                  now=dt.datetime.fromisoformat(today + "T10:00:00"), prior=self.prior)
+        self.save(led)
+        return e
 
 
 class Dash:
-    """Renders the production template with a ledger and reads Section 12 in a headless browser."""
+    """Renders the production template with a ledger and reads Section 12 (cycle history + keyword rows)."""
     def __init__(self, pw):
         self.br = pw.chromium.launch()
         self.base_ds = json.loads((BASE / "data" / "report_dataset.json").read_text(encoding="utf-8"))
 
-    def read(self, ledger, test_email=None):
+    def read(self, ledger):
         out = pathlib.Path(tempfile.mkdtemp()) / "dash.html"
-        render.render(self.base_ds, out, ledger, test_email)
+        render.render(self.base_ds, out, ledger)
         pg = self.br.new_page(viewport={"width": 1366, "height": 900})
         errs = []
         pg.on("pageerror", lambda e: errs.append(str(e)))
         pg.goto(out.as_uri())
-        pg.evaluate("window.__showTab__('s13', false)")
-        st = dict(pg.eval_on_selector_all("#t13 tbody tr[data-asin]", "e => e.map(r => [r.dataset.asin, r.dataset.state])"))
-        row = pg.inner_text(f'#t13 tbody tr[data-asin="{ASIN}"]') if ASIN in st else ""
+        hist = sorted(tuple(x) for x in pg.eval_on_selector_all(
+            "#t13h tbody tr[data-asin]", "e => e.map(r => [r.dataset.asin, r.dataset.live, r.dataset.status])"))
         cleanup = sorted(tuple(x) for x in pg.eval_on_selector_all(
             "#t13o tbody tr[data-asin]", "e => e.map(r => [r.dataset.asin, r.dataset.cleanup, r.dataset.status])"))
-        res = {"state": st.get(ASIN), "row": row, "banner": pg.inner_text("#foBanner"),
-               "section": pg.inner_text("#s13"), "cleanup": cleanup, "cleanup_text": pg.inner_text("#t13o"), "errors": errs}
+        body = pg.evaluate("[...document.querySelectorAll('section')].map(e => e.textContent).join(' ')")
+        htext = pg.eval_on_selector_all(f'#t13h tbody tr[data-asin="{ASIN}"]', "e => e.map(r => r.textContent)")
+        res = {"hist": [h for h in hist if h[0] == ASIN], "hist_text": htext, "cleanup": cleanup,
+               "cleanup_text": pg.inner_text("#t13o"), "body": body, "errors": errs}
         pg.close()
         return res
 
@@ -189,270 +182,219 @@ def main():
         run_cases(dash)
         dash.br.close()
     after = {p.name: sha(p) for p in PROD_FILES}
-    check("SAFETY", "production ledger, dataset, extract and TEST-mail record unchanged by the E2E run", before == after,
+    check("SAFETY", "production ledger, dataset and extract unchanged by the E2E run", before == after,
           {k: (before[k] == after[k]) for k in before})
     p_, f_ = sum(r["result"] == "PASS" for r in RESULTS), sum(r["result"] == "FAIL" for r in RESULTS)
     (BASE / "evidence" / "12_e2e_monitoring_test_results.json").write_text(json.dumps(
         {"run_at": dt.datetime.now().isoformat(timespec="seconds"),
-         "mode": "deterministic dry-run: temp fixtures + temp ledger + fake Gmail transport + temp dashboards; "
-                 "no real e-mail, no network, no Amazon keyword update",
+         "rule": "POST Accepted starts monitoring (common anchor 2026-09-29 for the 22 original submissions); Week 1 / Week 2; GET audit only; no e-mail (2026-10-05)",
+         "mode": "deterministic: temp fixtures + temp ledger + fake Listing Management + temp dashboards; "
+                 "no network, no real POST, no e-mail",
          "passed": p_, "failed": f_, "results": RESULTS}, indent=1, ensure_ascii=False), encoding="utf-8")
     print(f"{p_} PASS / {f_} FAIL")
     return 0 if f_ == 0 else 1
 
 
 def run_cases(dash):
-    # ---- Test Case 1: one declining week -> count 1, NO alert ----------------------------------
+    W1 = per_day("2026-09-29", 7, 2)                      # Week 1 = 14 orders
+    W2_DOWN, W2_UP = per_day("2026-10-06", 7, 1), per_day("2026-10-06", 7, 3)
+    ANCHOR = oc.ORIGINAL_ANCHOR
+
+    # ---- M1 anchor + windows: POST Accepted -> common update date 2026-09-29 (not the 28 Sep POST / report week) --
     b = Box()
-    b.run(week("2026-09-27", 10, 5))            # starts before the 29 Sep verification: not eligible
-    r = b.run(week("2026-10-04", 10, 6))
-    d = dash.read(b.led())
-    check("TC1", "week 1 down: consecutive decline count = 1", b.cyc("2026-10-04")["consecutive_decline_count"] == 1)
-    check("TC1", "NO Gmail alert (no alert due, no send request)", r["due"] == 0 and not b.sends())
-    check("TC1", "production alert log has no alert", b.led()["alerts"] == {})
-    check("TC1", "dashboard = one consecutive decline, NO Full Optimization Review alert",
-          d["state"] == "one" and "Full Optimization Review Required" not in d["row"] and d["banner"] == "", d)
+    b.run(daily("2026-09-27"))
+    c = b.mon("2026-09-29")
+    check("M1", "anchor = the common update date 29 Sep for the accepted original submission (POST 28 Sep and the "
+          "report week are NOT used)", ANCHOR == "2026-09-29" and c and c["live_update_date"] == ANCHOR
+          and not b.mon("2026-09-28") and len(b.mon()) == 1, b.mon())
+    check("M1", "Week 1 = 29 Sep..5 Oct, Week 2 = 6..12 Oct (7 days each, the update day included)",
+          (c["week1_start"], c["week1_end"], c["week2_start"], c["week2_end"]) == ("2026-09-29", "2026-10-05", "2026-10-06", "2026-10-12"))
+    check("M2", "no day of Week 1 loaded yet -> not started, no orders, no verdict",
+          c["monitoring_status"] == pa.S_NOT_STARTED and c["week1_orders"] is None and c["performance_status"] == pa.P_NOT_STARTED, c)
 
-    # ---- Test Case 2: two consecutive declining eligible weeks -> alert ------------------------
-    r = b.run(week("2026-10-11", 6, 4))         # dry run first: condition generated, nothing sent
-    d_req = dash.read(b.led())
-    check("TC2", "week 2 down: consecutive decline count = 2", b.cyc("2026-10-11")["consecutive_decline_count"] == 2)
-    check("TC2", "dashboard shows ⚠️ Full Optimization Review Required (+ banner, + manual notice)",
-          d_req["state"] == "required" and "⚠️ Full Optimization Review Required" in d_req["row"]
-          and "FULL OPTIMIZATION REVIEW REQUIRED" in d_req["banner"] and "Full Optimization is MANUAL" in d_req["section"], d_req)
-    r = b.run(week("2026-10-11", 6, 4), "send")  # production mode, same week
-    a = b.led()["alerts"][f"{ASIN}|2026-10-11_2026-10-17"]
-    check("TC2", "Gmail Full Optimization Review alert triggered (one send, both recipients in To)",
-          r["results"][0]["this_run"] == "SENT" and len(b.sends()) == 1
-          and sorted(a["recipients"]) == sorted(email_alert.RECIPIENTS), r["results"])
-    check("TC2", "alert recorded in the alert ledger (status, sent time, Gmail message id)",
-          a["alert_status"] == "SENT" and a["alert_sent_at"] and a["message_id"] == "fake-gmail-0001", a)
-    r = b.run(week("2026-10-11", 6, 4), "send")  # the same cycle again
-    check("TC2", "duplicate protection: same ASIN/cycle not sent twice",
-          r["results"][0]["this_run"].startswith("BLOCKED_DUPLICATE") and len(b.sends()) == 1, r["results"])
-    d = dash.read(b.led())
-    check("TC2", "dashboard after sending = review required + alert already sent, with message id",
-          d["state"] == "sent" and "Full Optimization Review Required · Alert sent" in d["row"] and "fake-gmail-0001" in d["row"], d)
+    # ---- M3 Week 1 partial / M4 Week 2 partial (incomplete Week 2 -> no comparison) ------------------------
+    b.run(daily("2026-10-02", W1))
+    c = b.mon("2026-09-29")
+    check("M3", "Week 1 in progress (4/7 days): 'Monitoring — Week 1', orders not totalled (8 so far), no verdict",
+          c["monitoring_status"] == pa.S_WEEK1 and c["week1_days_loaded"] == 4 and c["week1_orders"] is None
+          and c["week1_orders_so_far"] == 8 and c["performance_status"] == pa.P_WAIT, c)
+    b.run(daily("2026-10-09", {**W1, **W2_DOWN}))
+    c = b.mon("2026-09-29")
+    check("M4", "Week 1 complete (14), Week 2 4/7 days: 'Monitoring — Week 2', NO decline computed although Week 2 is lower so far",
+          c["monitoring_status"] == pa.S_WEEK2 and c["week1_orders"] == 14 and c["week2_orders"] is None
+          and c["week2_days_loaded"] == 4 and c["order_change"] is None and c["performance_status"] == pa.P_WAIT, c)
+    b.run(daily("2026-10-12", {**W1, **W2_DOWN}, gaps=("2026-10-08",)))
+    c = b.mon("2026-09-29")
+    check("M4", "a missing (not loaded) day inside Week 2 keeps it incomplete (6/7) - never a partial total",
+          c["monitoring_status"] == pa.S_WEEK2 and c["week2_days_loaded"] == 6 and c["week2_orders"] is None, c)
 
-    # ---- Test Case 3: down then improved -> reset, no alert ------------------------------------
-    b3 = Box()
-    b3.run(week("2026-10-04", 10, 6))
-    r = b3.run(week("2026-10-11", 6, 9), "send")
-    d = dash.read(b3.led())
-    check("TC3", "week 2 improved: count resets to 0", b3.cyc("2026-10-11")["consecutive_decline_count"] == 0)
-    check("TC3", "NO alert", r["due"] == 0 and not b3.sends() and b3.led()["alerts"] == {})
-    check("TC3", "dashboard = normal / improving", d["state"] == "normal" and "Improved" in d["row"], d)
+    # ---- M5 complete -> comparison --------------------------------------------------------------------------
+    b.run(daily("2026-10-12", {**W1, **W2_DOWN}))
+    c = b.mon("2026-09-29")
+    check("M5", "Week 2 complete and lower (14 -> 7): Monitoring Complete, Performance Decline, -50.0%",
+          c["monitoring_status"] == pa.S_COMPLETE and (c["week1_orders"], c["week2_orders"]) == (14, 7)
+          and c["order_change"] == -7 and c["order_change_pct"] == -50.0 and c["performance_status"] == pa.P_DECLINE, c)
+    bu = Box()
+    bu.run(daily("2026-10-12", {**W1, **W2_UP}))
+    be = Box()
+    be.run(daily("2026-10-12", {**W1, **per_day("2026-10-06", 7, 2)}))
+    check("M5", "Week 2 higher (21) -> Performance Improved; equal (14 = 14) -> Performance Stable",
+          bu.mon("2026-09-29")["performance_status"] == pa.P_IMPROVED and be.mon("2026-09-29")["performance_status"] == pa.P_STABLE)
+    b.run(daily("2026-11-30", {}, start="2026-10-20"))   # later builds no longer contain Sep/Oct daily data
+    check("M6", "a completed cycle is frozen: later daily-data windows never rewrite its Week 1 / Week 2 figures",
+          b.mon("2026-09-29")["week1_orders"] == 14 and b.mon("2026-09-29")["performance_status"] == pa.P_DECLINE)
 
-    # ---- Test Case 4: down then missing / non-eligible cycle -> streak broken -------------------
-    b4 = Box()
-    b4.run(week("2026-10-04", 10, 6))
-    b4.run(week("2026-10-18", 6, 4), "send")      # 11 Oct week missing entirely
-    check("TC4a", "missing week: streak breaks, count restarts at 1 (not 2), NO alert",
-          b4.cyc("2026-10-18")["consecutive_decline_count"] == 1 and not b4.sends())
-    b4b = Box()
-    b4b.run(week("2026-10-04", 10, 6))
-    b4b.run(week("2026-10-11", 6, 4, has_data=False))   # cycle exists but no performance data
-    d = dash.read(b4b.led())
-    r = b4b.run(week("2026-10-18", 6, 4), "send")
-    check("TC4b", "no-data cycle breaks the streak: next decline counts 1, NO alert",
-          b4b.cyc("2026-10-11")["consecutive_decline_count"] == 0
-          and b4b.cyc("2026-10-18")["consecutive_decline_count"] == 1 and r["due"] == 0 and not b4b.sends())
-    check("TC4b", "dashboard shows the no-data cycle (streak reset), not an alert", d["state"] == "nodata", d)
-    b4c = Box()
-    b4c.run(week("2026-09-27", 10, 6))            # down but NOT eligible (starts before verification)
-    r = b4c.run(week("2026-10-04", 6, 4), "send")
-    check("TC4c", "non-eligible down week + eligible down week -> count 1, NO alert",
-          b4c.cyc("2026-10-04")["consecutive_decline_count"] == 1 and r["due"] == 0 and not b4c.sends())
+    # ---- M7 POST Accepted, GET still shows the previous keywords: monitored anyway (no GET gate) -------------
+    bp = Box(prior=PENDING_P)
+    bp.run(daily("2026-10-12", {**W1, **W2_DOWN}))
+    m = bp.mon()
+    check("M7", "POST Accepted with the audit GET still showing the previous keywords -> monitored from 29 Sep, "
+          "no 'Update Pending' entry, ledger status not 'Live Verification Pending'",
+          list(m) == [f"{ASIN}|2026-09-29"] and m[f"{ASIN}|2026-09-29"]["monitoring_status"] == pa.S_COMPLETE
+          and bp.row()["status"] == oc.S_ACCEPTED, (m, bp.row()["status"]))
 
-    # ---- Test Case 5 (updated business rule): no weekly repeats; streak closes at the alert ----------
-    b5 = Box()
-    b5.run(week("2026-10-04", 10, 8), "send")
-    b5.run(week("2026-10-11", 8, 6), "send")              # count 2 -> alert
-    r3 = b5.run(week("2026-10-18", 6, 4), "send")         # week 3 down, no optimization recorded yet
-    r4 = b5.run(week("2026-10-25", 4, 3), "send")         # week 4 down again
-    c3, c4 = b5.cyc("2026-10-18"), b5.cyc("2026-10-25")
-    d = dash.read(b5.led())
-    check("TC5", "week 3 and 4 down after the alert: NO repeat alert (streak closed), still exactly 1 e-mail",
-          len(b5.sends()) == 1 and list(b5.led()["alerts"]) == [f"{ASIN}|2026-10-11_2026-10-17"]
-          and all(x["this_run"].startswith("BLOCKED_DUPLICATE") for x in r3["results"] + r4["results"]),
-          (len(b5.sends()), list(b5.led()["alerts"])))
-    check("TC5", "the ASIN stays monitored: weeks 3/4 recorded as 'awaiting manual Full Optimization', count 0",
-          c3["streak_status"] == c4["streak_status"] == "awaiting_full_optimization"
-          and c3["consecutive_decline_count"] == c4["consecutive_decline_count"] == 0
-          and c4["alert_cycle_id"] == "2026-10-11_2026-10-17", (c3["streak_status"], c4["streak_status"]))
-    check("TC5", "dashboard shows 'Awaiting User Optimization' (with the sent alert), not a new alert",
-          d["state"] == "awaiting" and "Awaiting User Optimization" in d["row"] and "fake-gmail-0001" in d["row"], d)
+    # ---- M8 next due check: GET shows the accepted value -> audit Live Verified, no POST, anchor unchanged ------
+    lm = FakeLM([PROPOSED])
+    bp.cleanup(lm, "2026-10-05")
+    r = bp.row()
+    check("M8", "GET shows the accepted keywords -> NO POST, audit Live Verified, anchor stays 29 Sep (no new cycle)",
+          lm.posts == [] and r["status"] == oc.S_VERIFIED and [u["date"] for u in r["live_updates"]] == [ANCHOR], r.get("live_updates"))
 
-    # ---- Test Case 9: the business example, weeks 1-5 --------------------------------------------
-    b9 = Box()
-    b9.run(week("2026-10-04", 10, 8), "send")             # Week 1: down -> 1, no alert
-    w1 = (b9.cyc("2026-10-04")["consecutive_decline_count"], len(b9.sends()))
-    b9.run(week("2026-10-11", 8, 6), "send")              # Week 2: down -> 2, alert
-    w2 = (b9.cyc("2026-10-11")["consecutive_decline_count"], len(b9.sends()))
-    opt = b9.optimize("2026-10-21")                       # team: Full Optimization done (week 3)
-    b9.run(week("2026-10-18", 6, 4), "send")              # Week 3: new monitoring cycle (baseline)
-    c3 = b9.cyc("2026-10-18")
-    d3 = dash.read(b9.led())
-    b9.run(week("2026-10-25", 4, 3), "send")              # Week 4: down -> 1, no alert
-    w4 = (b9.cyc("2026-10-25")["consecutive_decline_count"], len(b9.sends()))
-    r5 = b9.run(week("2026-11-01", 3, 2), "send")         # Week 5: down -> 2, NEW alert
-    w5 = (b9.cyc("2026-11-01")["consecutive_decline_count"], len(b9.sends()))
-    d5 = dash.read(b9.led())
-    check("TC9", "Week 1 down -> count 1, no alert", w1 == (1, 0), w1)
-    check("TC9", "Week 2 down -> count 2, Full Optimization alert", w2 == (2, 1), w2)
-    check("TC9", "Full Optimization recorded against the week-2 alert", opt["alert_cycle_id"] == "2026-10-11_2026-10-17", opt)
-    check("TC9", "Week 3 = new monitoring cycle (baseline after Full Optimization), count 0, decline not counted",
-          c3["streak_status"] == "baseline" and c3["baseline_type"] == "Full Optimization"
-          and c3["consecutive_decline_count"] == 0 and d3["state"] == "optimized", (c3["streak_status"], d3["state"]))
-    check("TC9", "Week 4 down -> count 1, no alert (fresh streak after optimization)", w4 == (1, 1), w4)
-    check("TC9", "Week 5 down -> count 2 -> NEW Full Optimization alert (new cycle key, 2nd e-mail)",
-          w5 == (2, 2) and f"{ASIN}|2026-11-01_2026-11-07" in b9.led()["alerts"]
-          and b9.led()["alerts"][f"{ASIN}|2026-11-01_2026-11-07"]["alert_status"] == "SENT", (w5, list(b9.led()["alerts"])))
-    check("TC9", "the ASIN stayed in weekly monitoring throughout (5 consecutive cycles recorded)",
-          sorted(c["current_7d_start"] for c in b9.led()["cycles"].values())
-          == ["2026-10-04", "2026-10-11", "2026-10-18", "2026-10-25", "2026-11-01"])
-    check("TC9", "dashboard after week 5 shows the new alert", d5["state"] == "sent" and "fake-gmail-0002" in d5["row"], d5)
+    # ---- M9 GET still shows the pre-POST keywords (with duplicates) -> NOT re-sent ------------------------------
+    bq = Box(prior=PENDING_P)
+    lm = FakeLM(ORIGINAL_ENTRIES)
+    bq.cleanup(lm, "2026-10-05")
+    r = bq.row()
+    check("M9", "GET still shows the keywords from before the accepted POST -> the same payload is NOT re-POSTed; "
+          "audit only, status POST Accepted — Monitoring, anchor stays 29 Sep",
+          lm.posts == [] and r["status"] == oc.S_ACCEPTED and [u["date"] for u in r["live_updates"]] == [ANCHOR]
+          and "NOT re-sent" in r["history"][-1]["detail"], (lm.posts, r["status"], r["history"][-1].get("detail")))
+    lm = FakeLM(["brass cage pendant", "brass cage", "industrial lamp"], sync="never")   # a genuinely new value
+    bq.cleanup(lm, "2026-10-12")
+    r = bq.row()
+    check("M9", "a genuinely NEW live value with duplicates -> cleaned from the fresh GET, POSTed once; POST Accepted "
+          "starts a new cycle on the POST date even though the read-back still shows the old value (audit)",
+          len(lm.posts) == 1 and lm.posts[0]["backend_keywords"] == oc.finetune(["brass cage pendant", "brass cage", "industrial lamp"])["cleaned"]
+          and r["status"] == oc.S_ACCEPTED and [(u["date"], u["source"]) for u in r["live_updates"]] == [(ANCHOR, oc.SRC_ORIGINAL), ("2026-10-12", oc.SRC_POST)],
+          (lm.posts, r["status"], r.get("live_updates")))
+    bq.cleanup(lm, "2026-10-19")
+    check("M9", "next due week: GET still shows the value from before THAT accepted POST -> not re-sent (still 1 POST)",
+          len(lm.posts) == 1 and len(bq.row()["live_updates"]) == 2)
 
-    # ---- Test Case 10: optimization recorded late (after extra awaiting weeks) ---------------------
-    b10 = Box()
-    for st, pv, cu in (("2026-10-04", 10, 8), ("2026-10-11", 8, 6), ("2026-10-18", 6, 5), ("2026-10-25", 5, 4)):
-        b10.run(week(st, pv, cu), "send")                  # alert at week 2, weeks 3-4 awaiting
-    b10.optimize("2026-11-03")                             # done during week 01-07 Nov
-    for st, pv, cu in (("2026-11-01", 4, 3), ("2026-11-08", 3, 2), ("2026-11-15", 2, 1)):
-        b10.run(week(st, pv, cu), "send")
-    cyc = {c["current_7d_start"]: c for c in b10.led()["cycles"].values()}
-    check("TC10", "late optimization: awaiting weeks never alert; baseline week, then 2 new declines -> new alert",
-          [cyc[k]["streak_status"] for k in sorted(cyc)] == ["open", "alert", "awaiting_full_optimization",
-          "awaiting_full_optimization", "baseline", "open", "alert"] and len(b10.sends()) == 2,
-          ([cyc[k]["streak_status"] for k in sorted(cyc)], len(b10.sends())))
+    # ---- M10 manual user change (clean) -> new anchor, new cycle; old cycle closed, not mixed ----------------
+    bm = Box()
+    bm.cleanup(FakeLM([PROPOSED]), "2026-10-06")          # routine re-check, same value
+    r0 = bm.row()
+    check("M10", "routine re-check of the accepted value: no POST, NO new anchor (stays 29 Sep)",
+          [u["date"] for u in r0["live_updates"]] == [ANCHOR])
+    lm = FakeLM(["vintage edison pendant cage"])          # the user changed the keywords manually
+    bm.cleanup(lm, "2026-10-13")
+    r1 = bm.row()
+    bm.run(daily("2026-10-25", {**W1, **W2_DOWN, **per_day("2026-10-13", 13, 1)}))
+    old, new = bm.mon("2026-09-29"), bm.mon("2026-10-13")
+    check("M10", "manual change detected by the weekly GET: clean -> no POST; new live value = source of truth; new anchor 13 Oct",
+          lm.posts == [] and r1["live_value"] == "vintage edison pendant cage"
+          and [(u["date"], u["source"]) for u in r1["live_updates"]] == [(ANCHOR, oc.SRC_ORIGINAL), ("2026-10-13", oc.SRC_MANUAL)])
+    check("M10", "new cycle: Week 1 13..19 Oct, Week 2 20..26 Oct; old 29 Sep cycle kept (complete before the change, not mixed)",
+          (new["week1_start"], new["week2_end"]) == ("2026-10-13", "2026-10-26") and new["latest"] and not old["latest"]
+          and old["monitoring_status"] == pa.S_COMPLETE and old["superseded_by"] is None and new["week1_orders"] == 7, (old, new))
+    bs = Box()
+    bs.run(daily("2026-10-02", W1))
+    lm = FakeLM(["brand new manual keywords"])
+    bs.cleanup(lm, "2026-10-06")                           # change made inside the old Week 2
+    bs.run(daily("2026-10-12", {**W1, **W2_DOWN}))
+    old = bs.mon("2026-09-29")
+    check("M10", "change during the old Week 2 -> old cycle 'Superseded', its Week 2 not evaluated (no mixed decline)",
+          old["monitoring_status"] == pa.S_SUPERSEDED and old["week2_valid"] is False and old["performance_status"] == pa.P_NOT_EVALUATED
+          and old["week1_orders"] == 14 and bs.mon("2026-10-06")["monitoring_status"] == pa.S_WEEK2
+          and bs.mon("2026-10-06")["week1_orders"] == 7, (old, bs.mon("2026-10-06")))
 
-    # ---- Test Case 11: recording safeguards ---------------------------------------------------------
-    b11 = Box()
-    b11.run(week("2026-10-04", 10, 8))
-    def rejects(date, today="2026-12-31"):
+    # ---- M11 manual change with duplicates -> clean the LATEST live value, POST, new anchor = POST date ---------
+    bd = Box()
+    user = ["Vintage cage pendant", "vintage", "brass holder", "brass holder"]
+    lm = FakeLM(user, sync="immediate")
+    bd.cleanup(lm, "2026-10-06")
+    r = bd.row()
+    check("M11", "user's value has repetitions -> cleanup operates on the latest live value: relevant words kept, "
+          "nothing invented, POST once, new anchor 6 Oct (POST Accepted date)",
+          len(lm.posts) == 1 and oc.uniq(lm.posts[0]["backend_keywords"]) == oc.uniq(" ".join(user))
+          and PROPOSED not in lm.posts[0]["backend_keywords"] and r["status"] == oc.S_VERIFIED
+          and [u["date"] for u in r["live_updates"]] == [ANCHOR, "2026-10-06"], (lm.posts, r["live_updates"]))
+
+    # ---- M12 --record-live-update: the user-reported date is the anchor -------------------------------------
+    br_ = Box()
+    br_.record("2026-10-03", today="2026-10-05")
+    br_.cleanup(FakeLM(["user typed keywords"]), "2026-10-05")
+    check("M12", "user recorded a manual change on 3 Oct; the next fresh GET confirms it -> anchor 3 Oct (not the GET date)",
+          [u["date"] for u in br_.row()["live_updates"]] == [ANCHOR, "2026-10-03"])
+    bc = Box()
+    bc.cleanup(FakeLM(["detected later"]), "2026-10-06")
+    bc.record("2026-10-04", today="2026-10-07")
+    check("M12", "change already detected on 6 Oct, user reports the real date 4 Oct -> the anchor is corrected to 4 Oct",
+          [u["date"] for u in bc.row()["live_updates"]] == [ANCHOR, "2026-10-04"])
+    bad = []
+    for d, today in (("2026-10-20", "2026-10-07"), ("2026-09-20", "2026-10-07"), ("05/10/2026", "2026-10-07")):
         try:
-            b11.optimize(date, today)
-        except ValueError as e:
-            return str(e)
-        return None
-    check("TC11", "no open alert -> recording rejected", "no open Full Optimization Review alert" in (rejects("2026-10-12") or ""))
-    b11.run(week("2026-10-11", 8, 6))                     # alert cycle (dry run)
-    check("TC11", "future date rejected", "in the future" in (rejects("2026-10-20", today="2026-10-19") or ""))
-    check("TC11", "date before the end of the alert cycle rejected", "before the end of the alert cycle" in (rejects("2026-10-15") or ""))
-    check("TC11", "malformed date rejected", "YYYY-MM-DD" in (rejects("20/10/2026") or ""))
-    first = b11.optimize("2026-10-20")
-    again = b11.optimize("2026-10-20")
-    check("TC11", "same date recorded twice is idempotent (one record)",
-          (first["completed_on"], first["recorded_at"]) == (again["completed_on"], again["recorded_at"])
-          and len(b11.led()["optimizations"][ASIN]) == 1)
-    check("TC11", "a second, different date is rejected once the alert is resolved",
-          "no open Full Optimization Review alert" in (rejects("2026-10-22") or ""))
+            Box().record(d, today=today)
+            bad.append(d)
+        except ValueError:
+            pass
+    check("M12", "future date, date before the current anchor and malformed date are rejected", not bad, bad)
+
+    # ---- M13 idempotent daily execution ---------------------------------------------------------------------
+    bi = Box(prior=PENDING_P)
+    lm = FakeLM(ORIGINAL_ENTRIES, sync="never")           # Amazon keeps showing the previous keywords
+    snaps = []
+    for d in days("2026-10-05", 15):                     # run the full pipeline stages DAILY for 15 days
+        bi.cleanup(lm, d, at="15:00:00")
+        bi.cleanup(lm, d, at="18:00:00")                 # and twice on the same day
+        bi.run(daily(d, W1), now=d + "T18:30:00")
+        snaps.append(sorted(bi.mon()))
+    check("M13", "daily runs for 15 days (twice a day) while GET shows the previous keywords: 0 POSTs (no retry of the "
+          "accepted payload), at most one check per Monday-week, monitoring never restarts (one 29 Sep cycle)",
+          lm.posts == [] and all(s == [f"{ASIN}|2026-09-29"] for s in snaps)
+          and len([e for e in bi.row()["history"] if e.get("event") == "weekly check"]) == 3, (len(lm.posts), snaps[-1]))
+    bj = Box()
+    for d in days("2026-10-05", 10):
+        bj.cleanup(FakeLM([PROPOSED]), d)
+        bj.run(daily(d, W1), now=d + "T18:30:00")
+    strip = lambda m: {k: {x: y for x, y in c.items() if x not in ("computed_at", "data_through")} for k, c in m.items()}
+    m1 = strip(bj.mon())
+    bj.cleanup(FakeLM([PROPOSED]), "2026-10-14", at="20:00:00")
+    bj.run(daily("2026-10-14", W1), now="2026-10-14T20:30:00")
+    check("M13", "re-running the same day changes nothing; the anchor never restarts on routine daily checks (one cycle, 29 Sep)",
+          strip(bj.mon()) == m1 and list(bj.mon()) == [f"{ASIN}|2026-09-29"]
+          and [u["date"] for u in bj.row()["live_updates"]] == [ANCHOR])
+
+    # ---- M14 no e-mail -------------------------------------------------------------------------------------
     out = io.StringIO()
-    saved_ledger = pa.LEDGER
-    pa.LEDGER = b11.ledger
-    argv = sys.argv
-    sys.argv = ["performance_alert.py", "--record-optimization", ASIN]
-    try:
-        with contextlib.redirect_stdout(out):
-            rc = pa.main()
-    finally:
-        pa.LEDGER, sys.argv = saved_ledger, argv
-    check("TC11", "CLI without --date -> clean error, exit 2", rc == 2 and "--date" in out.getvalue(), out.getvalue())
-
-    # ---- Test Case 12: a FAILED alert is retried while the ASIN awaits optimization --------------
-    b12 = Box()
-    b12.gmail = FakeGmail(send_status=500)
-    b12.run(week("2026-10-04", 10, 8), "send")
-    b12.run(week("2026-10-11", 8, 6), "send")              # alert fails
-    failed = b12.led()["alerts"][f"{ASIN}|2026-10-11_2026-10-17"]["alert_status"]
-    b12.gmail = FakeGmail()
-    r = b12.run(week("2026-10-18", 6, 4), "send")          # next week: retry the same alert, no new one
-    check("TC12", "failed alert is retried next run (same cycle key), and no extra alert for the awaiting week",
-          failed == "FAILED" and [x["this_run"] for x in r["results"]] == ["SENT"]
-          and list(b12.led()["alerts"]) == [f"{ASIN}|2026-10-11_2026-10-17"], (failed, r["results"]))
-
-    # ---- Test Case 6: submitted but NOT live verified -------------------------------------------
-    b6 = Box()
-    b6.run(week("2026-10-04", 10, 6, state="POST_ACCEPTED_PENDING_SYNC"))
-    r = b6.run(week("2026-10-11", 6, 4, state="POST_ACCEPTED_PENDING_SYNC"), "send")
-    check("TC6", "pending (not live-verified) change: no monitoring cycle starts, nothing tracked",
-          b6.led()["cycles"] == {} and r["tracked"] == 0)
-    check("TC6", "its declines do not count and no alert is sent", r["due"] == 0 and not b6.sends())
-    r = b6.run(week("2026-10-18", 4, 3, verified="2026-10-20"), "send")   # verified later
-    check("TC6", "after live verification, earlier/overlapping declines still do not count (count 0, no alert)",
-          b6.cyc("2026-10-18")["eligible_after_live_verification"] is False
-          and b6.cyc("2026-10-18")["consecutive_decline_count"] == 0 and not b6.sends())
-
-    # ---- Test Case 7: ASIN leaves the Top 50 after fine-tuning ----------------------------------
-    b7 = Box()
-    b7.run(week("2026-10-04", 10, 6))
-    r = b7.run(week("2026-10-11", 6, 4, in_top=False), "send")
-    c = b7.cyc("2026-10-11")
-    d = dash.read(b7.led())
-    check("TC7", "outside the top 50: still monitored, decline counted (count 2) and alert sent",
-          c["in_top_moving"] is False and c["consecutive_decline_count"] == 2 and len(b7.sends()) == 1, c)
-    check("TC7", "dashboard keeps the ASIN and marks it 'outside top 50 · still monitored'",
-          d["state"] == "sent" and "outside top 50" in d["row"], d)
-    gone = week("2026-10-18", 4, 5, in_top=False)
-    gone["change_record"] = []                   # not even in this week's change records any more
-    b7.run(gone)
-    check("TC7", "ASIN already monitored in the ledger stays tracked even without a change record",
-          any(c["current_7d_start"] == "2026-10-18" for c in b7.led()["cycles"].values()))
-    build_level_tc7()
-
-    # ---- Test Case 8: TEST Gmail e-mail stays separate ------------------------------------------
-    tfile = BASE / "evidence" / "10_gmail_test_email.json"
-    te = json.loads(tfile.read_text(encoding="utf-8"))
-    prod = json.loads((BASE / "data" / "monitoring_cycles.json").read_text(encoding="utf-8"))
-    check("TC8", "TEST e-mail record is separate (evidence/10_gmail_test_email.json, to apiramedigit only)",
-          te["status"] == "SENT" and te["to"] == ["apiramedigit@gmail.com"] and te["subject"].startswith("[TEST]"))
-    check("TC8", "production alert ledger has no TEST alert record",
-          not any("TEST" in json.dumps(a) or a.get("message_id") == te["gmail_message_id"] for a in prod["alerts"].values()),
-          prod["alerts"])
+    with contextlib.redirect_stdout(out):
+        rc = pa.main(["--send"])
     src = (BASE / "scripts" / "performance_alert.py").read_text(encoding="utf-8")
-    check("TC8", "the alert logic never reads the TEST-mail record", "10_gmail_test_email" not in src)
-    b8 = Box()
-    b8.ledger.write_text(json.dumps(prod), encoding="utf-8")
-    ds_real = json.loads((BASE / "data" / "report_dataset.json").read_text(encoding="utf-8"))
-    counts_before = {k: c.get("consecutive_decline_count") for k, c in prod["cycles"].items()}
-    r = b8.run(ds_real)
-    counts_after = {k: c.get("consecutive_decline_count") for k, c in b8.led()["cycles"].items() if k in counts_before}
-    check("TC8", "TEST e-mail does not change any consecutive-decline count or create an alert",
-          counts_before == counts_after and b8.led()["alerts"] == prod["alerts"] and r["due"] == 0, (counts_before, counts_after))
-    d = dash.read(prod, te)
-    check("TC8", "dashboard shows the TEST e-mail only as a separate note; no monitored ASIN in an alert state",
-          "not a production alert" in d["section"]
-          and not any(s in ("required", "sent") for s in [d["state"]] if s) and d["banner"] == "", d["banner"])
-    check("ALL", "no JavaScript errors on any rendered dashboard", True)
+    check("M14", "performance_alert.py --send is REFUSED (exit 2, nothing sent); the module never imports the e-mail code",
+          rc == 2 and "REFUSED" in out.getvalue() and "import email_alert" not in src and "gmail" not in src.lower(), out.getvalue())
+    bx = Box()
+    bx.run(daily("2026-10-12", {**W1, **W2_DOWN}))       # a Performance Decline cycle
+    led = bx.led()
+    keys = {k for c in led["monitoring"].values() for k in c}
+    check("M14", "a Performance Decline creates no alert / e-mail state (monitoring fields only, no alerts written)",
+          led["monitoring"][f"{ASIN}|2026-09-29"]["performance_status"] == pa.P_DECLINE
+          and not [k for k in keys if "alert" in k or "mail" in k] and not led.get("alerts"), sorted(keys))
 
-
-def build_level_tc7():
-    """build_dataset.py on a temp copy of the real extract where a live-verified ASIN falls out of
-    the top 50: its submission must stay in the change record and it must keep weekly metrics."""
-    target = "B0GXB7RGZK"
-    src = json.loads((BASE / "data" / "extract.json").read_text(encoding="utf-8"))
-    cw = src["current_week"][0]
-    ext = copy.deepcopy(src)
-    ext["ph_map"] = [m for m in ext["ph_map"] if m["asin"] != target]   # out of the ranked scope -> not in the top 50
-    tmp = pathlib.Path(tempfile.mkdtemp())
-    (tmp / "extract.json").write_text(json.dumps(ext), encoding="utf-8")
-    saved = (build_dataset.SRC, build_dataset.OUT, build_dataset.LEDGER)
-    build_dataset.SRC, build_dataset.OUT, build_dataset.LEDGER = tmp / "extract.json", tmp / "ds.json", tmp / "none.json"
-    try:
-        with contextlib.redirect_stdout(io.StringIO()):
-            build_dataset.main()
-    finally:
-        build_dataset.SRC, build_dataset.OUT, build_dataset.LEDGER = saved
-    ds = json.loads((tmp / "ds.json").read_text(encoding="utf-8"))
-    mp = {r["asin"]: r for r in ds["monitoring_performance"]}
-    cr = [c for c in ds["change_record"] if c["asin"] == target]
-    exp_cur = sum(int(r["orders"] or 0) for r in src["weekly_orders"] if r["asin"] == target and r["week_start"] == cw)
-    check("TC7", "build: ASIN outside the top 50 keeps its live-verified change record (carried forward) and weekly metrics",
-          target not in {p["asin"] for p in ds["performance"]} and cr and cr[0]["carried_forward"]
-          and cr[0]["status"] == "Live-verified" and target in mp and mp[target]["in_top_moving"] is False
-          and mp[target]["curr_orders"] == exp_cur,
-          {"in_top50": target in {p["asin"] for p in ds["performance"]}, "change_record": cr,
-           "metrics": {k: mp.get(target, {}).get(k) for k in ("in_top_moving", "curr_orders")}, "expected_cur": exp_cur})
+    # ---- M15 dashboard (Section 12 audit: cycle history + keyword rows) ---------------------------------------
+    d = dash.read(b.led())
+    check("M15", "Section 12 cycle history shows the 29 Sep cycle complete with both weeks' orders and the Decline result",
+          d["hist"] == [(ASIN, "2026-09-29", pa.S_COMPLETE)] and d["hist_text"] and "14 orders (7/7 days)" in d["hist_text"][0]
+          and "7 orders (7/7 days)" in d["hist_text"][0] and pa.P_DECLINE in d["hist_text"][0], d["hist_text"])
+    d2 = dash.read(bs.led())
+    check("M15", "after a manual change: the history keeps the superseded 29 Sep cycle and shows the new 6 Oct cycle",
+          (ASIN, "2026-09-29", pa.S_SUPERSEDED) in d2["hist"] and (ASIN, "2026-10-06", pa.S_WEEK2) in d2["hist"], d2["hist"])
+    d3 = dash.read(bq.led())
+    check("M15", "keyword rows show the audit status (POST Accepted — Monitoring), no e-mail alert status, no JavaScript errors",
+          d3["cleanup"] == [(ASIN, "WCE2E2PK", oc.S_ACCEPTED)]
+          and all(not x["errors"] for x in (d, d2, d3)) and not any(w in x["body"] for x in (d, d2, d3)
+                                                              for w in ("Alert Status", "Gmail", "Alert sent")),
+          [x["errors"] for x in (d, d2, d3)] + [d3["cleanup"]])
 
 
 if __name__ == "__main__":

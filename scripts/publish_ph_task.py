@@ -18,7 +18,7 @@ BASE = pathlib.Path(__file__).resolve().parent.parent
 REPORT = BASE / "output" / "weekly_top_moving_asin_backend_keyword_fine_tuning_report.html"
 DS = json.loads((BASE / "data" / "report_dataset.json").read_text(encoding="utf-8"))
 T = "tech_team_outputs.ph_task"
-USER, TEAM, CODE, VERSION = "paulr", "ph_priors", "WTMA", 3
+USER, TEAM, CODE, VERSION = "paulr", "ph_priors", "WTMA", 4
 
 
 def main():
@@ -36,15 +36,16 @@ def main():
         "project_code": CODE,
         "task_name": f"{USER} - Top {M['top_moving_n']} Wire Cage ASINs: {DS['kpi']['performance_drop']} "
                      f"performance drops, " + (
-                         f"{DS['kpi']['posts_accepted']} backend keyword updates accepted by Amazon "
-                         f"({DS['kpi']['live_verified']} live-verified, {DS['kpi'].get('live_verification_pending', 0)} pending) - {cw}"
+                         f"{DS['kpi']['posts_accepted']} backend keyword updates accepted by Amazon, under monitoring "
+                         f"from {dt.date.fromisoformat(DS['monitoring_week_orders']['anchor']).strftime('%d %b %Y')} "
+                         f"(Week 1 + Week 2) - {cw}"
                          if DS["kpi"].get("posts_accepted")
                          else f"{DS['kpi']['finetune_proposed']} backend keyword fine-tunes proposed - {cw}"),
         "task_id": task_id, "team": "Development", "developer": "Apirame", "assigned_user": USER,
         "html_content": html,
         "description": ("Amazon UK weekly report for PH Paulroshan (Wire Cage) only: top 50 moving ASINs, "
                         "Current 7D vs Previous 7D orders/impressions/clicks/CTR/CVR, backend keyword "
-                        "duplicate clean-up, change record and 7-day monitoring."),
+                        "duplicate clean-up, change record and Week 1 / Week 2 post-update monitoring."),
         "phase_level": 1, "version_level": VERSION, "version_status": "released",
         "assigned_user_team": TEAM,
     }

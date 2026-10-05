@@ -17,6 +17,7 @@ import tempfile
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import build_dataset  # noqa: E402
 import keyword_live_verify as klv  # noqa: E402
+import optimization_cleanup as oc  # noqa: E402
 import performance_alert as pa  # noqa: E402
 
 BASE = pathlib.Path(__file__).resolve().parent.parent
@@ -137,22 +138,47 @@ def main():
         build_dataset.BASE, build_dataset.OUT, build_dataset.LEDGER = saved
     ds = json.loads((tb / "data" / "ds.json").read_text(encoding="utf-8"))
     cr = {c["key"]: c for c in ds["change_record"]}
-    check("P12", "build: newly verified pending submission -> Live-verified, dated by the verification; 22-submission history kept",
-          cr[target]["status"] == "Live-verified" and cr[target]["submission"]["checked_at_utc"] == "2026-10-02T04:00:00Z"
+    # baseline = the audit verifications already in the real evidence (B0DH4KYFPD, B0GXB7RGZK, B0C43L42DK)
+    real = klv.latest_states([BASE / "evidence" / "09_remaining_20_live_verification.json",
+                              BASE / "evidence" / "07_live_keyword_verification.json"])
+    base_verified = sum(1 for v in real.values() if v["state"] == klv.VERIFIED)
+    check("P12", "build (rule 2026-10-05): a later GET verification is AUDIT only - the submission stays Monitoring from the "
+          "common update date 2026-09-29, like all 22 POST Accepted submissions; audit count +1, 0 pending",
+          cr[target]["status"] == "Monitoring" and cr[target]["date_changed"] == "2026-09-29"
+          and cr[target]["submission"]["get_verified_date"] == "2026-10-02"
           and sum(1 for c in cr.values() if c.get("submission")) == 22
-          and ds["kpi"]["live_verified"] == 3 and ds["kpi"]["posts_accepted"] == 22, (cr[target]["status"], ds["kpi"]["live_verified"]))
-    tracked = pa.tracked_asins(ds)
-    check("P13", "it enters normal monitoring: tracked, new 7-day cycle from the verification (next Sunday 4 Oct)",
-          "B0D7944QDY" in tracked and tracked["B0D7944QDY"]["last_live_verification_date"] == "2026-10-02"
-          and pa.monitoring_start("2026-10-02") == "2026-10-04", tracked.get("B0D7944QDY"))
-    check("P14", "the other pending submissions stay unverified (not tracked for monitoring yet)",
-          sum(1 for c in cr.values() if c["status"] == "Live-verified") == 3 and len(tracked) == 3)
+          and all((c["status"], c["date_changed"]) == ("Monitoring", "2026-09-29") for c in cr.values() if c.get("submission"))
+          and ds["kpi"]["get_audit_shows_submitted"] == base_verified + 1 and ds["kpi"]["live_verification_pending"] == 0
+          and ds["kpi"]["posts_accepted"] == 22,
+          (cr[target]["status"], cr[target]["date_changed"], ds["kpi"]["get_audit_shows_submitted"], base_verified))
+    # reconcile the ledger from the temp evidence (as performance_alert.py does in production), then monitor
+    led = {}
+    prior = klv.latest_states([tb / "evidence" / "09_remaining_20_live_verification.json",
+                               tb / "evidence" / "07_live_keyword_verification.json"])
+    oc.seed(led, oc.load_scope(), prior)
+    mon = pa.update(led, ds, now=dt.datetime(2026, 10, 5, 12))
+    cyc = mon.get("B0D7944QDY|2026-09-29") or {}
+    loaded = sum(1 for d in ds["monitoring_data"]["available_dates"] if "2026-09-29" <= d <= "2026-10-05")
+    exp_status = pa.S_NOT_STARTED if loaded == 0 else pa.S_WEEK1 if loaded < 7 else None
+    check("P13", "monitoring anchored on 2026-09-29 (not the 2 Oct GET date): Week 1 = 29 Sep..5 Oct, Week 2 = 6..12 Oct; "
+          "status follows the loaded days, no Week 1 total before 7/7 days",
+          (cyc.get("week1_start"), cyc.get("week1_end"), cyc.get("week2_start"), cyc.get("week2_end"))
+          == ("2026-09-29", "2026-10-05", "2026-10-06", "2026-10-12") and "B0D7944QDY|2026-10-02" not in mon
+          and (exp_status is None or cyc.get("monitoring_status") == exp_status)
+          and cyc.get("week1_days_loaded") == loaded and (loaded == 7 or cyc.get("week1_orders") is None), cyc)
+    cycles = {k: c for k, c in mon.items() if c["kind"] == "cycle"}
+    asins = {c["asin"] for c in cr.values() if c.get("submission")}
+    check("P14", "every POST Accepted submission is monitored without a GET gate: one 2026-09-29 cycle per ASIN (21 ASINs / 22 "
+          "listings), no 'Update Pending' entry, ledger rows not left as Live Verification Pending",
+          set(cycles) == {f"{a}|2026-09-29" for a in asins} and len(asins) == 21
+          and not [c for c in mon.values() if c["kind"] == "pending"]
+          and not [r for r in led["keyword_rows"].values() if r["status"] == oc.LEGACY_PENDING], sorted(cycles)[:3])
 
     sys.path.insert(0, str(BASE / "automation"))
     import run as runner
     prod = runner.pipeline(False)
-    check("P15", "pending rows are handled by the weekly keyword check (fresh GET + POST if needed); no separate read-only stage",
-          [n for n, _ in prod] == ["extract", "weekly_keyword_check", "build_dataset", "performance_alert", "render", "validate"])
+    check("P15", "pending rows are handled by the weekly keyword check (fresh GET + POST if needed); no separate read-only stage, no e-mail stage",
+          [n for n, _ in prod] == ["extract", "weekly_keyword_check", "build_dataset", "performance_monitoring", "render", "validate"])
 
     p_, f_ = sum(r["result"] == "PASS" for r in R), sum(r["result"] == "FAIL" for r in R)
     (BASE / "evidence" / "14_pending_verification_test_results.json").write_text(json.dumps(

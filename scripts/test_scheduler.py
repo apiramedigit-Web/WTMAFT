@@ -41,15 +41,21 @@ def main():
     bad = fake(tmp, "bad", "import sys; print('about to fail'); print('boom', file=sys.stderr); sys.exit(3)")
     leak = fake(tmp, "leak", "print('token ya29.SECRETtokenVALUE_123456 and GOCSPX-SECRETvalue99')")
 
-    # S1 production stage list: exact order, alert stage with --send, dry-run without
+    # S1 production stage list: exact order; NO e-mail stage and no --send anywhere (e-mail alerts removed 2026-10-02)
     prod, dry = runner.pipeline(False), runner.pipeline(True)
-    check("S1", "production order = extract -> weekly_keyword_check --apply -> build_dataset -> performance_alert --send -> render -> validate",
-          [n for n, _ in prod] == ["extract", "weekly_keyword_check", "build_dataset", "performance_alert", "render", "validate"]
+    check("S1", "production order = extract -> weekly_keyword_check --apply -> build_dataset -> performance_monitoring (no --send) -> render -> validate",
+          [n for n, _ in prod] == ["extract", "weekly_keyword_check", "build_dataset", "performance_monitoring", "render", "validate"]
           and prod[1][1] == ["scripts/optimization_cleanup.py", "--apply"]
-          and prod[3][1] == ["scripts/performance_alert.py", "--send"], prod)
-    check("S2", "--dry-run: keyword check without --apply (no POST) and alert without --send (no e-mail)",
+          and prod[3][1] == ["scripts/performance_alert.py"]
+          and not [c for _, c in prod if "--send" in c or any("email" in x or "gmail" in x for x in c)], prod)
+    check("S2", "--dry-run: keyword check without --apply (no POST); monitoring stage identical (it never e-mails)",
           dry[1][1] == ["scripts/optimization_cleanup.py"] and dry[3][1] == ["scripts/performance_alert.py"]
           and not [c for _, c in dry if "--send" in c or "--apply" in c], dry)
+    p_send, _, _ = run(tmp, [["alert", "scripts/performance_alert.py", "--send"]])
+    p_mail, _, _ = run(tmp, [["mail", "scripts/email_alert.py"]])
+    check("S2b", "an e-mail stage (performance_alert --send / email_alert) is REFUSED by the runner before anything runs",
+          p_send.returncode == 2 and "REFUSED" in p_send.stdout and p_mail.returncode == 2 and "REFUSED" in p_mail.stdout,
+          (p_send.stdout, p_mail.stdout))
     check("S3", "no Amazon keyword-update / test-mail / publish script in the pipeline",
           not any(f in " ".join(c) for _, c in prod + dry for f in runner.FORBIDDEN))
 

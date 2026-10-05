@@ -1,72 +1,52 @@
 {
- "run_at": "2026-09-29T16:04:13",
- "passed": 23,
+ "run_at": "2026-10-05T10:15:42",
+ "passed": 27,
  "failed": 0,
  "tests": [
   {
-   "test": "T1 Default: the 2 verified rows start Live-verified, all others Proposed; nothing monitored, Section 8 empty",
+   "test": "T1a Sections 5 / 7 show exactly the 22 submitted SKUs (no new 'Proposed – upload not confirmed' rows): all Monitoring with Date Changed 29 Sep 2026 and 'Live-verified — monitoring'; no 'Live Verification Pending'",
    "result": "PASS",
-   "detail": "{'statuses': ['Live-verified', 'Proposed'], 'monitor': {'active': False}}"
+   "detail": "{'monitoring': 22, 'pills': ['Live-verified — monitoring']}"
   },
   {
-   "test": "T2 Validation: no date / Proposed+date / future date / pending POST into monitoring are rejected and not stored",
+   "test": "T1b Section 8 keeps the previous 8-column layout; one row per monitoring change record (22), all from 29 Sep: Week 1 29 Sep → 5 Oct, Week 2 6 Oct → 12 Oct",
    "result": "PASS",
-   "detail": "['Enter the actual Date Changed before setting Status to Monitoring.', 'A Proposed change has no Date Changed. Set Status to Monitoring to record an applied change, or clear the date.', 'Date Changed cannot be in the future.', 'This POST is still pending live verification, so it cannot enter monitoring yet.', True, None]"
+   "detail": "(['ASIN', 'Week 1 Orders', 'Week 2 Orders', 'Order Change %', 'Week 1 Impressions', 'Week 2 Impressions', 'Impression Change %', 'Result'], 22)"
+  },
+  {
+   "test": "T1c Real data (5/7 Week 1 days loaded): Result 'Monitoring — Week 1', Week 1 orders '—' + 'Week 1 monitoring' until 7/7, no verdict",
+   "result": "PASS",
+   "detail": "{'start': '2026-09-29', 'result': 'Monitoring — Week 1', 'ASIN': 'B0DH4KYFPD\\nWCDTBM2PK+RPR44WH2PK · changed 29 Sept 2026', 'Week 1 Orders': '—\\n29 Sept 2026 → 05 Oct 2026\\nWeek 1 monitoring', 'Week 2 Orders': '—\\n06 Oct 2026 → 12 Oct 2026\\n0/7 days loaded', 'Order Change %': '—', 'Week 1 Impressions': '—\\nweekly data only', 'Week 2 Impressions': '—\\nweekly data only', 'Impression Change %': '—\\nweekly data only', 'Result': 'Monitoring — Week 1\\nWeek 1 monitoring'}"
+  },
+  {
+   "test": "T1d KPI cards: Completed 0, Live Verification Pending 0, Under Monitoring 22, POSTs Accepted 22",
+   "result": "PASS",
+   "detail": "{'Backend Keyword Fine-Tuning Completed': '0', 'Live Verification Pending': '0', 'ASINs Under Monitoring': '22', 'Backend Keyword POSTs Accepted': '22'}"
+  },
+  {
+   "test": "T2 Validation: no date / Proposed+date / future date rejected and not stored; Completed disabled before Week 2 is complete",
+   "result": "PASS",
+   "detail": "['Enter the actual Date Changed before setting Status to Monitoring.', 'A Proposed change has no Date Changed. Set Status to Monitoring to record an applied change, or clear the date.', 'Date Changed cannot be in the future.', True, None]"
   },
   {
    "test": "T3a Save shows Unsaved -> Saved state",
    "result": "PASS",
-   "detail": "['● Unsaved changes\\nStatus: Live-verified · Date Changed: 28 Sept 2026 (POST date) · eligible to begin monitoring; monitoring not started', '✓ Saved 29 Sept 2026, 16:04\\nStatus: Monitoring · Change Date: 22 Sept 2026 · Monitoring: Day 5 of 7 (23 Sept 2026 → 29 Sept 2026)']"
+   "detail": "['● Unsaved changes\\nStatus: Monitoring · Change Date: 29 Sept 2026 · Monitoring — Week 1: Week 1 5/7 days loaded (Week 1 29 Sept 2026 → 05 Oct 2026 · Week 2 06 Oct 2026 → 12 Oct 2026)', '✓ Saved 05 Oct 2026, 10:15\\nStatus: Live-verified · Date Changed: 29 Sept 2026 · set Monitoring to track Week 1 / Week 2']"
   },
   {
    "test": "T3b Record persists after page refresh",
    "result": "PASS",
-   "detail": "('2026-09-22', 'Monitoring')"
+   "detail": "('2026-09-29', 'Live-verified')"
   },
   {
-   "test": "T3c Saved Date Changed is authoritative: Section 7 shows change date and Day X of 7",
+   "test": "T3c Section 7 info: Change Date 29 Sep, current monitoring week and both windows",
    "result": "PASS",
-   "detail": "✓ Saved 29 Sept 2026, 16:04\nStatus: Monitoring · Change Date: 22 Sept 2026 · Monitoring: Day 5 of 7 (23 Sept 2026 → 29 Sept 2026)"
+   "detail": "✓ Saved 05 Oct 2026, 10:15\nStatus: Monitoring · Change Date: 29 Sept 2026 · Monitoring — Week 1: Week 1 5/7 days loaded (Week 1 29 Sept 2026 → 05 Oct 2026 · Week 2 06 Oct 2026 → 12 Oct 2026)"
   },
   {
-   "test": "T3d Section 8: 'Monitoring — 5/7 days', post-change values '—' (not fabricated)",
-   "result": "PASS",
-   "detail": "[['B0DH4KYFPD\\nWCDTBM2PK+RPR44WH2PK · changed 22 Sept 2026', '9\\n15 Sept 2026 → 21 Sept 2026', '—\\n23 Sept 2026 → 29 Sept 2026', '—', '—\\nweekly data only', '—\\nweekly data only', '—\\nweekly data only', 'Monitoring — 5/7 days\\nPost-change figures appear when all 7 days are loaded']]"
-  },
-  {
-   "test": "T3e Pre-period D-7..D-1 = 15 → 21 Sept, orders match live DB",
-   "result": "PASS",
-   "detail": "['9\\n15 Sept 2026 → 21 Sept 2026', 9]"
-  },
-  {
-   "test": "T3f Completed cannot be chosen before 7/7 days",
-   "result": "PASS",
-   "detail": ""
-  },
-  {
-   "test": "T3g KPI + Section 5 follow the saved record",
-   "result": "PASS",
-   "detail": "[{'top_moving_reviewed': 50, 'performance_drop': 23, 'keyword_review_required': 19, 'finetune_proposed': 20, 'finetune_completed_verified': 2, 'visible_content_changed': 0, 'duplicate_words_removed': 487, 'under_monitoring': 1, 'completed': 0, 'posts_accepted': 22, 'live_verified': 2, 'live_verification_pending': 20, 'monitoring_rows': 1}, 'B0DH4KYFPDWCDTBM2PK+RPR44WH2PKLampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Lamp Shades Indoor Geometric Wall Kitchen Living Room Hallw"
-  },
-  {
-   "test": "T3h Impressions shown as '—' with reason (weekly-only source), never estimated",
-   "result": "PASS",
-   "detail": "['—\\nweekly data only', '—\\nweekly data only', '—\\nweekly data only']"
-  },
-  {
-   "test": "T3i Sections 7/8 with a saved record: no horizontal scrollbar at 1920/1366/1024/390px",
+   "test": "T3d Sections 7/8/12: no horizontal scrollbar at 1920/1366/1024/390px",
    "result": "PASS",
    "detail": "all 0"
-  },
-  {
-   "test": "T4 Monitoring with 0/7 days (Date Changed = last loaded day)",
-   "result": "PASS",
-   "detail": "Monitoring — 0/7 days\nPost-change figures appear when all 7 days are loaded"
-  },
-  {
-   "test": "T5 Monitoring with partial days (2026-09-22 -> 5/7)",
-   "result": "PASS",
-   "detail": "Monitoring — 5/7 days\nPost-change figures appear when all 7 days are loaded"
   },
   {
    "test": "T6 Unsaved input: leaving the page triggers a confirmation",
@@ -81,40 +61,80 @@
   {
    "test": "T7 Export: saved record downloads as change_records.json",
    "result": "PASS",
-   "detail": "{'key': 'B0DH4KYFPD|WCDTBM2PK+RPR44WH2PK', 'asin': 'B0DH4KYFPD', 'sku': 'WCDTBM2PK+RPR44WH2PK', 'issue_detected': 'Conversion Drop', 'optimization_action': 'Removed duplicates', 'change_type': 'Backend Keyword Fine-Tuning', 'date_changed': '2026-09-22', 'status': 'Monitoring', 'saved_at': '2026-09-29T10:34:11.512Z'}"
+   "detail": "{'key': 'B0DH4KYFPD|WCDTBM2PK+RPR44WH2PK', 'asin': 'B0DH4KYFPD', 'sku': 'WCDTBM2PK+RPR44WH2PK', 'issue_detected': 'Conversion Drop', 'optimization_action': 'Removed duplicates', 'change_type': 'Backend Keyword Fine-Tuning', 'date_changed': '2026-09-30', 'status': 'Monitoring', 'saved_at': '2026-10-05T04:45:38.795Z'}"
   },
   {
-   "test": "T8a Full 7 days: Post-Change Orders + Order Change % + Result calculated",
+   "test": "T8a Week 2 complete, 14 -> 7: Week 1 Orders 14, Week 2 Orders 7, Order Change -50.0%, Result Performance Decline",
    "result": "PASS",
-   "detail": "['B0DH4KYFPD\\nWCDTBM2PK+RPR44WH2PK · changed 22 Sept 2026', '14\\n15 Sept 2026 → 21 Sept 2026', '21\\n23 Sept 2026 → 29 Sept 2026', '+50.0%', '—\\nweekly data only', '—\\nweekly data only', '—\\nweekly data only', 'Orders improved\\n7/7 days loaded · mark Completed in Section 7']"
+   "detail": "{'start': '2026-09-29', 'result': 'Performance Decline', 'ASIN': 'B0DH4KYFPD\\nWCDTBM2PK+RPR44WH2PK · changed 29 Sept 2026', 'Week 1 Orders': '14\\n29 Sept 2026 → 05 Oct 2026', 'Week 2 Orders': '7\\n06 Oct 2026 → 12 Oct 2026', 'Order Change %': '-50.0%', 'Week 1 Impressions': '—\\nweekly data only', 'Week 2 Impressions': '—\\nweekly data only', 'Impression Change %': '—\\nweekly data only', 'Result': 'Performance Decline\\nWeek 2 complete · mark Completed in Section 7'}"
   },
   {
-   "test": "T8b Not auto-completed: stays Monitoring until the user marks Completed",
+   "test": "T8b 7 -> 14: Performance Improved; 7 -> 7: Performance Stable",
    "result": "PASS",
-   "detail": ""
+   "detail": "('Performance Improved', 'Performance Stable')"
   },
   {
-   "test": "T8c Completed record: persists, shows Monitoring Period 23 → 29 Sept, KPI updated",
+   "test": "T8c KPI after the full 14 days: Completed 22, Under Monitoring 0, Pending 0",
    "result": "PASS",
-   "detail": "['✓ Saved 29 Sept 2026, 16:04\\nStatus: Completed · Change Date: 22 Sept 2026 · Completed · Monitoring period 23 Sept 2026 → 29 Sept 2026', {'top_moving_reviewed': 50, 'performance_drop': 23, 'keyword_review_required': 19, 'finetune_proposed': 20, 'finetune_completed_verified': 2, 'visible_content_changed': 0, 'duplicate_words_removed': 487, 'under_monitoring': 0, 'completed': 1, 'posts_accepted': 22, 'live_verified': 2, 'live_verification_pending': 20, 'monitoring_rows': 1}, 'Orders improved\\nCo"
+   "detail": "{'Backend Keyword Fine-Tuning Completed': '22', 'Live Verification Pending': '0', 'ASINs Under Monitoring': '0', 'Backend Keyword POSTs Accepted': '22'}"
   },
   {
-   "test": "No JavaScript errors (fixture)",
+   "test": "T8d Completed can be saved once Week 2 is complete; it persists with the result",
+   "result": "PASS",
+   "detail": "✓ Saved 05 Oct 2026, 10:15\nStatus: Completed · Change Date: 29 Sept 2026 · Completed · Week 1 29 Sept 2026 → 05 Oct 2026 · Week 2 06 Oct 2026 → 12 Oct 2026 · Performance Decline"
+  },
+  {
+   "test": "No JavaScript errors (fixture F1)",
    "result": "PASS",
    "detail": "[]"
   },
   {
-   "test": "T9 Date windows: 22-Sep -> pre 15..21, post 23..29; 02-Oct crosses month (25 Sep..01 Oct / 03..09 Oct)",
+   "test": "T9a Week 1 in progress (5/7 internally): Result 'Monitoring — Week 1', Week 1 orders '—' with 'Week 1 monitoring' (no 7/7, no total)",
    "result": "PASS",
-   "detail": "[{'active': True, 'change_date': '2026-09-22', 'pre_from': '2026-09-15', 'pre_to': '2026-09-21', 'post_from': '2026-09-23', 'post_to': '2026-09-29', 'pre_days': 7, 'post_days': 5, 'pre_orders': 9, 'post_orders': None, 'order_chg': None, 'pre_impressions': None, 'post_impressions': None, 'impression_chg': None, 'impression_note': 'Not available: Amazon impressions exist only as Sunday–Saturday weekly totals, not for a D±7-day window', 'complete': False}, {'active': True, 'change_date': '2026-10-0"
+   "detail": "{'start': '2026-09-29', 'result': 'Monitoring — Week 1', 'ASIN': 'B0DH4KYFPD\\nWCDTBM2PK+RPR44WH2PK · changed 29 Sept 2026', 'Week 1 Orders': '—\\n29 Sept 2026 → 05 Oct 2026\\nWeek 1 monitoring', 'Week 2 Orders': '—\\n06 Oct 2026 → 12 Oct 2026\\n0/7 days loaded', 'Order Change %': '—', 'Week 1 Impressions': '—\\nweekly data only', 'Week 2 Impressions': '—\\nweekly data only', 'Impression Change %': '—\\nweekly data only', 'Result': 'Monitoring — Week 1\\nWeek 1 monitoring'}"
   },
   {
-   "test": "T10 Build-embedded record (data/change_records.json) is restored without browser storage",
+   "test": "T9b Week 2 in progress (5/7): Result 'Monitoring — Week 2', Week 1 = 14 shown, Week 2 '—', NO verdict, Completed disabled",
    "result": "PASS",
-   "detail": "('2026-09-22', 'Monitoring')"
+   "detail": "{'start': '2026-09-29', 'result': 'Monitoring — Week 2', 'ASIN': 'B0DH4KYFPD\\nWCDTBM2PK+RPR44WH2PK · changed 29 Sept 2026', 'Week 1 Orders': '14\\n29 Sept 2026 → 05 Oct 2026', 'Week 2 Orders': '—\\n06 Oct 2026 → 12 Oct 2026\\n5/7 days loaded', 'Order Change %': '—', 'Week 1 Impressions': '—\\nweekly data only', 'Week 2 Impressions': '—\\nweekly data only', 'Impression Change %': '—\\nweekly data only', 'Result': 'Monitoring — Week 2\\nWeek 1 complete · Week 2 5/7 days loaded'}"
   },
   {
-   "test": "T10b Build rejects a Monitoring record without Date Changed",
+   "test": "T9c KPI while monitoring: Completed 0, Under Monitoring 22",
+   "result": "PASS",
+   "detail": "({'Backend Keyword Fine-Tuning Completed': '0', 'Live Verification Pending': '0', 'ASINs Under Monitoring': '22', 'Backend Keyword POSTs Accepted': '22'}, {'Backend Keyword Fine-Tuning Completed': '0', 'Live Verification Pending': '0', 'ASINs Under Monitoring': '22', 'Backend Keyword POSTs Accepted': '22'})"
+  },
+  {
+   "test": "No JavaScript errors (fixtures F2 / F3)",
+   "result": "PASS",
+   "detail": "[]"
+  },
+  {
+   "test": "T10 Manual change on 8 Oct: Section 8 marks the 29 Sep record superseded (no mixed Week 2 verdict); Section 12 history shows the superseded 29 Sep cycle and the new 8 Oct cycle",
+   "result": "PASS",
+   "detail": "('Superseded by the 08 Oct 2026 update', [('B0DH4KYFPD', '2026-09-29', 'Superseded by a newer backend keyword update'), ('B0DH4KYFPD', '2026-10-08', 'Monitoring — Week 1')])"
+  },
+  {
+   "test": "No JavaScript errors (fixture F4)",
+   "result": "PASS",
+   "detail": "[]"
+  },
+  {
+   "test": "T11 Build-embedded record (data/change_records.json) is restored without browser storage",
+   "result": "PASS",
+   "detail": "('2026-09-30', 'Monitoring')"
+  },
+  {
+   "test": "T11b Build rejects a Monitoring record without Date Changed",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "test": "T12 Week windows: 29 Sep -> W1 29 Sep..5 Oct, W2 6..12 Oct; common anchor constant = 2026-09-29",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "test": "SAFETY production ledger, dataset and report unchanged by the test",
    "result": "PASS",
    "detail": ""
   }

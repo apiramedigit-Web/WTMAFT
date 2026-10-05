@@ -1,0 +1,63 @@
+{
+ "run_at": "2026-10-05T10:15:54",
+ "rule": "e-mail alerts removed from the production workflow (business instruction 2026-10-02)",
+ "mode": "static source checks + refused CLI calls + temp-ledger monitoring run; network calls patched to fail",
+ "passed": 9,
+ "failed": 0,
+ "results": [
+  {
+   "id": "N1",
+   "test": "production + dry-run pipeline: no e-mail stage, no --send / --validate, no Gmail script",
+   "result": "PASS",
+   "detail": "[('extract', ['scripts/extract.py']), ('weekly_keyword_check', ['scripts/optimization_cleanup.py', '--apply']), ('build_dataset', ['scripts/build_dataset.py']), ('performance_monitoring', ['scripts/performance_alert.py']), ('render', ['scripts/render.py']), ('validate', ['scripts/validate.py']), ('extract', ['scripts/extract.py']), ('weekly_keyword_check', ['scripts/optimization_cleanup.py']), ('b"
+  },
+  {
+   "id": "N2",
+   "test": "automation/run.py refuses performance_alert --send / email_alert / send_test_email / gmail_authorize stages",
+   "result": "PASS",
+   "detail": "[(['scripts/performance_alert.py', '--send'], 2, True), (['scripts/email_alert.py'], 2, True), (['scripts/send_test_email.py'], 2, True), (['scripts/gmail_authorize.py'], 2, True)]"
+  },
+  {
+   "id": "N3",
+   "test": "performance_alert.py --send / --validate -> REFUSED (exit 2), nothing sent, no network request",
+   "result": "PASS",
+   "detail": "[(2, 'REFUSED: e-mail alerting was removed from this workflow (business instruction 2026-10-02); the dashboard shows the performance status directly. Nothing was sent.\\n'), (2, 'REFUSED: e-mail alerting was removed from this workflow (business instruction 2026-10-02); the dashboard shows the performance status directly. Nothing was sent.\\n')]"
+  },
+  {
+   "id": "N4",
+   "test": "no production module imports email_alert / send_test_email / gmail_authorize, or uses Gmail API / SMTP / Gmail env",
+   "result": "PASS",
+   "detail": "{}"
+  },
+  {
+   "id": "N5",
+   "test": "the runner needs no Gmail credentials (USER_ENV = WLP_SOURCE_DB_URL only)",
+   "result": "PASS",
+   "detail": "('WLP_SOURCE_DB_URL',)"
+  },
+  {
+   "id": "N6",
+   "test": "scheduler registration: no --send, no Gmail paths; task action is run.py only",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "N7",
+   "test": "Week 2 < Week 1 -> Performance Decline is shown as a status only: no e-mail, no network, no alert record, no token file",
+   "result": "PASS",
+   "detail": "{'key': 'B0NOMAIL01|2026-09-29', 'kind': 'cycle', 'asin': 'B0NOMAIL01', 'skus': ['SKU'], 'sku': 'SKU', 'backend_keyword_status': 'Live-verified', 'live_update_date': '2026-09-29', 'live_confirmed_at': '2026-09-29T04:00:00Z', 'live_update_source': 'test', 'monitoring_status': 'Monitoring Complete / Performance Comparison Available', 'week1_start': '2026-09-29', 'week1_end': '2026-10-05', 'week1_val"
+  },
+  {
+   "id": "N8",
+   "test": "dashboard embeds no e-mail record (no alert_monitoring / test_email / Gmail message id)",
+   "result": "PASS",
+   "detail": ""
+  },
+  {
+   "id": "N9",
+   "test": "historical e-mail evidence is kept as history (not rewritten) and read by no production module",
+   "result": "PASS",
+   "detail": "[]"
+  }
+ ]
+}

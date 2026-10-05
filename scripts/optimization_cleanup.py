@@ -5,31 +5,39 @@ Scope (business instruction 2026-09-29): ONLY the listings in data/keyword_scope
 rows of the weekly report (26 listings; a report row naming several SKUs is resolved per SKU). Never all
 seller listings. Identity = ASIN + SKU + account (sub_source) + UK + listing id.
 
-Every weekly DUE check of a listing (whatever its status, incl. "Live-verified" and "POST Accepted - Live
-Verification Pending"):
+Every weekly DUE check of a listing:
   1 GET the latest live backend keywords (existing keyword_live_verify.lm_listing) - the source of truth
-  2 run the existing fine-tuning (keyword_finetune.finetune, unchanged): keep every relevant word in order,
+  2 GET shows the ACCEPTED payload, or still the value from before that accepted POST -> AUDIT only: no POST,
+    no new anchor (an accepted payload is never re-sent as a retry; business rule 2026-10-05)
+  3 run the existing fine-tuning (keyword_finetune.finetune, unchanged): keep every relevant word in order,
     remove only duplicate words / repeated entries / whitespace; nothing added, rewritten or truncated
-  3 cleaned == live  -> no POST; the cleaned keywords are live -> Live Verified
-                        ("proposed value is live" when it equals the earlier proposed payload)
-  4 cleaned != live  -> validate, then POST the cleaned value through the existing keyword_live_update.post
-                        (payload built from THIS fresh GET - an earlier payload is never re-sent as such),
-                        read back: live == cleaned -> Live Verified; otherwise POST Accepted - Live
-                        Verification Pending (next due week: fresh GET again and repeat)
-  Every GET value, POST attempt, verification result and final live value is appended to the row history.
+  4 cleaned == live  -> no POST (a NEW clean value = the user's manual change -> new anchor = GET date)
+  5 cleaned != live  -> validate, then POST the cleaned value through the existing keyword_live_update.post
+                        (payload built from THIS fresh GET). POST Accepted = updated for the user -> monitoring
+                        starts on the POST Accepted date; the read-back is recorded as audit only
+  Every GET value, POST attempt, read-back and final live value is appended to the row history.
 Due: at most one production check per listing per Monday-week, and not before 7 days after the listing's
-last verification / last POST (never-submitted rows: from the first run). Recording an optimization never
-makes a listing due early.
-Monitoring: a listing's FIRST live verification starts its 7-day monitoring (performance_alert.py); routine
-weekly re-verifications do not reset the decline streak. After a recorded Full Optimization, the first
-production run in which all the ASIN's checked listings end Live Verified sets the optimization's
-monitoring_baseline_date (the reset).
+last verification / last POST (never-submitted rows: from the first run).
+
+Monitoring anchors (business instruction 2026-10-05): every backend keyword update is appended to the row's
+live_updates; its date is the anchor used by performance_alert.py (Week 1 = anchor .. anchor+6,
+Week 2 = anchor+7 .. anchor+13). Anchors:
+  * the 22 original submissions (POST Accepted 28 Sep 2026): ONE common anchor ORIGINAL_ANCHOR = 2026-09-29
+    (reconciled by seed(); GET verifications of them are audit only and never move it)
+  * a weekly POST Accepted                                                    - the POST date
+  * a weekly GET that finds a NEW clean live value (the user's manual change) - the GET date, or the date the
+    user recorded with --record-live-update (must be after the previous anchor and not in the future)
+A routine re-check of the same value is NOT a new update and never moves the anchor. The first GET of a
+listing this workflow never updated only records its value (nothing changed -> nothing monitored).
 Only sku, sub_source, site and backend_keywords are ever sent - no visible listing content.
 
 Usage:
     python scripts/optimization_cleanup.py            # dry run: GET + clean + validate, no POST (not the week's check)
     python scripts/optimization_cleanup.py --apply    # production weekly check (POST allowed)
     python scripts/optimization_cleanup.py --retry-keyword-cleanup ASIN   # team: re-check that ASIN's listings this week
+    python scripts/optimization_cleanup.py --record-live-update ASIN --date YYYY-MM-DD [--sku SKU] [--note TEXT]
+        # team: the user changed the backend keywords manually on DATE; the next run's fresh GET confirms the new
+        # value and DATE becomes the new monitoring anchor (if the change was already detected, its date is corrected)
 """
 import argparse
 import datetime as dt
@@ -54,7 +62,8 @@ POST_SETTLE = 10             # seconds before the read-back after a POST (as key
 _EDGE = re.compile(r"^[^\w]+|[^\w]+$", re.UNICODE)
 
 S_VERIFIED = "Live Verified"
-S_PENDING = "POST Accepted — Live Verification Pending"
+S_ACCEPTED = "POST Accepted — Monitoring"      # accepted = updated for the user; GET read-back is audit only
+LEGACY_PENDING = "POST Accepted — Live Verification Pending"   # pre-2026-10-05 label, migrated by reconcile()
 S_UPDATE_FAILED = "Update Failed"
 S_VERIFY_FAILED = "Verification Failed"
 S_NO_KEYWORDS = "No backend keywords (nothing to clean)"
@@ -114,24 +123,84 @@ def prior_states_from_evidence():
                           BASE / "evidence" / "07_live_keyword_verification.json"])
 
 
+# Business instruction 2026-10-05: the 22 original submissions (POST Accepted 28 Sep) share ONE monitoring anchor.
+ORIGINAL_ANCHOR = "2026-09-29"
+SRC_ORIGINAL = "original submission POST Accepted (common monitoring anchor)"
+SRC_POST = "cleaned keywords POSTed (POST Accepted)"
+SRC_MANUAL = "new live keyword value detected by the weekly GET (manual change)"
+# earlier GET-confirmation sources (2026-10-02 rule); replaced by the POST Accepted anchor on reconciliation
+LEGACY_SOURCES = ("original submission confirmed live (Listing Management GET)", "submitted value confirmed live by the weekly GET")
+
+
+def add_live_update(row, at, source, value, user_date=None, date=None):
+    """Appends one backend keyword update (= a monitoring anchor) and the value it set."""
+    row.setdefault("live_updates", []).append({"date": date or user_date or str(at)[:10], "confirmed_at": at, "source": source,
+                                               "user_reported_date": user_date, "value": norm(value)})
+    row["live_value"] = norm(value)
+
+
+_ORIGINALS = {}
+
+
+def original_values():
+    """ASIN|SKU -> the backend keywords live BEFORE the original submission (evidence/06 dashboard_original)."""
+    if not _ORIGINALS:
+        p = BASE / "evidence" / "06_live_keyword_update.json"
+        if p.exists():
+            for r in json.loads(p.read_text(encoding="utf-8"))["records"]:
+                if r.get("submission_id"):
+                    _ORIGINALS[f'{r["asin"]}|{r["sku"]}'] = norm(r.get("dashboard_original"))
+    return _ORIGINALS
+
+
+def reconcile(row, p, original=None):
+    """Migration / reconciliation (2026-10-05 rule). POST Accepted = the update is done for the user: an accepted
+    original submission is monitored from ORIGINAL_ANCHOR whatever the GET shows. A verification recorded in the
+    evidence (07 weekly / 09) is kept as AUDIT (row Live Verified + first_verified_at); it never sets an anchor."""
+    if row["status"] == LEGACY_PENDING:
+        row["status"] = S_ACCEPTED
+    ver = p.get("verified_at_utc") if p.get("state") == VERIFIED else None
+    weekly = any(e.get("event") == "weekly check" and e.get("mode") == "apply" for e in row["history"])
+    if ver and not row.get("first_verified_at") and not weekly:
+        row.update(status=S_VERIFIED, first_verified_at=ver, last_verified_at=ver)
+        row["history"].append({"event": "evidence reconciliation", "at": ver, "status_after": S_VERIFIED,
+                               "detail": f"audit: Listing Management showed the submitted keywords ({p.get('evidence')})"})
+        row["next_due"] = next_due(row)
+    ups = row.setdefault("live_updates", [])
+    row.setdefault("live_value", None)
+    if row.get("submission_id") and row.get("proposed"):
+        row.setdefault("accepted_value", norm(row["proposed"]))     # the accepted payload: never re-sent as a retry
+        if original and not row.get("pre_post_value"):
+            row["pre_post_value"] = norm(original)                    # what was live before the accepted POST
+        ups[:] = [u for u in ups if u["source"] not in LEGACY_SOURCES]
+        if not any(u["source"] == SRC_ORIGINAL for u in ups):
+            ups.insert(0, {"date": ORIGINAL_ANCHOR, "confirmed_at": row.get("last_post_at") or ORIGINAL_ANCHOR,
+                           "source": SRC_ORIGINAL, "user_reported_date": None, "value": norm(row["proposed"])})
+        row["live_value"] = ups[-1]["value"]
+
+
 def seed(ledger, scope, prior):
-    """Creates the per-listing ledger rows once, from the existing submission history (never overwritten)."""
+    """Creates the per-listing ledger rows once, from the existing submission history (never overwritten),
+    then reconciles them with the latest verification evidence."""
     rows = ledger.setdefault("keyword_rows", {})
     for r in scope:
         k = row_key(r)
+        p = prior.get(f'{r["asin"]}|{r["sku"]}') or {}
+        original = r.get("original") or original_values().get(f'{r["asin"]}|{r["sku"]}')
         if k in rows:
             rows[k].update(proposed=r.get("proposed"), submission_id=r.get("submission_id"))
+            reconcile(rows[k], p, original)
             continue
-        p = prior.get(f'{r["asin"]}|{r["sku"]}') or {}
         verified = p.get("state") == VERIFIED
         rows[k] = {**{x: r.get(x) for x in ("asin", "sku", "sub_source", "account", "product_id", "report_row",
                                              "submission_id", "proposed")},
-                   "status": S_VERIFIED if verified else (S_PENDING if r.get("submission_id") else S_NOT_CHECKED),
+                   "status": S_VERIFIED if verified else (S_ACCEPTED if r.get("submission_id") else S_NOT_CHECKED),
                    "first_verified_at": p.get("verified_at_utc") if verified else None,
                    "last_verified_at": p.get("verified_at_utc") if verified else None,
                    "last_post_at": r.get("post_timestamp"), "last_check_week": None, "post_attempts": 1 if r.get("submission_id") else 0,
                    "history": [{"event": "original submission", "at": r.get("post_timestamp"), "submission_id": r.get("submission_id"),
                                 "proposed": r.get("proposed"), "state_at_seed": p.get("state")}] if r.get("submission_id") else []}
+        reconcile(rows[k], p, original)
     return rows
 
 
@@ -209,13 +278,31 @@ def check_listing(row, r, apply, io, now):
                            "bytes": len(cleaned.encode("utf-8"))})
     if not entries:
         return done(S_NO_KEYWORDS, action="no POST", detail="the live listing has no backend keywords")
-    if cleaned == live:                                                   # 3: already clean -> no POST
-        proposed_live = bool(row.get("proposed")) and live == norm(row["proposed"])
+    acc, pre = row.get("accepted_value"), row.get("pre_post_value")
+    if acc and live == norm(acc):                                         # 2a: accepted value shown -> audit only
         if apply:
             row["first_verified_at"] = row.get("first_verified_at") or stamp
             row["last_verified_at"] = stamp
         return done(S_VERIFIED, action="no POST", verified_at=stamp, live_after=live,
-                    detail="proposed value is live" if proposed_live else "live keywords already clean (no duplicates)")
+                    detail="audit: GET shows the accepted keywords; monitoring continues (no new anchor)")
+    if acc and pre and live == norm(pre):                                 # 2b: GET still shows the pre-POST value
+        return done(S_ACCEPTED, action="no POST", live_after=live,
+                    detail="audit: GET still shows the keywords from before the accepted POST; the accepted payload is "
+                           "NOT re-sent and monitoring continues from its anchor")
+    if cleaned == live:                                                   # 3: already clean -> no POST
+        detail = "live keywords already clean (no duplicates)"
+        if apply:
+            row["first_verified_at"] = row.get("first_verified_at") or stamp
+            row["last_verified_at"] = stamp
+            if live != row.get("live_value"):
+                if row.get("live_value") is not None or row.get("submission_id"):
+                    # a new live value (the user's manual change): a genuine new update -> new anchor
+                    add_live_update(row, stamp, SRC_MANUAL, live, take_user_date(row, now, e))
+                    e["live_update_date"] = row["live_updates"][-1]["date"]
+                    detail += f"; new live keyword value -> new monitoring cycle from {e['live_update_date']}"
+                else:
+                    row["live_value"] = live              # first read of a listing this workflow never updated
+        return done(S_VERIFIED, action="no POST", verified_at=stamp, live_after=live, detail=detail)
     errors, warnings = validate_payload(live, cleaned)                    # 4: validate the payload
     e["warnings"] = warnings
     if errors:
@@ -236,48 +323,71 @@ def check_listing(row, r, apply, io, now):
     if not ok:
         return done(S_UPDATE_FAILED, detail=f"Listing Management did not accept the update (HTTP {status}); "
                                              "next due check starts again from a fresh GET")
-    lm3 = io.read(r["sub_source"], r["product_id"])                       # 5: live verification (read-back)
+    # POST Accepted = the update is done for the user: monitoring starts on the POST Accepted date (the anchor);
+    # the accepted payload and the value it replaced are kept so a later GET never triggers a retry of it.
+    u = row.pop("user_live_update", None)
+    if u:   # the user's value still had duplicates: the cleaned version of it is what this POST set
+        e["user_reported_date"] = u["date"]
+    row["accepted_value"], row["pre_post_value"] = norm(cleaned), live
+    add_live_update(row, stamp, SRC_POST, cleaned)
+    e["live_update_date"] = stamp[:10]
+    lm3 = io.read(r["sub_source"], r["product_id"])                       # 5: read-back = AUDIT only
     after = finetune(_entries(lm3))["original"] if lm3 and not _identity(lm3, r) else None
     e["live_after"] = after
     if after == norm(cleaned):
         row["first_verified_at"] = row.get("first_verified_at") or stamp
         row["last_verified_at"] = stamp
-        return done(S_VERIFIED, verified_at=stamp, detail="update accepted and the cleaned keywords are live")
-    if after == live or after is None:
-        return done(S_PENDING, detail="update accepted; Listing Management still shows the previous keywords - "
-                                      "next due check: fresh GET and repeat")
-    return done(S_VERIFY_FAILED, detail="live keywords match neither the cleaned nor the previous value; "
-                                        "next due check starts again from a fresh GET")
+        return done(S_VERIFIED, verified_at=stamp, detail=f"POST Accepted; monitoring from {stamp[:10]}; "
+                                                          "audit: read-back shows the cleaned keywords")
+    return done(S_ACCEPTED, detail=f"POST Accepted; monitoring from {stamp[:10]}; audit: read-back shows "
+                                   + ("the previous keywords" if after in (live, None) else "a different value"))
 
 
-def link_optimizations(ledger):
-    """A recorded Full Optimization is completed by the first production run after it in which all of the
-    ASIN's checked listings ended Live Verified; that date is the new monitoring baseline (the reset)."""
-    rows = ledger.get("keyword_rows", {})
-    for asin, opts in ledger.get("optimizations", {}).items():
-        mine = [r for r in rows.values() if r["asin"] == asin]
-        runs = {}
-        for r in mine:
-            for e in r["history"]:
-                if e.get("event") == "weekly check" and e.get("mode") == "apply":
-                    runs.setdefault(e["at"][:16], []).append(e)
-        nxt = min((r.get("next_due") or "") for r in mine) if mine else None
-        for o in opts:
-            after = [(t, es) for t, es in sorted(runs.items()) if t >= o.get("recorded_at", o["completed_on"])[:16]]
-            done = next(((t, es) for t, es in after if all(x["status_after"] == S_VERIFIED for x in es)), None)
-            if done:
-                o["monitoring_baseline_date"] = max(x["verified_at"] for x in done[1])[:10]
-                o["keyword_cleanup"] = {"status": "Monitoring Active", "check_week": done[1][0]["week"],
-                                        "live_verified_at": max(x["verified_at"] for x in done[1])}
-            elif after:
-                sts = [x["status_after"] for x in after[-1][1]]
-                bad = [s for s in sts if s.startswith(("Update Failed", "Verification Failed"))]
-                o["keyword_cleanup"] = {"status": (bad[0].split(" (")[0] if bad else
-                                                   S_PENDING if S_PENDING in sts else sts[0]),
-                                        "check_week": after[-1][1][0]["week"]}
-            else:
-                o["keyword_cleanup"] = {"status": "User Optimization Completed",
-                                        "detail": f"awaiting the next weekly keyword check (due {nxt or 'next run'})"}
+def take_user_date(row, now, e):
+    """Consumes the date recorded with --record-live-update for the GET that confirms the manual change. It is the
+    anchor only if it is after the previous anchor and not in the future; otherwise the GET date is used."""
+    u = row.pop("user_live_update", None)
+    if not u:
+        return None
+    prev = max((x["date"] for x in row.get("live_updates") or []), default="")
+    if prev < u["date"] <= now.date().isoformat():
+        e["user_reported_date"] = u["date"]
+        return u["date"]
+    e["user_date_ignored"] = f'recorded date {u["date"]} is not after the previous live update ({prev or "none"}) or is in the future'
+    return None
+
+
+def record_live_update(ledger, scope, asin, date, sku=None, note=None, today=None, now=None, prior=None):
+    """Team input: the user changed the ASIN's backend keywords manually on `date`. If the weekly GET already
+    detected that change (anchor = GET date), the anchor is corrected to `date`; otherwise `date` is kept for the
+    next run, whose fresh GET must confirm a new live value (forced re-check). Nothing is sent to Amazon here."""
+    today, now = today or dt.date.today(), now or dt.datetime.now()
+    try:
+        d = dt.date.fromisoformat(date).isoformat()
+    except ValueError:
+        raise ValueError(f"--date must be YYYY-MM-DD, got {date!r}") from None
+    if d > today.isoformat():
+        raise ValueError(f"live update date {d} is in the future")
+    mine = [r for r in scope if r["asin"] == asin and (sku is None or r["sku"] == sku)]
+    if not mine:
+        raise ValueError(f"{asin}{' / ' + sku if sku else ''} is not in the weekly report scope")
+    if len(mine) > 1:
+        raise ValueError(f"{asin} has {len(mine)} listings in scope ({', '.join(r['sku'] for r in mine)}): pass --sku")
+    row = seed(ledger, scope, prior if prior is not None else prior_states_from_evidence())[row_key(mine[0])]
+    ups = row.get("live_updates") or []
+    last, prev = (ups[-1] if ups else None), (ups[-2]["date"] if len(ups) > 1 else "")
+    entry = {"event": "user reported live update", "at": now.isoformat(timespec="seconds"), "date": d, "note": note}
+    if last and last["source"] == SRC_MANUAL and prev < d <= last["confirmed_at"][:10]:
+        entry["detail"] = f"corrects the anchor of the change detected on {last['confirmed_at'][:10]} ({last['date']} -> {d})"
+        last.update(date=d, user_reported_date=d)
+    elif last and d <= last["date"]:
+        raise ValueError(f"{d} is not after the current live update date {last['date']} of {row['sku']}")
+    else:
+        row["user_live_update"] = {"date": d, "recorded_at": entry["at"], "note": note}
+        ledger.setdefault("keyword_retry", {})[asin] = entry["at"]
+        entry["detail"] = "the next run's fresh GET confirms the new live value; this date becomes its monitoring anchor"
+    row["history"].append(entry)
+    return entry
 
 
 def process(ledger, scope, apply=False, io=None, now=None, prior=None):
@@ -307,7 +417,6 @@ def process(ledger, scope, apply=False, io=None, now=None, prior=None):
     if apply:
         for a in list(retry):
             retry.pop(a)
-    link_optimizations(ledger)
     return out
 
 
@@ -315,10 +424,25 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--apply", action="store_true", help="production weekly check: POST allowed")
     ap.add_argument("--retry-keyword-cleanup", metavar="ASIN")
+    ap.add_argument("--record-live-update", metavar="ASIN", help="team: the user changed this ASIN's keywords manually")
+    ap.add_argument("--date", help="manual live update date YYYY-MM-DD (with --record-live-update)")
+    ap.add_argument("--sku", help="listing SKU (required when the ASIN has several listings in scope)")
+    ap.add_argument("--note", help="short note (optional)")
     a = ap.parse_args()
     ledger = json.loads(LEDGER.read_text(encoding="utf-8")) if LEDGER.exists() else {"cycles": {}, "alerts": {}}
-    ledger.setdefault("optimizations", {})
     scope = load_scope()
+    if a.record_live_update:
+        if not a.date:
+            print("ERROR: --date YYYY-MM-DD is required with --record-live-update")
+            return 2
+        try:
+            e = record_live_update(ledger, scope, a.record_live_update.strip().upper(), a.date, a.sku, a.note)
+        except ValueError as err:
+            print("NOT RECORDED:", err)
+            return 2
+        LEDGER.write_text(json.dumps(ledger, indent=1, ensure_ascii=False), encoding="utf-8")
+        print("RECORDED:", json.dumps(e, ensure_ascii=False))
+        return 0
     if a.retry_keyword_cleanup:
         asin = a.retry_keyword_cleanup.strip().upper()
         if asin not in {r["asin"] for r in scope}:

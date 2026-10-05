@@ -2,39 +2,53 @@
 
 Runs the EXISTING production scripts in order; no business logic lives here:
     extract.py -> optimization_cleanup.py --apply (weekly keyword check of the 24 report rows)
-              -> build_dataset.py -> performance_alert.py --send -> render.py -> validate.py
+              -> build_dataset.py -> performance_alert.py (post-update Week 1 / Week 2 monitoring)
+              -> render.py -> validate.py
 
 * One stage failing (non-zero exit, timeout, crash) marks the run FAILED, the remaining stages
   are NOT RUN, and this process exits 1. Success is reported only when every stage exits 0.
-* optimization_cleanup.py updates backend keywords ONLY for ASINs whose manual Full Optimization the
-  team recorded, and only after its payload validation; performance_alert.py e-mails only when its own
-  rule says so. --dry-run runs both without --apply / --send (no POST, no e-mail).
-* No Amazon keyword update runs here (keyword_live_* scripts are refused), and nothing touches
+* optimization_cleanup.py GETs the CURRENT live backend keywords of each due listing (source of truth),
+  removes only duplicates/repetition and POSTs only when the cleaned value differs, after its payload
+  validation. --dry-run runs it without --apply (no POST).
+* NO e-mail of any kind (business instruction 2026-10-02): the dashboard shows the performance status.
+  The retired e-mail scripts are refused as stages.
+* Safe to run DAILY (idempotent): a listing is checked / POSTed at most once per Monday-week and only >= 7 days
+  after its last verification or POST; the Week 1 / Week 2 cycles are recomputed from the stored live-update
+  anchors (never restarted, completed cycles frozen); the lock below blocks overlapping runs.
+* No other Amazon keyword update runs here (keyword_live_* scripts are refused), and nothing touches
   title, bullets, images, description, A+ content or any visible listing content.
 * stdout/stderr of every stage -> logs/<run_id>/NN_<stage>.log (secrets redacted);
   run record -> evidence/11_scheduler_runs.json (last 100 runs) + logs/run_history.log.
 
 Usage:
     python automation/run.py            # production (what the scheduled task runs)
-    python automation/run.py --dry-run  # same pipeline, no POST (no --apply) and no e-mail (no --send)
+    python automation/run.py --dry-run  # same pipeline, no POST (no --apply)
 """
 import argparse
 import datetime as dt
 import json
 import os
 import pathlib
+import re
 import subprocess
 import sys
 import time
 
 BASE = pathlib.Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(BASE / "scripts"))
-from email_alert import redact  # noqa: E402  (same secret redaction as the alert module)
+# Secret redaction for the stage logs (the same pattern the retired e-mail module used; no e-mail code is imported).
+_SECRETS = re.compile(r"ya29\.[A-Za-z0-9._-]+|1//[A-Za-z0-9._-]{10,}|GOCSPX-[A-Za-z0-9_-]+|re_[A-Za-z0-9_]{8,}"
+                      r'|("(?:access_token|refresh_token|client_secret|token)"\s*:\s*)"[^"]*"')
+
+
+def redact(text):
+    return _SECRETS.sub(lambda m: (m.group(1) + '"[REDACTED]"') if m.group(1) else "[REDACTED]", str(text))
+
 
 STAGE_TIMEOUT = 1800
-FORBIDDEN = ("keyword_live_update", "keyword_live_dryrun", "send_test_email", "gmail_authorize", "publish_ph_task")
+FORBIDDEN = ("keyword_live_update", "keyword_live_dryrun", "send_test_email", "gmail_authorize", "publish_ph_task",
+             "email_alert", "--send")
 # Environment the stages need; read from the Windows user environment if the calling shell is stale.
-USER_ENV = ("WLP_SOURCE_DB_URL", "WTMA_GMAIL_CLIENT_FILE", "WTMA_GMAIL_TOKEN_FILE")
+USER_ENV = ("WLP_SOURCE_DB_URL",)
 
 
 def pipeline(dry_run):
@@ -42,7 +56,8 @@ def pipeline(dry_run):
             # weekly keyword check of the report's ASIN-SKU rows (fresh GET, clean, POST only if needed, verify)
             ("weekly_keyword_check", ["scripts/optimization_cleanup.py"] + ([] if dry_run else ["--apply"])),
             ("build_dataset", ["scripts/build_dataset.py"]),
-            ("performance_alert", ["scripts/performance_alert.py"] + ([] if dry_run else ["--send"])),
+            # Week 1 / Week 2 orders from the actual live update date; no e-mail
+            ("performance_monitoring", ["scripts/performance_alert.py"]),
             ("render", ["scripts/render.py"]),
             ("validate", ["scripts/validate.py"])]
 
@@ -71,7 +86,7 @@ def current_cycle():
 
 def main(argv=None):
     ap = argparse.ArgumentParser()
-    ap.add_argument("--dry-run", action="store_true", help="alert stage without --send (no e-mail)")
+    ap.add_argument("--dry-run", action="store_true", help="keyword check without --apply (no POST)")
     ap.add_argument("--stages-json", help=argparse.SUPPRESS)  # tests only: [[name, script, args...], ...]
     ap.add_argument("--log-dir", default=str(BASE / "logs"), help=argparse.SUPPRESS)
     ap.add_argument("--evidence", default=str(BASE / "evidence" / "11_scheduler_runs.json"), help=argparse.SUPPRESS)
@@ -98,7 +113,7 @@ def main(argv=None):
         env = load_user_env(dict(os.environ))
         env["PYTHONIOENCODING"] = "utf-8"
         before = current_cycle()
-        rec = {"run_id": run_id, "mode": "dry-run (no e-mail)" if a.dry_run else "production",
+        rec = {"run_id": run_id, "mode": "dry-run (no POST)" if a.dry_run else "production",
                "started_at": dt.datetime.now().isoformat(timespec="seconds"), "python": sys.executable,
                "cwd": str(BASE), "status": None, "stages": []}
         for n, (name, cmd) in enumerate(stages, 1):

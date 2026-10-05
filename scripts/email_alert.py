@@ -1,4 +1,8 @@
-"""Full Optimization Review alert e-mail, sent directly through the Gmail API (OAuth 2.0).
+"""RETIRED 2026-10-02 (business instruction: no e-mail alerts; the dashboard shows the performance status).
+No production stage imports the sending code any more: automation/run.py uses only redact() from here and
+refuses this module, gmail_authorize.py and send_test_email.py as pipeline stages. Kept as historical code.
+
+Full Optimization Review alert e-mail, sent directly through the Gmail API (OAuth 2.0).
 
 No SMTP, no n8n, no Resend, no Gmail password. Credentials live OUTSIDE the repository:
     WTMA_GMAIL_CLIENT_FILE  Desktop OAuth client JSON downloaded from Google Cloud

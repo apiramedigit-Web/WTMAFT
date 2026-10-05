@@ -128,20 +128,25 @@ recon = {
     "top_moving_reviewed": len(P),
     "performance_drop": sum(1 for r in P if r["curr_orders"] < r["prev_orders"]),
     "keyword_review_required": len({k["asin"] for k in review}),
-    "finetune_proposed": len(review),
-    "duplicate_words_removed": sum(k["duplicate_words_removed"] for k in review),
-    "under_monitoring": len({s["asin"] for s in DS["saved_change_records"] if s["status"] == "Monitoring"}),
+    "finetune_proposed": len(DS["submitted_keyword_changes"]),
+    "duplicate_words_removed": sum(k["duplicate_words_removed"] for k in DS["submitted_keyword_changes"]),
 }
 check("12. KPI summary reconciles to dataset rows", all(kpi[k] == v for k, v in recon.items()), recon)
 CRS = DS["change_record"]
-check("Change Record rows = proposed changes (+ saved records carried forward), keys unique",
-      [c["key"] for c in CRS if not c["carried_forward"]] == [f'{k["asin"]}|{k["sku"]}' for k in review]
-      and len({c["key"] for c in CRS}) == len(CRS), f"{len(CRS)} rows")
+SUBM = DS["submitted_keyword_changes"]
+EV06 = [r for r in json.loads((BASE / "evidence" / "06_live_keyword_update.json").read_text(encoding="utf-8"))["records"] if r.get("submission_id")]
+check("Sections 5 / 7 = exactly the 22 submitted changes (evidence/06): original = pre-POST keywords, cleaned = accepted payload; "
+      "this week's new review candidates are not added",
+      len(SUBM) == 22 and [f'{k["asin"]}|{k["sku"]}' for k in SUBM] == [f'{r["asin"]}|{r["sku"]}' for r in EV06]
+      and all(k["cleaned"] == r["proposed"] and k["original"] == " ".join(r["dashboard_original"].split()) for k, r in zip(SUBM, EV06))
+      and [c["key"] for c in CRS if not c["carried_forward"]] == [f'{k["asin"]}|{k["sku"]}' for k in SUBM]
+      and len({c["key"] for c in CRS}) == len(CRS), f"{len(SUBM)} submitted rows, {len(CRS)} change records")
 
 # ---- no fabricated status --------------------------------------------------------------------
-check("18/19. Build sets Live-verified + POST date only for Listing Management-verified submissions; all else Proposed, no date",
-      all((c["status"], c["date_changed"]) == (("Live-verified", c["submission"]["post_date"])
-          if c.get("submission") and c["submission"]["state"] == "UPDATED / VERIFIED" else ("Proposed", None)) for c in CRS),
+ANCHOR = "2026-09-29"   # business rule 2026-10-05: one common monitoring anchor for the 22 original submissions
+check("18/19. Build sets every POST Accepted submission to Monitoring from the update date 2026-09-29 (no GET gate); all else Proposed, no date",
+      all((c["status"], c["date_changed"]) == (("Monitoring", ANCHOR)
+          if c.get("submission") and c["submission"]["api_status"] == "ACCEPTED" else ("Proposed", None)) for c in CRS),
       f"{len(CRS)} change records: {dict(collections.Counter(c['status'] for c in CRS))}; "
       f"{len(DS['saved_change_records'])} user-saved record(s) embedded")
 # ---- Amazon submission status (evidence/06 + 07 overlaid by 09) ---------------------------------
@@ -155,39 +160,38 @@ check("Submissions: every POSTed record is in the Change Record with its submiss
       len(posted) == 22 and {k: s["submission_id"] for k, s in sub_rows.items()} == posted
       and len(set(posted.values())) == len(posted), f"{len(sub_rows)} rows with a submission / {len(posted)} POSTed")
 k_skip = [k for k in K if k["asin"] in skipped]
+# (they may leave this week's top-moving keyword rows; when present they must not carry a proposed change)
 check("Skipped ASINs stay skipped: not submitted, no change proposed",
       skipped == {"B0CBLWLZ4W", "B0DTTKL6KX"} and not any(a in {c["asin"] for c in CRS if c.get("submission")} for a in skipped)
-      and k_skip and all(not k["needs_change"] for k in k_skip), sorted(skipped))
+      and all(not k["needs_change"] for k in k_skip), f"{sorted(skipped)}; in this week's keyword rows: {len(k_skip)}")
 # latest state per submission: legacy one-off 09 first, weekly 07 last; a verification is final
 ver_state = {}
 for r in EV_REM + EV_VER:
     k_ = f'{r["asin"]}|{r["sku"]}'
     if ver_state.get(k_) != "UPDATED / VERIFIED":
         ver_state[k_] = r["classification"]
-check("Submission state = latest Listing Management verification (weekly 07 over legacy 09; verified is final); KPIs reconcile",
+check("Audit GET state = latest Listing Management verification (weekly 07 over legacy 09); audit KPIs reconcile; 0 accepted left pending",
       all(sub_rows[k]["state"] == ver_state[k] for k in sub_rows)
-      and kpi["posts_accepted"] == len(sub_rows) and kpi["live_verified"] == sum(v == "UPDATED / VERIFIED" for v in ver_state.values())
-      and kpi["live_verification_pending"] == sum(v == "POST_ACCEPTED_PENDING_SYNC" for v in ver_state.values()),
-      f'accepted {kpi["posts_accepted"]}, live-verified {kpi["live_verified"]}, pending {kpi["live_verification_pending"]}, '
-      f'states {dict(collections.Counter(ver_state.values()))}')
+      and kpi["posts_accepted"] == len(sub_rows) and kpi["get_audit_shows_submitted"] == sum(v == "UPDATED / VERIFIED" for v in ver_state.values())
+      and kpi["get_audit_shows_previous"] == sum(v == "POST_ACCEPTED_PENDING_SYNC" for v in ver_state.values())
+      and kpi["live_verification_pending"] == 0,
+      f'accepted {kpi["posts_accepted"]}, audit: shows submitted {kpi["get_audit_shows_submitted"]}, shows previous '
+      f'{kpi["get_audit_shows_previous"]}; accepted-not-monitoring {kpi["live_verification_pending"]}')
 rem_ok = (len(EV_REM) == 20 and all(all(r["identity_checks"].values()) for r in EV_REM)
           and not {f'{r["asin"]}|{r["sku"]}' for r in EV_REM} & {"B0DH4KYFPD|WCDTBM2PK+RPR44WH2PK", "B0GXB7RGZK|WCBSF90FG2PK+RPR44WH2PK"})
 check("Evidence 09: the 20 non-verified submissions re-checked, all identity checks pass, the 2 verified excluded",
       rem_ok, dict(collections.Counter(r["classification"] for r in EV_REM)))
 states = collections.Counter(ver_state.values())
 expect = {"submitted": (len(sub_rows), 22),
-          "live_verified": (kpi["live_verified"], states.get("UPDATED / VERIFIED", 0)),
-          "pending": (kpi["live_verification_pending"], states.get("POST_ACCEPTED_PENDING_SYNC", 0)),
-          "accounted (verified + pending + mismatch + failed + not found)": (sum(states.values()), 22),
-          "completed = live-verified": (kpi["finetune_completed_verified"], states.get("UPDATED / VERIFIED", 0)),
-          "monitoring rows": (sum(c["status"] in ("Monitoring", "Completed") for c in CRS), 0),
+          "accepted not monitoring (pending)": (kpi["live_verification_pending"], 0),
+          "accounted (audit: verified + pending + mismatch + failed + not found)": (sum(states.values()), 22),
+          "monitoring rows = accepted submissions": (sum(c["status"] == "Monitoring" for c in CRS), len(sub_rows)),
           "duplicate words removed": (kpi["duplicate_words_removed"], recon["duplicate_words_removed"])}
-check("Status reconciliation: all 22 submissions accounted for (verified / pending / mismatch / failed shown as they are); 0 monitoring rows; duplicate words = rows",
+check("Status reconciliation: all 22 submissions accounted for; all 22 accepted are monitoring, 0 pending; duplicate words = rows",
       all(a == b for a, b in expect.values()),
       {k: a for k, (a, b) in expect.items()})
-check("No post-change metrics / monitoring started (no Monitoring/Completed, 0 under monitoring, nothing user-saved)",
-      not any(c["status"] in ("Monitoring", "Completed") for c in CRS) and kpi["under_monitoring"] == 0
-      and not DS["saved_change_records"])
+check("No Completed record and nothing user-saved (no result before Week 2 is complete)",
+      not any(c["status"] == "Completed" for c in CRS) and not DS["saved_change_records"])
 MDv = DS["monitoring_data"]
 av = MDv["available_dates"]
 contig = all((dt.date.fromisoformat(b) - dt.date.fromisoformat(a)).days == 1 for a, b in zip(av, av[1:]))
@@ -202,11 +206,28 @@ check("17c. Loaded days are contiguous and cover both comparison weeks",
 check("20. No fabricated thresholds: drop rule is orders < previous (no numeric cut-off)",
       all((r["issue_detected"] != "No Drop") == (r["curr_orders"] < r["prev_orders"]) for r in P))
 
+# ---- Section 3 Week 1 / Week 2 Orders (monitoring weeks from 29 Sep; independent recompute from the raw extract) --
+MWO = DS["monitoring_week_orders"]
+av_set = set(MDv["available_dates"])
+wk_days = {n: [(dt.date(2026, 9, 29) + dt.timedelta(days=7 * (n - 1) + i)).isoformat() for i in range(7)] for n in (1, 2)}
+raw = collections.defaultdict(lambda: collections.defaultdict(int))
+for r in EXTRACT["daily_orders"]:
+    raw[r["asin"]][r["date"][:10]] += int(r["orders"])
+exp_mwo = {r["asin"]: {f"week{n}": (sum(raw[r["asin"]].get(x, 0) for x in wk_days[n]) if all(x in av_set for x in wk_days[n]) else None)
+                       for n in (1, 2)} for r in P}
+check("Section 3 Week 1 / Week 2 Orders = real 7-day totals (29 Sep..5 Oct, 6..12 Oct) only when all 7 days are loaded, else '—'",
+      MWO["anchor"] == "2026-09-29" and MWO["week1"] == ["2026-09-29", "2026-10-05"] and MWO["week2"] == ["2026-10-06", "2026-10-12"]
+      and MWO["orders"] == exp_mwo,
+      f'Week 1 {MWO["week1_days_loaded"]}/7 days, Week 2 {MWO["week2_days_loaded"]}/7 days; '
+      f'{sum(v["week1"] is not None for v in exp_mwo.values())} Week 1 totals, {sum(v["week2"] is not None for v in exp_mwo.values())} Week 2 totals')
+
 # ---- monitored ASINs (Full Optimization Review monitoring, Section 12) ------------------------
 MP = {r["asin"]: r for r in DS["monitoring_performance"]}
 LEDGER_PATH = BASE / "data" / "monitoring_cycles.json"
 LEDGER = json.loads(LEDGER_PATH.read_text(encoding="utf-8")) if LEDGER_PATH.exists() else {"cycles": {}, "alerts": {}}
-need = {c["asin"] for c in CRS} | {c["asin"] for c in LEDGER["cycles"].values()}
+MON = LEDGER.get("monitoring", {})
+pa_COMPLETE = "Monitoring Complete / Performance Comparison Available"
+need = {c["asin"] for c in CRS} | {c["asin"] for c in MON.values() if c["kind"] == "cycle"}
 check("Monitoring continuity: every change-record / ledger ASIN has weekly metrics (in or outside the top 50)",
       need <= set(MP), sorted(need - set(MP)) or f"{len(MP)} monitored ASINs, {sum(not r['in_top_moving'] for r in MP.values())} outside top 50")
 top_p = {r["asin"]: r for r in P}
@@ -218,14 +239,44 @@ for a, r in MP.items():
     if a in top_p and any(r[f] != top_p[a][f] for f in ("prev_orders", "curr_orders", "order_chg", "impression_chg", "ctr_chg", "cvr_chg")):
         mism.append(a + " (differs from Section 3)")
 check("Monitored-ASIN metrics recompute from raw extract and equal Section 3 for top-50 ASINs", not mism, mism[:5] or "all match")
-cyc = list(LEDGER["cycles"].values())
-bad_rule = [c for c in cyc if c.get("consecutive_decline_count", 0) > 0 and not c.get("eligible_after_live_verification")]
-bad_rule += [c for c in cyc if c.get("consecutive_decline_count", 0) > 0 and c.get("performance_drop") is not True]
-bad_alert = [k for k, a in LEDGER["alerts"].items() if (LEDGER["cycles"].get(k) or {}).get("streak_status") != "alert"
-             or (LEDGER["cycles"].get(k) or {}).get("consecutive_decline_count") != 2]
-check("Ledger integrity: declines count only on eligible declining cycles; alerts only at >= 2 consecutive declines; no TEST in ledger",
-      not bad_rule and not bad_alert and not any("TEST" in json.dumps(a) for a in LEDGER["alerts"].values()),
-      (bad_rule[:2], bad_alert[:2]) if bad_rule or bad_alert else f"{len(cyc)} cycles, {len(LEDGER['alerts'])} alert records")
+# ---- post-update monitoring (Week 1 / Week 2 from the actual live update date; no e-mail) --------
+cyc = [c for c in MON.values() if c["kind"] == "cycle"]
+anchors_led = {(r["asin"], u["date"]) for r in LEDGER.get("keyword_rows", {}).values() for u in r.get("live_updates") or []}
+D_ = lambda s: dt.date.fromisoformat(s)
+bad_win = [c["key"] for c in cyc if (D_(c["week1_start"]) - D_(c["live_update_date"])).days != 0
+           or (D_(c["week1_end"]) - D_(c["week1_start"])).days != 6 or (D_(c["week2_start"]) - D_(c["week1_end"])).days != 1
+           or (D_(c["week2_end"]) - D_(c["week2_start"])).days != 6]
+check("Monitoring anchor = update date (POST Accepted anchor); Week 1 = D..D+6, Week 2 = D+7..D+13; one cycle per update",
+      not bad_win and {(c["asin"], c["live_update_date"]) for c in cyc} == anchors_led,
+      bad_win[:3] or sorted(f'{c["asin"]} live {c["live_update_date"]}: W1 {c["week1_start"]}..{c["week1_end"]}, W2 {c["week2_start"]}..{c["week2_end"]}' for c in cyc))
+cr_live = {c["asin"]: c["date_changed"] for c in CRS if c["status"] == "Monitoring"}
+first_cyc = {}
+for c in sorted(cyc, key=lambda c: c["live_update_date"]):
+    first_cyc.setdefault(c["asin"], c["live_update_date"])
+check("Every monitoring change record starts its first cycle on 2026-09-29 (Week 1 29 Sep..5 Oct, Week 2 6..12 Oct); not the report week",
+      cr_live and all(first_cyc.get(a) == d == ANCHOR for a, d in cr_live.items())
+      and all((c["week1_start"], c["week1_end"], c["week2_start"], c["week2_end"]) == ("2026-09-29", "2026-10-05", "2026-10-06", "2026-10-12")
+              for c in cyc if c["live_update_date"] == ANCHOR),
+      {a: (d, first_cyc.get(a)) for a, d in cr_live.items() if first_cyc.get(a) != d} or f"{len(cr_live)} ASINs from {ANCHOR}")
+avail = set(MDv["available_dates"])
+fabricated = []
+for c in cyc:
+    for i in (1, 2):
+        days_ = [(D_(c[f"week{i}_start"]) + dt.timedelta(n)).isoformat() for n in range(7)]
+        full = all(x in avail for x in days_)
+        frozen_ = c["monitoring_status"] == "Monitoring Complete / Performance Comparison Available"
+        if c[f"week{i}_orders"] is not None and not (c[f"week{i}_complete"] and (full or frozen_)):
+            fabricated.append((c["key"], f"week{i} orders without 7 loaded days"))
+        if c[f"week{i}_complete"] and full and c[f"week{i}_orders"] != sum(MDv["orders"].get(c["asin"], {}).get(x, 0) for x in days_):
+            fabricated.append((c["key"], f"week{i} orders != daily series"))
+    if c.get("order_change") is not None and not (c["week1_complete"] and c["week2_complete"]):
+        fabricated.append((c["key"], "comparison before Week 2 complete"))
+    if c["performance_status"] in ("Performance Decline", "Performance Improved", "Performance Stable") and not c["week2_complete"]:
+        fabricated.append((c["key"], "verdict before Week 2 complete"))
+check("Week orders only for complete 7-day windows (= daily series); no Week 2 comparison / verdict before Week 2 is complete",
+      not fabricated, fabricated[:4] or dict(collections.Counter(c["monitoring_status"] for c in MON.values())))
+check("No e-mail state in the monitoring ledger output (monitoring entries carry no alert / Gmail fields)",
+      not any(k for c in MON.values() for k in c if "alert" in k or "gmail" in k or "email" in k))
 
 # ---- live DB spot-check (read-only) ----------------------------------------------------------
 sample = random.Random(20260925).sample([r["asin"] for r in P], 8)
@@ -267,29 +318,30 @@ check("9/10/11. No external CSS/JS/network references", not ext and "@import" no
 m = re.search(r'<script id="report-data" type="application/json">(.*?)</script>', html, re.S)
 try:
     embedded = json.loads(m.group(1))
-    am = embedded.pop("alert_monitoring")
-    ok = embedded == DS and am["cycles"] == sorted(LEDGER["cycles"].values(), key=lambda c: (c["asin"], c["cycle_id"])) \
-        and am["alerts"] == sorted(LEDGER["alerts"].values(), key=lambda a: (a["asin"], a["cycle_id"]))         and am["optimizations"] == [o for a_ in sorted(LEDGER.get("optimizations", {})) for o in LEDGER["optimizations"][a_]] \
-        and am["keyword_rows"] == LEDGER.get("keyword_rows", {})
+    km = embedded.pop("keyword_monitoring")
+    ok = embedded == DS and "alert_monitoring" not in embedded \
+        and km["monitoring"] == sorted(MON.values(), key=lambda c: (c["asin"], c.get("live_update_date") or "")) \
+        and km["keyword_rows"] == LEDGER.get("keyword_rows", {}) and set(km) == {"monitoring", "keyword_rows"}
 except Exception as e:  # noqa: BLE001
     ok, embedded = False, e
-check("8. Embedded JSON parses and equals dataset (+ monitoring ledger for Section 12)", ok)
+check("8. Embedded JSON parses and equals dataset (+ monitoring cycles and keyword rows for Sections 8 / 12; no e-mail record)", ok)
 
 REQUIRED = {
     "sections": ["Report Purpose", "Weekly Performance Summary", "ASIN Performance Comparison",
                  "Backend Keyword Analysis", "Keyword Change Details", "Optimization Classification",
                  "Change Record", "7-Day Monitoring Report", "Weekly Workflow", "KPI Formulas", "Management Summary",
-                 "Full Optimization Review Monitoring"],
-    "t13": ["ASIN / SKU", "Amazon Account", "Current 7D Orders", "Previous 7D Orders", "Order Change %",
-            "Fine-Tuning & Monitoring", "Consecutive Declines", "Keyword Status", "Full Optimization Review", "Alert Status"],
-    "t3": ["ASIN", "SKU", "Previous 7D Orders", "Current 7D Orders", "Order Change %", "Impression Change %",
+                 "Weekly Backend Keyword Check"],
+    "t13o": ["ASIN / SKU", "Status / Weekly Check", "Latest Live Backend Keywords", "Duplicates · Live → Cleaned",
+             "POST Attempts", "Monitoring · Audit"],
+    "t13h": ["ASIN", "Update Date", "Week 1", "Week 2", "State"],
+    "t3": ["ASIN", "SKU", "Previous 7D Orders", "Current 7D Orders", "Order Change %", "Week 1 Orders", "Week 2 Orders", "Impression Change %",
            "Click Change %", "CTR Change %", "CVR Change %", "Issue Detected"],
     "t4": ["ASIN", "Content Status", "Backend Keyword Status", "Issue Found", "Action Taken"],
     "t5": ["ASIN", "Original Backend Keywords", "Issue", "Fine-Tuning Action", "Final Status"],
     "t6": ["Change Type", "Applied?", "Description"],
     "t7": ["ASIN", "SKU", "Issue Detected", "Optimization Action", "Change Type", "Date Changed", "Status"],
-    "t8": ["ASIN", "Pre-Change Orders", "Post-Change Orders", "Order Change %", "Pre-Change Impressions",
-           "Post-Change Impressions", "Impression Change %", "Result"],
+    "t8": ["ASIN", "Week 1 Orders", "Week 2 Orders", "Order Change %", "Week 1 Impressions",
+           "Week 2 Impressions", "Impression Change %", "Result"],
     "kpis": ["Top-Moving ASINs Reviewed", "ASINs Showing Performance Drop", "ASINs Requiring Backend Keyword Review",
              "Backend Keyword Fine-Tuning Completed", "Backend Keyword POSTs Accepted", "Live Verification Pending",
              "Visible Listing Content Changed", "Duplicate Keywords Removed",
@@ -315,7 +367,7 @@ with sync_playwright() as pw_:
     h2 = pg.eval_on_selector_all("section h2", "e => e.map(x => x.textContent)")
     check("3. Required sections present", all(any(s in h for h in h2) for s in REQUIRED["sections"]), h2)
     missing = {}
-    for t in ["t3", "t4", "t5", "t6", "t7", "t8", "t13"]:
+    for t in ["t3", "t4", "t5", "t6", "t7", "t8", "t13o", "t13h"]:
         heads = pg.eval_on_selector_all(f"#{t} thead th", "e => e.map(x => x.textContent.trim())")
         miss = [c for c in REQUIRED[t] if c not in heads]
         if miss:
@@ -337,39 +389,46 @@ with sync_playwright() as pw_:
     n = lambda sel: pg.locator(sel).count()
     drops = kpi["performance_drop"]
     counts = {"t3 (drop filter)": (n("#t3 tbody tr"), drops), "t4": (n("#t4 tbody tr"), len(K)),
-              "t5": (n("#t5 tbody tr"), len(K)), "t6": (n("#t6 tbody tr"), 9),
+              "t5": (n("#t5 tbody tr"), len(SUBM)), "t6": (n("#t6 tbody tr"), 9),
               "t7": (n("#t7 tbody tr"), len(DS["change_record"])),
-              "t8": (n("#t8 tbody tr:not(:has(td.empty))"),
-                     sum(1 for s in DS["saved_change_records"] if s["status"] != "Proposed"))}
+              "t8 (one row per monitoring change record)": (n("#t8 tbody tr:not(:has(td.empty))"), sum(1 for c in CRS if c["status"] == "Monitoring"))}
     check("Displayed row counts = dataset row counts", all(a == b for a, b in counts.values()), counts)
-    pend = sum(1 for s in DS["change_record"] if s.get("submission") and s["submission"]["state"] != "UPDATED / VERIFIED")
-    page = {"t7 pending pills": pg.locator('#t7 td[data-label="Amazon Submission"] .pill', has_text="POST Accepted").count(),
-            "t5 pending status": pg.locator('#t5 td[data-label="Final Status"] .pill', has_text="POST Accepted").count(),
-            "t8 monitoring rows": n("#t8 tbody tr:not(:has(td.empty))"),
-            "t5 live-verified status": pg.locator('#t5 td[data-label="Final Status"] .pill', has_text="Live-verified — monitoring not yet started").count(),
-            "t7 Live-verified status": pg.locator('#t7 select.cr-status').evaluate_all("e => e.filter(s => s.value === 'Live-verified').length"),
-            "t7 Monitoring/Completed status": pg.locator('#t7 select.cr-status').evaluate_all("e => e.filter(s => s.value === 'Monitoring' || s.value === 'Completed').length"),
+    mon_keys = sorted(c["key"] for c in CRS if c["status"] == "Monitoring")
+    acc_keys = {c["key"] for c in CRS if c.get("submission") and c["submission"]["api_status"] == "ACCEPTED"}
+    cyc_of = {c["asin"]: c for c in cyc if c["live_update_date"] == ANCHOR}
+    def exp_result(asin):
+        c = cyc_of.get(asin)
+        if not c:
+            return None
+        return c["performance_status"] if c["monitoring_status"] == pa_COMPLETE else c["monitoring_status"]
+    done = sum(1 for k in mon_keys if exp_result(k.split("|")[0]) in ("Performance Decline", "Performance Improved", "Performance Stable"))
+    page = {"t7 monitoring pills": pg.locator('#t7 td[data-label="Amazon Submission"] .pill', has_text="Live-verified — monitoring").count(),
+            "t5 monitoring status": pg.locator('#t5 td[data-label="Final Status"] .pill', has_text="Live-verified — monitoring").count(),
+            "'Live Verification Pending' pills": pg.locator('.pill', has_text="Live Verification Pending").count(),
+            "t7 Monitoring status": pg.locator('#t7 select.cr-status').evaluate_all("e => e.filter(s => s.value === 'Monitoring').length"),
             "Completed card": pg.inner_text('#kpis .v[data-kpi="Backend Keyword Fine-Tuning Completed"]'),
             "Pending card": pg.inner_text('#kpis .v[data-kpi="Live Verification Pending"]'),
             "POSTs Accepted card": pg.inner_text('#kpis .v[data-kpi="Backend Keyword POSTs Accepted"]'),
             "Under Monitoring card": pg.inner_text('#kpis .v[data-kpi="ASINs Under Monitoring"]')}
-    verified_keys = sorted(c["key"] for c in DS["change_record"] if c["status"] == "Live-verified")
-    verified_set = set(verified_keys)
-    check("Page shows submission status: pending pills, only the verified marked Live-verified, 0 monitoring rows, KPI cards match",
-          page["t7 pending pills"] == pend and page["t5 pending status"] == pend and page["t8 monitoring rows"] == 0
-          # Section 5 lists this week's keyword rows: a verified listing whose keywords are now clean shows
-          # "No change required", so only verified rows that still need a change carry the live-verified status
-          and page["t5 live-verified status"] == sum(1 for k in K if k["needs_change"] and f'{k["asin"]}|{k["sku"]}' in verified_set)
-          and page["t7 Live-verified status"] == kpi["live_verified"]
-          and page["t7 Monitoring/Completed status"] == 0
-          and verified_keys == sorted(k for k, v in ver_state.items() if v == "UPDATED / VERIFIED")
-          and page["Completed card"] == str(kpi["live_verified"]) and page["Pending card"] == str(kpi["live_verification_pending"])
-          and page["POSTs Accepted card"] == str(kpi["posts_accepted"]) and page["Under Monitoring card"] == "0", page)
+    check("Page: every POST Accepted submission is 'Live-verified — monitoring' (Sections 5 / 7), no 'Live Verification Pending'; "
+          "KPI cards: Completed = complete Week 2 cycles, Pending 0, Under Monitoring = accepted - completed",
+          page["t7 monitoring pills"] == len(acc_keys) == 22 and page["t7 Monitoring status"] == len(mon_keys) == 22
+          and page["t5 monitoring status"] == len(SUBM) == 22
+          and page["'Live Verification Pending' pills"] == 0
+          and page["Completed card"] == str(done) and page["Pending card"] == "0"
+          and page["POSTs Accepted card"] == str(kpi["posts_accepted"]) and page["Under Monitoring card"] == str(len(mon_keys) - done)
+          and js_kpi["under_monitoring"] == len(mon_keys) - done, page)
     wording = re.findall(r"\b22 (?:completed|updated|live)\b", body_text := pg.evaluate(
         "[...document.querySelectorAll('header, nav, section, footer')].map(e => e.textContent).join(' ')"), re.I)
-    t8_text = pg.inner_text("#t8")
-    check("No '22 completed / updated / live' wording; Section 8 shows no post-change results",
-          not wording and not re.search(r"Orders (improved|declined|unchanged)", t8_text), wording or "clean")
+    check("No '22 completed / updated / live' wording", not wording, wording or "clean")
+    shown8 = {r[0]: r[1:] for r in pg.eval_on_selector_all(
+        "#t8 tbody tr[data-key]", "e => e.map(r => [r.dataset.key, r.dataset.start, r.dataset.result])")}
+    exp8 = {k: [ANCHOR, exp_result(k.split("|")[0])] for k in mon_keys}
+    check("Section 8 (previous 8-column layout): one row per monitoring change record, update date 29 Sep, Result = "
+          "Monitoring — Week 1 / Week 2 from the ledger, a verdict only after Week 2 is complete",
+          shown8 == exp8, {k: (shown8.get(k), v) for k, v in exp8.items() if shown8.get(k) != v} or f"{len(shown8)} rows")
+    check("No e-mail alert shown as a production action (no Alert Status / Gmail / alert sent wording on the page)",
+          not re.search(r"Alert Status|Gmail|alert sent|Alert sent|Full Optimization Review Required", body_text))
 
     # textContent of page elements (includes hidden tab panels, excludes <script> source)
     body = pg.evaluate("[...document.querySelectorAll('header, nav, section, footer')].map(e => e.textContent).join(' ')")
@@ -377,49 +436,21 @@ with sync_playwright() as pw_:
 
     struck = pg.eval_on_selector_all("#t5 tbody tr", "rows => rows.map(r => r.querySelectorAll('del.rm').length)")
     t5_rows = pg.eval_on_selector_all("#t5 tbody tr td:first-child", "e => e.map(x => x.textContent)")
-    exp_struck = [k["duplicate_words_removed"] for k in K]
+    exp_struck = [k["duplicate_words_removed"] for k in SUBM]
     check("Struck-through words in Keyword Change Details = removed-word counts", struck == exp_struck,
           list(zip(t5_rows, struck, exp_struck))[:4])
 
-    # Section 12: one row per monitored ASIN (latest cycle); state follows the ledger count.
-    latest = {}
-    for c in cyc:
-        if c["asin"] not in latest or c["cycle_id"] > latest[c["asin"]]["cycle_id"]:
-            latest[c["asin"]] = c
-    def exp_state(c):
-        st = c.get("streak_status")
-        if st in ("alert", "awaiting_full_optimization"):
-            alert_end = c["current_7d_end"] if st == "alert" else (c.get("alert_cycle_id") or "")[11:]
-            os_ = LEDGER.get("optimizations", {}).get(c["asin"]) or []
-            o = os_[-1] if os_ else None
-            if o and o["completed_on"] >= alert_end:
-                return "cleanup_failed" if "Failed" in ((o.get("keyword_cleanup") or {}).get("status") or "") else "cleanup"
-            if st == "alert":
-                a = LEDGER["alerts"].get(f'{c["asin"]}|{c["cycle_id"]}')
-                return "sent" if a and a.get("alert_status") == "SENT" else "required"
-            return "awaiting"
-        if st == "baseline" and c.get("baseline_type") == "Full Optimization":
-            return "optimized"
-        if not c.get("eligible_after_live_verification"):
-            return "waiting"
-        if c.get("performance_drop") is None:
-            return "nodata"
-        return "one" if c.get("consecutive_decline_count", 0) == 1 else "normal"
-    shown13 = dict(pg.eval_on_selector_all("#t13 tbody tr[data-asin]", "e => e.map(r => [r.dataset.asin, r.dataset.state])"))
-    exp13 = {a: exp_state(c) for a, c in latest.items()}
-    fo_text = pg.inner_text("#s13") if pg.locator("#s13").is_visible() else pg.evaluate("document.getElementById('s13').textContent")
-    req_rows = [a for a, st in shown13.items() if st == "required"]
-    check("Section 12: one row per monitored ASIN; state = ledger (FOR Required only on the alert cycle at 2 consecutive declines); manual notice shown",
-          shown13 == exp13 and all(latest[a].get("streak_status") == "alert" and latest[a].get("consecutive_decline_count") == 2 for a in req_rows)
-          and "Full Optimization is MANUAL" in fo_text and "will NOT modify the title, bullets, images, description, A+ content" in fo_text,
-          {"shown": shown13, "expected": exp13})
+    # Section 12: weekly keyword check rows + every monitoring cycle (ledger).
     exp_o = sorted((r_["asin"], r_["sku"], r_["status"]) for r_ in LEDGER.get("keyword_rows", {}).values())
     shown_o = sorted(tuple(x) for x in pg.eval_on_selector_all("#t13o tbody tr[data-asin]",
                      "e => e.map(r => [r.dataset.asin, r.dataset.cleanup, r.dataset.status])"))
     check("Section 12: weekly keyword rows = ledger keyword_rows (scope listings, status per ASIN-SKU; not hard-coded)",
           shown_o == exp_o, {"shown": shown_o, "expected": exp_o})
-    check("Section 12: cycle history rows = ledger cycles", n("#t13h tbody tr:not(:has(td.empty))") == len(cyc),
-          f'{n("#t13h tbody tr:not(:has(td.empty))")} rows / {len(cyc)} cycles')
+    shown_h = sorted(tuple(x) for x in pg.eval_on_selector_all(
+        "#t13h tbody tr[data-asin]", "e => e.map(r => [r.dataset.asin, r.dataset.live, r.dataset.status])"))
+    check("Section 12: monitoring cycle history rows = ledger cycles (ASIN, live update date, status)",
+          shown_h == sorted((c["asin"], c["live_update_date"], c["monitoring_status"]) for c in cyc),
+          f"{len(shown_h)} rows / {len(cyc)} cycles")
 
     # Tabs: each tab click shows exactly its own section and does not scroll the page.
     tab_ids = pg.eval_on_selector_all("nav.toc a", "e => e.map(a => a.getAttribute('href').slice(1))")

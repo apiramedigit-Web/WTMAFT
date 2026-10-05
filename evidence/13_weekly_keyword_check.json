@@ -1,7 +1,34 @@
 {
- "run_at": "2026-09-29T16:04:50",
+ "run_at": "2026-10-05T09:37:34",
  "mode": "dry run (no POST)",
  "this_run": [
+  {
+   "asin": "B0D7944QDY",
+   "sku": "WCB6BM2PK",
+   "status_before": "POST Accepted — Monitoring",
+   "status_after": "POST Accepted — Monitoring",
+   "action": "no POST",
+   "submission_id": null,
+   "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+  },
+  {
+   "asin": "B0C43LY8DB",
+   "sku": "WCDTYE+RPR44WH",
+   "status_before": "POST Accepted — Monitoring",
+   "status_after": "POST Accepted — Monitoring",
+   "action": "no POST",
+   "submission_id": null,
+   "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+  },
+  {
+   "asin": "B0D59MHSXN",
+   "sku": "WCB3WH2PK+RPR44WH2PK VD",
+   "status_before": "POST Accepted — Monitoring",
+   "status_after": "POST Accepted — Monitoring",
+   "action": "no POST",
+   "submission_id": null,
+   "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+  },
   {
    "asin": "B0CBLWLZ4W",
    "sku": "WCWDBM2PK+RPR44WH2PK",
@@ -28,6 +55,150 @@
    "action": null,
    "submission_id": null,
    "detail": "listing not in the Listing Management active feed"
+  },
+  {
+   "asin": "B0DTHZ1JX5",
+   "sku": "WCDTBM3PK+RPR44WH3PK AM",
+   "status_before": "POST Accepted — Monitoring",
+   "status_after": "POST Accepted — Monitoring",
+   "action": "no POST",
+   "submission_id": null,
+   "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+  },
+  {
+   "asin": "B0D9RQQZYB",
+   "sku": "WCDCBM3PK+RPR44WH3PK M",
+   "status_before": "POST Accepted — Monitoring",
+   "status_after": "POST Accepted — Monitoring",
+   "action": "no POST",
+   "submission_id": null,
+   "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+  },
+  {
+   "asin": "B0D9RQQZYB",
+   "sku": "WCDCBM3PK+RPR44WH3PK_AB",
+   "status_before": "POST Accepted — Monitoring",
+   "status_after": "POST Accepted — Monitoring",
+   "action": "no POST",
+   "submission_id": null,
+   "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+  },
+  {
+   "asin": "B0DTPB2YC2",
+   "sku": "WCB2BM3PK+RPR44WH3PK BM_",
+   "status_before": "POST Accepted — Monitoring",
+   "status_after": "POST Accepted — Monitoring",
+   "action": "no POST",
+   "submission_id": null,
+   "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+  },
+  {
+   "asin": "B0CDBYNK9B",
+   "sku": "WCB3BS+RPR44WH C",
+   "status_before": "POST Accepted — Monitoring",
+   "status_after": "POST Accepted — Monitoring",
+   "action": "no POST",
+   "submission_id": null,
+   "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+  },
+  {
+   "asin": "B09MQSJ72N",
+   "sku": "WCB4BC+RPR44WH",
+   "status_before": "POST Accepted — Monitoring",
+   "status_after": "POST Accepted — Monitoring",
+   "action": "no POST",
+   "submission_id": null,
+   "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+  },
+  {
+   "asin": "B0C43N2F3D",
+   "sku": "WCDTWH+RPR44WH",
+   "status_before": "POST Accepted — Monitoring",
+   "status_after": "POST Accepted — Monitoring",
+   "action": "no POST",
+   "submission_id": null,
+   "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+  },
+  {
+   "asin": "B0D59PP6PC",
+   "sku": "WCB1BM2PK+RPR44WH2PK VD",
+   "status_before": "POST Accepted — Monitoring",
+   "status_after": "POST Accepted — Monitoring",
+   "action": "no POST",
+   "submission_id": null,
+   "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+  },
+  {
+   "asin": "B0D93PN1ZS",
+   "sku": "WCDTGR2PK+RPR44WH2PK",
+   "status_before": "POST Accepted — Monitoring",
+   "status_after": "POST Accepted — Monitoring",
+   "action": "no POST",
+   "submission_id": null,
+   "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+  },
+  {
+   "asin": "B084RL7K8J",
+   "sku": "LSBLP4BSR",
+   "status_before": "POST Accepted — Monitoring",
+   "status_after": "POST Accepted — Monitoring",
+   "action": "no POST",
+   "submission_id": null,
+   "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+  },
+  {
+   "asin": "B08VGPPCY1",
+   "sku": "WCDTBM+RPR44WH R",
+   "status_before": "POST Accepted — Monitoring",
+   "status_after": "POST Accepted — Monitoring",
+   "action": "no POST",
+   "submission_id": null,
+   "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+  },
+  {
+   "asin": "B0FXFMZLWV",
+   "sku": "WCBCFBM2PK",
+   "status_before": "POST Accepted — Monitoring",
+   "status_after": "POST Accepted — Monitoring",
+   "action": "no POST",
+   "submission_id": null,
+   "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+  },
+  {
+   "asin": "B0CCDR7C3Y",
+   "sku": "WCVCBS2PK+RPR44WH2PK",
+   "status_before": "POST Accepted — Monitoring",
+   "status_after": "POST Accepted — Monitoring",
+   "action": "no POST",
+   "submission_id": null,
+   "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+  },
+  {
+   "asin": "B0GXB1RGJB",
+   "sku": "WCBSF90FG+RPR44WH",
+   "status_before": "POST Accepted — Monitoring",
+   "status_after": "POST Accepted — Monitoring",
+   "action": "no POST",
+   "submission_id": null,
+   "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+  },
+  {
+   "asin": "B07RTY1TFK",
+   "sku": "WCGEBNCR-A",
+   "status_before": "POST Accepted — Monitoring",
+   "status_after": "POST Accepted — Monitoring",
+   "action": "no POST",
+   "submission_id": null,
+   "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+  },
+  {
+   "asin": "B0CCDKF18M",
+   "sku": "WCB3B+RPR44WH",
+   "status_before": "POST Accepted — Monitoring",
+   "status_after": "POST Accepted — Monitoring",
+   "action": "no POST",
+   "submission_id": null,
+   "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
   },
   {
    "asin": "B0DTTKL6KX",
@@ -64,7 +235,19 @@
      "state_at_seed": "UPDATED / VERIFIED"
     }
    ],
-   "next_due": "2026-10-06"
+   "next_due": "2026-10-06",
+   "live_updates": [
+    {
+     "date": "2026-09-29",
+     "confirmed_at": "2026-09-28 (run 1)",
+     "source": "original submission POST Accepted (common monitoring anchor)",
+     "user_reported_date": null,
+     "value": "Lampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Lamp Shades Indoor Geometric Wall Kitchen Living Room Hallway"
+    }
+   ],
+   "live_value": "Lampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Lamp Shades Indoor Geometric Wall Kitchen Living Room Hallway",
+   "accepted_value": "Lampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Lamp Shades Indoor Geometric Wall Kitchen Living Room Hallway",
+   "pre_post_value": "Lampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Ceiling Light Shade, Lamp Shades Ceiling for Indoor Pendant Light Shade Industrial Geometric Ceiling Pendant Light Shade for Wall Light Kitchen Living Room Hallway"
   },
   "B0D7944QDY|WCB6BM2PK|8": {
    "asin": "B0D7944QDY",
@@ -75,7 +258,7 @@
    "report_row": "B0D7944QDY|WCB6BM2PK",
    "submission_id": "1ed6331c7dd04d4dbbb98b0220fb70cc",
    "proposed": "Unique and Beautiful Matte Black Metal Forest Design Table Lamp | The Light Escapes Through Gaps Casts Against Lampshade Drum with Flower Pattern for Pendant Lamps Shades 4.7×7.9in Floor",
-   "status": "POST Accepted — Live Verification Pending",
+   "status": "POST Accepted — Monitoring",
    "first_verified_at": null,
    "last_verified_at": null,
    "last_post_at": "2026-09-28T17:21:17",
@@ -90,7 +273,66 @@
      "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
     }
    ],
-   "next_due": "2026-10-05"
+   "next_due": "2026-10-05",
+   "live_updates": [
+    {
+     "date": "2026-09-29",
+     "confirmed_at": "2026-09-28T17:21:17",
+     "source": "original submission POST Accepted (common monitoring anchor)",
+     "user_reported_date": null,
+     "value": "Unique and Beautiful Matte Black Metal Forest Design Table Lamp | The Light Escapes Through Gaps Casts Against Lampshade Drum with Flower Pattern for Pendant Lamps Shades 4.7×7.9in Floor"
+    }
+   ],
+   "live_value": "Unique and Beautiful Matte Black Metal Forest Design Table Lamp | The Light Escapes Through Gaps Casts Against Lampshade Drum with Flower Pattern for Pendant Lamps Shades 4.7×7.9in Floor",
+   "last_dry_run": {
+    "event": "weekly check",
+    "week": "2026-10-05",
+    "at": "2026-10-05T09:35:08",
+    "mode": "dry_run",
+    "status_before": "POST Accepted — Monitoring",
+    "live_before": "Unique and Beautiful Matte Black Metal Forest Design Table Lamp | The Light Escapes Through The Gaps and Casts The Forest Against The Table Metal Lampshade Metal Drum Lampshade with Flower Pattern for Pendant Lamps Black Pendant Lamp Shades 4.7×7.9in for Table Lamps Floor Light",
+    "live_entries": [
+     "Unique and Beautiful Matte Black Metal Forest Design Table Lamp | The Light Escapes Through The Gaps and Casts The Forest Against The Table  Metal Lampshade Metal Drum Lampshade with Flower Pattern for Pendant Lamps Black Pendant Lamp Shades 4.7×7.9in for Table Lamps Floor Light"
+    ],
+    "cleaned": "Unique and Beautiful Matte Black Metal Forest Design Table Lamp | The Light Escapes Through Gaps Casts Against Lampshade Drum with Flower Pattern for Pendant Lamps Shades 4.7×7.9in Floor",
+    "duplicate_issue": true,
+    "issue": "Duplicate words",
+    "removed_words": [
+     "The",
+     "and",
+     "The",
+     "Forest",
+     "The",
+     "Table",
+     "Metal",
+     "Metal",
+     "Lampshade",
+     "Black",
+     "Pendant",
+     "Lamp",
+     "for",
+     "Table",
+     "Lamps",
+     "Light"
+    ],
+    "repeated_entries": [],
+    "original_meta": {
+     "entries": 1,
+     "words": 45,
+     "bytes": 279
+    },
+    "cleaned_meta": {
+     "entries": 1,
+     "words": 29,
+     "bytes": 187
+    },
+    "status_after": "POST Accepted — Monitoring",
+    "action": "no POST",
+    "live_after": "Unique and Beautiful Matte Black Metal Forest Design Table Lamp | The Light Escapes Through The Gaps and Casts The Forest Against The Table Metal Lampshade Metal Drum Lampshade with Flower Pattern for Pendant Lamps Black Pendant Lamp Shades 4.7×7.9in for Table Lamps Floor Light",
+    "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+   },
+   "accepted_value": "Unique and Beautiful Matte Black Metal Forest Design Table Lamp | The Light Escapes Through Gaps Casts Against Lampshade Drum with Flower Pattern for Pendant Lamps Shades 4.7×7.9in Floor",
+   "pre_post_value": "Unique and Beautiful Matte Black Metal Forest Design Table Lamp | The Light Escapes Through The Gaps and Casts The Forest Against The Table Metal Lampshade Metal Drum Lampshade with Flower Pattern for Pendant Lamps Black Pendant Lamp Shades 4.7×7.9in for Table Lamps Floor Light"
   },
   "B0C43LY8DB|WCDTYE+RPR44WH|8": {
    "asin": "B0C43LY8DB",
@@ -101,7 +343,7 @@
    "report_row": "B0C43LY8DB|WCDTYE+RPR44WH",
    "submission_id": "36280bfb109843989e6db5c4e9ac1e52",
    "proposed": "Black Ceiling Light Wire Basket Metal Pendant Lighting Shade,Black Industrial Style for Indoor Kitchen Islands Living Room 1X E27 Base AC 220V Set of 2 Vintage Fitting, 16cm Geometric Cage Hanging Fixture Chandelier Lamp Shade Bedroom Dining 1-Light)",
-   "status": "POST Accepted — Live Verification Pending",
+   "status": "POST Accepted — Monitoring",
    "first_verified_at": null,
    "last_verified_at": null,
    "last_post_at": "2026-09-28T17:21:32",
@@ -116,7 +358,68 @@
      "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
     }
    ],
-   "next_due": "2026-10-05"
+   "next_due": "2026-10-05",
+   "live_updates": [
+    {
+     "date": "2026-09-29",
+     "confirmed_at": "2026-09-28T17:21:32",
+     "source": "original submission POST Accepted (common monitoring anchor)",
+     "user_reported_date": null,
+     "value": "Black Ceiling Light Wire Basket Metal Pendant Lighting Shade,Black Industrial Style for Indoor Kitchen Islands Living Room 1X E27 Base AC 220V Set of 2 Vintage Fitting, 16cm Geometric Cage Hanging Fixture Chandelier Lamp Shade Bedroom Dining 1-Light)"
+    }
+   ],
+   "live_value": "Black Ceiling Light Wire Basket Metal Pendant Lighting Shade,Black Industrial Style for Indoor Kitchen Islands Living Room 1X E27 Base AC 220V Set of 2 Vintage Fitting, 16cm Geometric Cage Hanging Fixture Chandelier Lamp Shade Bedroom Dining 1-Light)",
+   "last_dry_run": {
+    "event": "weekly check",
+    "week": "2026-10-05",
+    "at": "2026-10-05T09:35:08",
+    "mode": "dry_run",
+    "status_before": "POST Accepted — Monitoring",
+    "live_before": "Black Ceiling Light Wire Basket Metal Basket Pendant Lighting Ceiling Light Shade,Black Pendant Light Industrial Style Light for Indoor Kitchen Islands Living Room 1X E27 Base AC 220V Set of 2 Vintage Ceiling Pendant Light Fitting, 16cm Geometric Cage E27 Industrial Hanging Light Fixture Metal Chandelier Lamp Shade for Bedroom Living Room Dining Room (Black, 1-Light)",
+    "live_entries": [
+     "Black Ceiling Light Wire Basket Metal Basket Pendant Lighting Ceiling Light Shade,Black Pendant Light Industrial Style Light for Indoor Kitchen Islands Living Room 1X E27 Base AC 220V Set of 2 Vintage Ceiling Pendant Light Fitting, 16cm Geometric Cage E27 Industrial Hanging Light Fixture Metal Chandelier Lamp Shade for Bedroom Living Room Dining Room (Black, 1-Light)"
+    ],
+    "cleaned": "Black Ceiling Light Wire Basket Metal Pendant Lighting Shade,Black Industrial Style for Indoor Kitchen Islands Living Room 1X E27 Base AC 220V Set of 2 Vintage Fitting, 16cm Geometric Cage Hanging Fixture Chandelier Lamp Shade Bedroom Dining 1-Light)",
+    "duplicate_issue": true,
+    "issue": "Duplicate words",
+    "removed_words": [
+     "Basket",
+     "Ceiling",
+     "Light",
+     "Pendant",
+     "Light",
+     "Light",
+     "Ceiling",
+     "Pendant",
+     "Light",
+     "E27",
+     "Industrial",
+     "Light",
+     "Metal",
+     "for",
+     "Living",
+     "Room",
+     "Room",
+     "(Black,"
+    ],
+    "repeated_entries": [],
+    "original_meta": {
+     "entries": 1,
+     "words": 56,
+     "bytes": 369
+    },
+    "cleaned_meta": {
+     "entries": 1,
+     "words": 38,
+     "bytes": 250
+    },
+    "status_after": "POST Accepted — Monitoring",
+    "action": "no POST",
+    "live_after": "Black Ceiling Light Wire Basket Metal Basket Pendant Lighting Ceiling Light Shade,Black Pendant Light Industrial Style Light for Indoor Kitchen Islands Living Room 1X E27 Base AC 220V Set of 2 Vintage Ceiling Pendant Light Fitting, 16cm Geometric Cage E27 Industrial Hanging Light Fixture Metal Chandelier Lamp Shade for Bedroom Living Room Dining Room (Black, 1-Light)",
+    "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+   },
+   "accepted_value": "Black Ceiling Light Wire Basket Metal Pendant Lighting Shade,Black Industrial Style for Indoor Kitchen Islands Living Room 1X E27 Base AC 220V Set of 2 Vintage Fitting, 16cm Geometric Cage Hanging Fixture Chandelier Lamp Shade Bedroom Dining 1-Light)",
+   "pre_post_value": "Black Ceiling Light Wire Basket Metal Basket Pendant Lighting Ceiling Light Shade,Black Pendant Light Industrial Style Light for Indoor Kitchen Islands Living Room 1X E27 Base AC 220V Set of 2 Vintage Ceiling Pendant Light Fitting, 16cm Geometric Cage E27 Industrial Hanging Light Fixture Metal Chandelier Lamp Shade for Bedroom Living Room Dining Room (Black, 1-Light)"
   },
   "B0GXB7RGZK|WCBSF90FG2PK+RPR44WH2PK|8": {
    "asin": "B0GXB7RGZK",
@@ -142,7 +445,19 @@
      "state_at_seed": "UPDATED / VERIFIED"
     }
    ],
-   "next_due": "2026-10-06"
+   "next_due": "2026-10-06",
+   "live_updates": [
+    {
+     "date": "2026-09-29",
+     "confirmed_at": "2026-09-28T17:21:47",
+     "source": "original submission POST Accepted (common monitoring anchor)",
+     "user_reported_date": null,
+     "value": "Modern Sun Flower French Gold Crystal Pendant Light Shade, Jewels Easy Fit Ceiling with Diameter 9 cm - Height 14 Lamp Shades for Bedroom Kitchen Living Room"
+    }
+   ],
+   "live_value": "Modern Sun Flower French Gold Crystal Pendant Light Shade, Jewels Easy Fit Ceiling with Diameter 9 cm - Height 14 Lamp Shades for Bedroom Kitchen Living Room",
+   "accepted_value": "Modern Sun Flower French Gold Crystal Pendant Light Shade, Jewels Easy Fit Ceiling with Diameter 9 cm - Height 14 Lamp Shades for Bedroom Kitchen Living Room",
+   "pre_post_value": "Modern Sun Flower French Gold Crystal Pendant Light Shade, Jewels Modern Easy Fit Ceiling Light Shade with Diameter 9 cm - Height 14 cm Lamp Shades for Bedroom Kitchen Living Room"
   },
   "B0D59MHSXN|WCB3WH2PK+RPR44WH2PK VD|6": {
    "asin": "B0D59MHSXN",
@@ -153,7 +468,7 @@
    "report_row": "B0D59MHSXN|WCB3WH2PK+RPR44WH2PK VD",
    "submission_id": "6493b493a71b4f01ae41096d064644b4",
    "proposed": "Lampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Easy Fit Modern Indoor Geometric Wall Kitchen Living Room Hallway",
-   "status": "POST Accepted — Live Verification Pending",
+   "status": "POST Accepted — Monitoring",
    "first_verified_at": null,
    "last_verified_at": null,
    "last_post_at": "2026-09-28T17:22:03",
@@ -168,7 +483,67 @@
      "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
     }
    ],
-   "next_due": "2026-10-05"
+   "next_due": "2026-10-05",
+   "live_updates": [
+    {
+     "date": "2026-09-29",
+     "confirmed_at": "2026-09-28T17:22:03",
+     "source": "original submission POST Accepted (common monitoring anchor)",
+     "user_reported_date": null,
+     "value": "Lampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Easy Fit Modern Indoor Geometric Wall Kitchen Living Room Hallway"
+    }
+   ],
+   "live_value": "Lampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Easy Fit Modern Indoor Geometric Wall Kitchen Living Room Hallway",
+   "last_dry_run": {
+    "event": "weekly check",
+    "week": "2026-10-05",
+    "at": "2026-10-05T09:35:08",
+    "mode": "dry_run",
+    "status_before": "POST Accepted — Monitoring",
+    "live_before": "Lampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Easy Fit Light Pendant Modern Ceiling Lighting Shade Ceiling for Indoor Pendant Light Shade Industrial Geometric Ceiling Pendant Light Shade for Wall Light Kitchen Living Room Hallway",
+    "live_entries": [
+     "Lampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Easy Fit Light Pendant Modern Ceiling Lighting Shade Ceiling for Indoor Pendant Light Shade Industrial Geometric Ceiling Pendant Light Shade for Wall Light Kitchen Living Room Hallway"
+    ],
+    "cleaned": "Lampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Easy Fit Modern Indoor Geometric Wall Kitchen Living Room Hallway",
+    "duplicate_issue": true,
+    "issue": "Duplicate words",
+    "removed_words": [
+     "Light",
+     "Pendant",
+     "Ceiling",
+     "Lighting",
+     "Shade",
+     "Ceiling",
+     "for",
+     "Pendant",
+     "Light",
+     "Shade",
+     "Industrial",
+     "Ceiling",
+     "Pendant",
+     "Light",
+     "Shade",
+     "for",
+     "Light"
+    ],
+    "repeated_entries": [],
+    "original_meta": {
+     "entries": 1,
+     "words": 36,
+     "bytes": 251
+    },
+    "cleaned_meta": {
+     "entries": 1,
+     "words": 19,
+     "bytes": 133
+    },
+    "status_after": "POST Accepted — Monitoring",
+    "action": "no POST",
+    "live_after": "Lampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Easy Fit Light Pendant Modern Ceiling Lighting Shade Ceiling for Indoor Pendant Light Shade Industrial Geometric Ceiling Pendant Light Shade for Wall Light Kitchen Living Room Hallway",
+    "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+   },
+   "accepted_value": "Lampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Easy Fit Modern Indoor Geometric Wall Kitchen Living Room Hallway",
+   "pre_post_value": "Lampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Easy Fit Light Pendant Modern Ceiling Lighting Shade Ceiling for Indoor Pendant Light Shade Industrial Geometric Ceiling Pendant Light Shade for Wall Light Kitchen Living Room Hallway"
   },
   "B0CBLWLZ4W|WCWDBM2PK+RPR44WH2PK|6": {
    "asin": "B0CBLWLZ4W",
@@ -189,8 +564,8 @@
    "next_due": null,
    "last_dry_run": {
     "event": "weekly check",
-    "week": "2026-09-28",
-    "at": "2026-09-29T16:04:24",
+    "week": "2026-10-05",
+    "at": "2026-10-05T09:35:08",
     "mode": "dry_run",
     "status_before": "Awaiting first weekly check",
     "live_before": "",
@@ -213,7 +588,9 @@
     "status_after": "No backend keywords (nothing to clean)",
     "action": "no POST",
     "detail": "the live listing has no backend keywords"
-   }
+   },
+   "live_updates": [],
+   "live_value": null
   },
   "B0CBLWLZ4W|WCWDBM2PK+RPR44WH2PK_AMD|6": {
    "asin": "B0CBLWLZ4W",
@@ -234,8 +611,8 @@
    "next_due": null,
    "last_dry_run": {
     "event": "weekly check",
-    "week": "2026-09-28",
-    "at": "2026-09-29T16:04:24",
+    "week": "2026-10-05",
+    "at": "2026-10-05T09:35:08",
     "mode": "dry_run",
     "status_before": "Awaiting first weekly check",
     "live_before": "",
@@ -258,7 +635,9 @@
     "status_after": "No backend keywords (nothing to clean)",
     "action": "no POST",
     "detail": "the live listing has no backend keywords"
-   }
+   },
+   "live_updates": [],
+   "live_value": null
   },
   "B0CBLWLZ4W|WCWDBM2PK+RPR44WH2PK_DCVV|8": {
    "asin": "B0CBLWLZ4W",
@@ -279,13 +658,15 @@
    "next_due": null,
    "last_dry_run": {
     "event": "weekly check",
-    "week": "2026-09-28",
-    "at": "2026-09-29T16:04:24",
+    "week": "2026-10-05",
+    "at": "2026-10-05T09:35:08",
     "mode": "dry_run",
     "status_before": "Awaiting first weekly check",
     "status_after": "Read Failed (not in the Listing Management feed / identity mismatch)",
     "detail": "listing not in the Listing Management active feed"
-   }
+   },
+   "live_updates": [],
+   "live_value": null
   },
   "B0DTHZ1JX5|WCDTBM3PK+RPR44WH3PK AM|8": {
    "asin": "B0DTHZ1JX5",
@@ -296,7 +677,7 @@
    "report_row": "B0DTHZ1JX5|WCDTBM3PK+RPR44WH3PK AM",
    "submission_id": "b425b459ece84d8e9addd106f09a71b7",
    "proposed": "black wire lampshade, light shade, cage metal shades ceiling, lamp ceilings, geometric industrial",
-   "status": "POST Accepted — Live Verification Pending",
+   "status": "POST Accepted — Monitoring",
    "first_verified_at": null,
    "last_verified_at": null,
    "last_post_at": "2026-09-28T17:22:18",
@@ -311,7 +692,76 @@
      "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
     }
    ],
-   "next_due": "2026-10-05"
+   "next_due": "2026-10-05",
+   "live_updates": [
+    {
+     "date": "2026-09-29",
+     "confirmed_at": "2026-09-28T17:22:18",
+     "source": "original submission POST Accepted (common monitoring anchor)",
+     "user_reported_date": null,
+     "value": "black wire lampshade, light shade, cage metal shades ceiling, lamp ceilings, geometric industrial"
+    }
+   ],
+   "live_value": "black wire lampshade, light shade, cage metal shades ceiling, lamp ceilings, geometric industrial",
+   "last_dry_run": {
+    "event": "weekly check",
+    "week": "2026-10-05",
+    "at": "2026-10-05T09:35:08",
+    "mode": "dry_run",
+    "status_before": "POST Accepted — Monitoring",
+    "live_before": "black wire lampshade, black wire light shade, cage light shade, wire lampshade, black metal light shades ceiling, black metal light shade, metal lamp shades ceilings, black metal lampshade, black light shades, black light shade, geometric lampshade, industrial light shade,",
+    "live_entries": [
+     "black wire lampshade, black wire light shade, cage light shade, wire lampshade, black metal light shades ceiling, black metal light shade, metal lamp shades ceilings, black metal lampshade, black light shades, black light shade, geometric lampshade, industrial light shade,"
+    ],
+    "cleaned": "black wire lampshade, light shade, cage metal shades ceiling, lamp ceilings, geometric industrial",
+    "duplicate_issue": true,
+    "issue": "Duplicate words",
+    "removed_words": [
+     "black",
+     "wire",
+     "light",
+     "shade,",
+     "wire",
+     "lampshade,",
+     "black",
+     "light",
+     "black",
+     "metal",
+     "light",
+     "shade,",
+     "metal",
+     "shades",
+     "black",
+     "metal",
+     "lampshade,",
+     "black",
+     "light",
+     "shades,",
+     "black",
+     "light",
+     "shade,",
+     "lampshade,",
+     "light",
+     "shade,"
+    ],
+    "repeated_entries": [],
+    "original_meta": {
+     "entries": 1,
+     "words": 39,
+     "bytes": 273
+    },
+    "cleaned_meta": {
+     "entries": 1,
+     "words": 13,
+     "bytes": 97
+    },
+    "status_after": "POST Accepted — Monitoring",
+    "action": "no POST",
+    "live_after": "black wire lampshade, black wire light shade, cage light shade, wire lampshade, black metal light shades ceiling, black metal light shade, metal lamp shades ceilings, black metal lampshade, black light shades, black light shade, geometric lampshade, industrial light shade,",
+    "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+   },
+   "accepted_value": "black wire lampshade, light shade, cage metal shades ceiling, lamp ceilings, geometric industrial",
+   "pre_post_value": "black wire lampshade, black wire light shade, cage light shade, wire lampshade, black metal light shades ceiling, black metal light shade, metal lamp shades ceilings, black metal lampshade, black light shades, black light shade, geometric lampshade, industrial light shade,"
   },
   "B0D9RQQZYB|WCDCBM3PK+RPR44WH3PK M|8": {
    "asin": "B0D9RQQZYB",
@@ -322,7 +772,7 @@
    "report_row": "B0D9RQQZYB|WCDCBM3PK+RPR44WH3PK M",
    "submission_id": "170bd2f642ab4e1d887d54134782267d",
    "proposed": "lamp shades ceiling light shade lampshades for lights fittings ceilings lampshade rattan living room iron wire cages gold lamps metal black copper",
-   "status": "POST Accepted — Live Verification Pending",
+   "status": "POST Accepted — Monitoring",
    "first_verified_at": null,
    "last_verified_at": null,
    "last_post_at": "2026-09-28T17:22:34",
@@ -337,7 +787,108 @@
      "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
     }
    ],
-   "next_due": "2026-10-05"
+   "next_due": "2026-10-05",
+   "live_updates": [
+    {
+     "date": "2026-09-29",
+     "confirmed_at": "2026-09-28T17:22:34",
+     "source": "original submission POST Accepted (common monitoring anchor)",
+     "user_reported_date": null,
+     "value": "lamp shades ceiling light shade lampshades for lights fittings ceilings lampshade rattan living room iron wire cages gold lamps metal black copper"
+    }
+   ],
+   "live_value": "lamp shades ceiling light shade lampshades for lights fittings ceilings lampshade rattan living room iron wire cages gold lamps metal black copper",
+   "last_dry_run": {
+    "event": "weekly check",
+    "week": "2026-10-05",
+    "at": "2026-10-05T09:35:08",
+    "mode": "dry_run",
+    "status_before": "POST Accepted — Monitoring",
+    "live_before": "lamp shades ceiling light shade lamp shade lampshades for ceiling lights ceiling light shade light shade ceiling light fittings ceilings lampshade rattan lampshade light shades light shades ceiling living room lampshades ceiling lampshades iron wire cages lamp shades ceiling light shade ceiling light shade lampshade for ceiling lampshade gold light shade lamps shades metal lampshade lamp shade ceiling black wire lampshade copper ceiling lights copper light shade",
+    "live_entries": [
+     "lamp shades ceiling light shade lamp shade lampshades for ceiling lights ceiling light shade light shade ceiling light fittings ceilings lampshade rattan lampshade light shades light shades ceiling living room lampshades ceiling lampshades",
+     " iron wire cages",
+     " lamp shades ceiling",
+     " light shade ceiling",
+     " light shade",
+     " lampshade for ceiling",
+     " lampshade",
+     " gold light shade",
+     "lamps shades",
+     "metal lampshade",
+     "lamp shade ceiling",
+     "black wire lampshade",
+     "copper ceiling lights",
+     "copper light shade"
+    ],
+    "cleaned": "lamp shades ceiling light shade lampshades for lights fittings ceilings lampshade rattan living room iron wire cages gold lamps metal black copper",
+    "duplicate_issue": true,
+    "issue": "Duplicate words",
+    "removed_words": [
+     "lamp",
+     "shade",
+     "ceiling",
+     "ceiling",
+     "light",
+     "shade",
+     "light",
+     "shade",
+     "ceiling",
+     "light",
+     "lampshade",
+     "light",
+     "shades",
+     "light",
+     "shades",
+     "ceiling",
+     "lampshades",
+     "ceiling",
+     "lampshades",
+     "lamp",
+     "shades",
+     "ceiling",
+     "light",
+     "shade",
+     "ceiling",
+     "light",
+     "shade",
+     "lampshade",
+     "for",
+     "ceiling",
+     "lampshade",
+     "light",
+     "shade",
+     "shades",
+     "lampshade",
+     "lamp",
+     "shade",
+     "ceiling",
+     "wire",
+     "lampshade",
+     "ceiling",
+     "lights",
+     "copper",
+     "light",
+     "shade"
+    ],
+    "repeated_entries": [],
+    "original_meta": {
+     "entries": 14,
+     "words": 67,
+     "bytes": 466
+    },
+    "cleaned_meta": {
+     "entries": 1,
+     "words": 22,
+     "bytes": 146
+    },
+    "status_after": "POST Accepted — Monitoring",
+    "action": "no POST",
+    "live_after": "lamp shades ceiling light shade lamp shade lampshades for ceiling lights ceiling light shade light shade ceiling light fittings ceilings lampshade rattan lampshade light shades light shades ceiling living room lampshades ceiling lampshades iron wire cages lamp shades ceiling light shade ceiling light shade lampshade for ceiling lampshade gold light shade lamps shades metal lampshade lamp shade ceiling black wire lampshade copper ceiling lights copper light shade",
+    "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+   },
+   "accepted_value": "lamp shades ceiling light shade lampshades for lights fittings ceilings lampshade rattan living room iron wire cages gold lamps metal black copper",
+   "pre_post_value": "lamp shades ceiling light shade lamp shade lampshades for ceiling lights ceiling light shade light shade ceiling light fittings ceilings lampshade rattan lampshade light shades light shades ceiling living room lampshades ceiling lampshades iron wire cages lamp shades ceiling light shade ceiling light shade lampshade for ceiling lampshade gold light shade lamps shades metal lampshade lamp shade ceiling black wire lampshade copper ceiling lights copper light shade"
   },
   "B0D9RQQZYB|WCDCBM3PK+RPR44WH3PK_AB|8": {
    "asin": "B0D9RQQZYB",
@@ -348,7 +899,7 @@
    "report_row": "B0D9RQQZYB|WCDCBM3PK+RPR44WH3PK_AB",
    "submission_id": "f8b4f746eae247109cd3f23433283284",
    "proposed": "Metal Lamp Shades, Wire Cage Light Shade, Lip-Less Cover, Replacement for Pendant Wall Sconce, Black Ceiling Basket Lighting Fitting & Industrial Style Indoor",
-   "status": "POST Accepted — Live Verification Pending",
+   "status": "POST Accepted — Monitoring",
    "first_verified_at": null,
    "last_verified_at": null,
    "last_post_at": "2026-09-28T17:22:49",
@@ -363,7 +914,70 @@
      "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
     }
    ],
-   "next_due": "2026-10-05"
+   "next_due": "2026-10-05",
+   "live_updates": [
+    {
+     "date": "2026-09-29",
+     "confirmed_at": "2026-09-28T17:22:49",
+     "source": "original submission POST Accepted (common monitoring anchor)",
+     "user_reported_date": null,
+     "value": "Metal Lamp Shades, Wire Cage Light Shade, Lip-Less Cover, Replacement for Pendant Wall Sconce, Black Ceiling Basket Lighting Fitting & Industrial Style Indoor"
+    }
+   ],
+   "live_value": "Metal Lamp Shades, Wire Cage Light Shade, Lip-Less Cover, Replacement for Pendant Wall Sconce, Black Ceiling Basket Lighting Fitting & Industrial Style Indoor",
+   "last_dry_run": {
+    "event": "weekly check",
+    "week": "2026-10-05",
+    "at": "2026-10-05T09:35:08",
+    "mode": "dry_run",
+    "status_before": "POST Accepted — Monitoring",
+    "live_before": "Metal Lamp Shades, Wire Cage Light Shade, Lip-Less Light Cover, Replacement for Pendant Light, Wall Sconce, Black Black Ceiling Light Wire Basket Metal Basket Pendant Lighting Ceiling Light Shade, Ceiling Fitting Light & Industrial Style Light for Indoor Pendant Light Shade lamp Shade",
+    "live_entries": [
+     "Metal Lamp Shades, Wire Cage Light Shade, Lip-Less Light Cover, Replacement for Pendant Light, Wall Sconce, Black Black Ceiling Light Wire Basket Metal Basket Pendant Lighting Ceiling Light Shade, Ceiling Fitting Light & Industrial Style Light for Indoor Pendant Light Shade lamp Shade"
+    ],
+    "cleaned": "Metal Lamp Shades, Wire Cage Light Shade, Lip-Less Cover, Replacement for Pendant Wall Sconce, Black Ceiling Basket Lighting Fitting & Industrial Style Indoor",
+    "duplicate_issue": true,
+    "issue": "Duplicate words",
+    "removed_words": [
+     "Light",
+     "Light,",
+     "Black",
+     "Light",
+     "Wire",
+     "Metal",
+     "Basket",
+     "Pendant",
+     "Ceiling",
+     "Light",
+     "Shade,",
+     "Ceiling",
+     "Light",
+     "Light",
+     "for",
+     "Pendant",
+     "Light",
+     "Shade",
+     "lamp",
+     "Shade"
+    ],
+    "repeated_entries": [],
+    "original_meta": {
+     "entries": 1,
+     "words": 43,
+     "bytes": 285
+    },
+    "cleaned_meta": {
+     "entries": 1,
+     "words": 23,
+     "bytes": 158
+    },
+    "status_after": "POST Accepted — Monitoring",
+    "action": "no POST",
+    "live_after": "Metal Lamp Shades, Wire Cage Light Shade, Lip-Less Light Cover, Replacement for Pendant Light, Wall Sconce, Black Black Ceiling Light Wire Basket Metal Basket Pendant Lighting Ceiling Light Shade, Ceiling Fitting Light & Industrial Style Light for Indoor Pendant Light Shade lamp Shade",
+    "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+   },
+   "accepted_value": "Metal Lamp Shades, Wire Cage Light Shade, Lip-Less Cover, Replacement for Pendant Wall Sconce, Black Ceiling Basket Lighting Fitting & Industrial Style Indoor",
+   "pre_post_value": "Metal Lamp Shades, Wire Cage Light Shade, Lip-Less Light Cover, Replacement for Pendant Light, Wall Sconce, Black Black Ceiling Light Wire Basket Metal Basket Pendant Lighting Ceiling Light Shade, Ceiling Fitting Light & Industrial Style Light for Indoor Pendant Light Shade lamp Shade"
   },
   "B0DTPB2YC2|WCB2BM3PK+RPR44WH3PK BM_|8": {
    "asin": "B0DTPB2YC2",
@@ -374,7 +988,7 @@
    "report_row": "B0DTPB2YC2|WCB2BM3PK+RPR44WH3PK BM_",
    "submission_id": "754e70406993415dbb306e72e623c75b",
    "proposed": "Matte Black and Acrylic Gem Moroccan Style Chandelier Pendant Light Shade Fitting with Clear Beads | 11w | 24cm Diameter by Unique Designed Metal Circular Floral Decor | 30cm | Maximum 11watt LED Allowed",
-   "status": "POST Accepted — Live Verification Pending",
+   "status": "POST Accepted — Monitoring",
    "first_verified_at": null,
    "last_verified_at": null,
    "last_post_at": "2026-09-28T17:23:04",
@@ -389,7 +1003,58 @@
      "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
     }
    ],
-   "next_due": "2026-10-05"
+   "next_due": "2026-10-05",
+   "live_updates": [
+    {
+     "date": "2026-09-29",
+     "confirmed_at": "2026-09-28T17:23:04",
+     "source": "original submission POST Accepted (common monitoring anchor)",
+     "user_reported_date": null,
+     "value": "Matte Black and Acrylic Gem Moroccan Style Chandelier Pendant Light Shade Fitting with Clear Beads | 11w | 24cm Diameter by Unique Designed Metal Circular Floral Decor | 30cm | Maximum 11watt LED Allowed"
+    }
+   ],
+   "live_value": "Matte Black and Acrylic Gem Moroccan Style Chandelier Pendant Light Shade Fitting with Clear Beads | 11w | 24cm Diameter by Unique Designed Metal Circular Floral Decor | 30cm | Maximum 11watt LED Allowed",
+   "last_dry_run": {
+    "event": "weekly check",
+    "week": "2026-10-05",
+    "at": "2026-10-05T09:35:08",
+    "mode": "dry_run",
+    "status_before": "POST Accepted — Monitoring",
+    "live_before": "Matte Black and Acrylic Gem Moroccan Style Chandelier Pendant Light Shade Fitting with Clear Beads | 11w | 24cm Diameter by Unique Moroccan Designed Matte Black Metal Circular Pendant Light Shade with Floral Decor | 30cm Diameter | Maximum 11watt LED Allowed",
+    "live_entries": [
+     "Matte Black and Acrylic Gem Moroccan Style Chandelier Pendant Light Shade Fitting with Clear Beads | 11w | 24cm Diameter by Unique Moroccan Designed Matte Black Metal Circular Pendant Light Shade with Floral Decor | 30cm Diameter | Maximum 11watt LED Allowed"
+    ],
+    "cleaned": "Matte Black and Acrylic Gem Moroccan Style Chandelier Pendant Light Shade Fitting with Clear Beads | 11w | 24cm Diameter by Unique Designed Metal Circular Floral Decor | 30cm | Maximum 11watt LED Allowed",
+    "duplicate_issue": true,
+    "issue": "Duplicate words",
+    "removed_words": [
+     "Moroccan",
+     "Matte",
+     "Black",
+     "Pendant",
+     "Light",
+     "Shade",
+     "with",
+     "Diameter"
+    ],
+    "repeated_entries": [],
+    "original_meta": {
+     "entries": 1,
+     "words": 42,
+     "bytes": 258
+    },
+    "cleaned_meta": {
+     "entries": 1,
+     "words": 34,
+     "bytes": 203
+    },
+    "status_after": "POST Accepted — Monitoring",
+    "action": "no POST",
+    "live_after": "Matte Black and Acrylic Gem Moroccan Style Chandelier Pendant Light Shade Fitting with Clear Beads | 11w | 24cm Diameter by Unique Moroccan Designed Matte Black Metal Circular Pendant Light Shade with Floral Decor | 30cm Diameter | Maximum 11watt LED Allowed",
+    "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+   },
+   "accepted_value": "Matte Black and Acrylic Gem Moroccan Style Chandelier Pendant Light Shade Fitting with Clear Beads | 11w | 24cm Diameter by Unique Designed Metal Circular Floral Decor | 30cm | Maximum 11watt LED Allowed",
+   "pre_post_value": "Matte Black and Acrylic Gem Moroccan Style Chandelier Pendant Light Shade Fitting with Clear Beads | 11w | 24cm Diameter by Unique Moroccan Designed Matte Black Metal Circular Pendant Light Shade with Floral Decor | 30cm Diameter | Maximum 11watt LED Allowed"
   },
   "B0CDBYNK9B|WCB3BS+RPR44WH C|8": {
    "asin": "B0CDBYNK9B",
@@ -400,7 +1065,7 @@
    "report_row": "B0CDBYNK9B|WCB3BS+RPR44WH C",
    "submission_id": "404230ccfa88456ab256934669708bbf",
    "proposed": "Metal Lampshade Drum with Flower Pattern for Pendant Lamps Black Lamp Shades 4.7×7.9in Table Floor Light Modern Ornate Shabby Chic Ceiling Shade | Lights, Home Décor & Improvement Essential | 18cm Width Unique and Beautiful Matte Forest Design | Escapes Through The Gaps Casts Against Walls by",
-   "status": "POST Accepted — Live Verification Pending",
+   "status": "POST Accepted — Monitoring",
    "first_verified_at": null,
    "last_verified_at": null,
    "last_post_at": "2026-09-28T17:23:19",
@@ -415,7 +1080,69 @@
      "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
     }
    ],
-   "next_due": "2026-10-05"
+   "next_due": "2026-10-05",
+   "live_updates": [
+    {
+     "date": "2026-09-29",
+     "confirmed_at": "2026-09-28T17:23:19",
+     "source": "original submission POST Accepted (common monitoring anchor)",
+     "user_reported_date": null,
+     "value": "Metal Lampshade Drum with Flower Pattern for Pendant Lamps Black Lamp Shades 4.7×7.9in Table Floor Light Modern Ornate Shabby Chic Ceiling Shade | Lights, Home Décor & Improvement Essential | 18cm Width Unique and Beautiful Matte Forest Design | Escapes Through The Gaps Casts Against Walls by"
+    }
+   ],
+   "live_value": "Metal Lampshade Drum with Flower Pattern for Pendant Lamps Black Lamp Shades 4.7×7.9in Table Floor Light Modern Ornate Shabby Chic Ceiling Shade | Lights, Home Décor & Improvement Essential | 18cm Width Unique and Beautiful Matte Forest Design | Escapes Through The Gaps Casts Against Walls by",
+   "last_dry_run": {
+    "event": "weekly check",
+    "week": "2026-10-05",
+    "at": "2026-10-05T09:35:08",
+    "mode": "dry_run",
+    "status_before": "POST Accepted — Monitoring",
+    "live_before": "Metal Lampshade Metal Drum Lampshade with Flower Pattern for Pendant Lamps Black Pendant Lamp Shades 4.7×7.9in for Table Lamps Floor Light Modern Ornate Shabby Chic Ceiling Light Shade | Pendant Lights, Home Décor & Improvement Essential | 18cm Shade Width Unique and Beautiful Matte Black Metal Forest Design Pendant Shade | Light Escapes Through The Gaps and Casts The Forest Against The Walls and Ceiling by",
+    "live_entries": [
+     "Metal Lampshade Metal Drum Lampshade with Flower Pattern for Pendant Lamps Black Pendant Lamp Shades 4.7×7.9in for Table Lamps Floor Light Modern Ornate Shabby Chic Ceiling Light Shade | Pendant Lights, Home Décor & Improvement Essential | 18cm Shade Width Unique and Beautiful Matte Black Metal Forest Design Pendant Shade | Light Escapes Through The Gaps and Casts The Forest Against The Walls and Ceiling by"
+    ],
+    "cleaned": "Metal Lampshade Drum with Flower Pattern for Pendant Lamps Black Lamp Shades 4.7×7.9in Table Floor Light Modern Ornate Shabby Chic Ceiling Shade | Lights, Home Décor & Improvement Essential | 18cm Width Unique and Beautiful Matte Forest Design | Escapes Through The Gaps Casts Against Walls by",
+    "duplicate_issue": true,
+    "issue": "Duplicate words",
+    "removed_words": [
+     "Metal",
+     "Lampshade",
+     "Pendant",
+     "for",
+     "Lamps",
+     "Light",
+     "Pendant",
+     "Shade",
+     "Black",
+     "Metal",
+     "Pendant",
+     "Shade",
+     "Light",
+     "and",
+     "The",
+     "Forest",
+     "The",
+     "and",
+     "Ceiling"
+    ],
+    "repeated_entries": [],
+    "original_meta": {
+     "entries": 1,
+     "words": 66,
+     "bytes": 412
+    },
+    "cleaned_meta": {
+     "entries": 1,
+     "words": 47,
+     "bytes": 295
+    },
+    "status_after": "POST Accepted — Monitoring",
+    "action": "no POST",
+    "live_after": "Metal Lampshade Metal Drum Lampshade with Flower Pattern for Pendant Lamps Black Pendant Lamp Shades 4.7×7.9in for Table Lamps Floor Light Modern Ornate Shabby Chic Ceiling Light Shade | Pendant Lights, Home Décor & Improvement Essential | 18cm Shade Width Unique and Beautiful Matte Black Metal Forest Design Pendant Shade | Light Escapes Through The Gaps and Casts The Forest Against The Walls and Ceiling by",
+    "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+   },
+   "accepted_value": "Metal Lampshade Drum with Flower Pattern for Pendant Lamps Black Lamp Shades 4.7×7.9in Table Floor Light Modern Ornate Shabby Chic Ceiling Shade | Lights, Home Décor & Improvement Essential | 18cm Width Unique and Beautiful Matte Forest Design | Escapes Through The Gaps Casts Against Walls by",
+   "pre_post_value": "Metal Lampshade Metal Drum Lampshade with Flower Pattern for Pendant Lamps Black Pendant Lamp Shades 4.7×7.9in for Table Lamps Floor Light Modern Ornate Shabby Chic Ceiling Light Shade | Pendant Lights, Home Décor & Improvement Essential | 18cm Shade Width Unique and Beautiful Matte Black Metal Forest Design Pendant Shade | Light Escapes Through The Gaps and Casts The Forest Against The Walls and Ceiling by"
   },
   "B09MQSJ72N|WCB4BC+RPR44WH|8": {
    "asin": "B09MQSJ72N",
@@ -426,7 +1153,7 @@
    "report_row": "B09MQSJ72N|WCB4BC+RPR44WH",
    "submission_id": "6a06940215214800ba0091b8bf563c2e",
    "proposed": "Modern Ornate Shabby Chic Ceiling Light Shade | Pendant Lights, Home Décor & Improvement Essential | 18cm Width Metal Lampshade Drum with Flower Pattern for Lamps Black Lamp Shades 4.7×7.9in Table Floor lampshades Industrial UK cages Hanging Bedroom",
-   "status": "POST Accepted — Live Verification Pending",
+   "status": "POST Accepted — Monitoring",
    "first_verified_at": null,
    "last_verified_at": null,
    "last_post_at": "2026-09-28T17:23:35",
@@ -441,7 +1168,95 @@
      "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
     }
    ],
-   "next_due": "2026-10-05"
+   "next_due": "2026-10-05",
+   "live_updates": [
+    {
+     "date": "2026-09-29",
+     "confirmed_at": "2026-09-28T17:23:35",
+     "source": "original submission POST Accepted (common monitoring anchor)",
+     "user_reported_date": null,
+     "value": "Modern Ornate Shabby Chic Ceiling Light Shade | Pendant Lights, Home Décor & Improvement Essential | 18cm Width Metal Lampshade Drum with Flower Pattern for Lamps Black Lamp Shades 4.7×7.9in Table Floor lampshades Industrial UK cages Hanging Bedroom"
+    }
+   ],
+   "live_value": "Modern Ornate Shabby Chic Ceiling Light Shade | Pendant Lights, Home Décor & Improvement Essential | 18cm Width Metal Lampshade Drum with Flower Pattern for Lamps Black Lamp Shades 4.7×7.9in Table Floor lampshades Industrial UK cages Hanging Bedroom",
+   "last_dry_run": {
+    "event": "weekly check",
+    "week": "2026-10-05",
+    "at": "2026-10-05T09:35:08",
+    "mode": "dry_run",
+    "status_before": "POST Accepted — Monitoring",
+    "live_before": "Modern Ornate Shabby Chic Ceiling Light Shade | Pendant Lights, Home Décor & Improvement Essential | 18cm Shade Width Metal Lampshade Metal Drum Lampshade with Flower Pattern for Pendant Lamps Black Pendant Lamp Shades 4.7×7.9in for Table Lamps Floor Light Ceiling light shade Ceiling lampshades Pendant light shades Industrial ceiling light, Ceiling lampshade UK Pendant cages Light cages Cages Ceiling cages Light shades Hanging lampshade Bedroom lampshade Lampshades for floor lamps",
+    "live_entries": [
+     "Modern Ornate Shabby Chic Ceiling Light Shade | Pendant Lights, Home Décor & Improvement Essential | 18cm Shade Width Metal Lampshade Metal Drum Lampshade with Flower Pattern for Pendant Lamps Black Pendant Lamp Shades 4.7×7.9in for Table Lamps Floor Light",
+     " Ceiling light shade",
+     " Ceiling lampshades",
+     " Pendant light shades",
+     "Industrial ceiling light, Ceiling lampshade UK",
+     " Pendant cages",
+     " Light cages",
+     " Cages",
+     " Ceiling cages",
+     " Light shades",
+     " Hanging lampshade",
+     " Bedroom lampshade",
+     " Lampshades for floor lamps"
+    ],
+    "cleaned": "Modern Ornate Shabby Chic Ceiling Light Shade | Pendant Lights, Home Décor & Improvement Essential | 18cm Width Metal Lampshade Drum with Flower Pattern for Lamps Black Lamp Shades 4.7×7.9in Table Floor lampshades Industrial UK cages Hanging Bedroom",
+    "duplicate_issue": true,
+    "issue": "Duplicate words",
+    "removed_words": [
+     "Shade",
+     "Metal",
+     "Lampshade",
+     "Pendant",
+     "Pendant",
+     "for",
+     "Lamps",
+     "Light",
+     "Ceiling",
+     "light",
+     "shade",
+     "Ceiling",
+     "Pendant",
+     "light",
+     "shades",
+     "ceiling",
+     "light,",
+     "Ceiling",
+     "lampshade",
+     "Pendant",
+     "Light",
+     "cages",
+     "Cages",
+     "Ceiling",
+     "cages",
+     "Light",
+     "shades",
+     "lampshade",
+     "lampshade",
+     "Lampshades",
+     "for",
+     "floor",
+     "lamps"
+    ],
+    "repeated_entries": [],
+    "original_meta": {
+     "entries": 13,
+     "words": 71,
+     "bytes": 487
+    },
+    "cleaned_meta": {
+     "entries": 1,
+     "words": 38,
+     "bytes": 251
+    },
+    "status_after": "POST Accepted — Monitoring",
+    "action": "no POST",
+    "live_after": "Modern Ornate Shabby Chic Ceiling Light Shade | Pendant Lights, Home Décor & Improvement Essential | 18cm Shade Width Metal Lampshade Metal Drum Lampshade with Flower Pattern for Pendant Lamps Black Pendant Lamp Shades 4.7×7.9in for Table Lamps Floor Light Ceiling light shade Ceiling lampshades Pendant light shades Industrial ceiling light, Ceiling lampshade UK Pendant cages Light cages Cages Ceiling cages Light shades Hanging lampshade Bedroom lampshade Lampshades for floor lamps",
+    "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+   },
+   "accepted_value": "Modern Ornate Shabby Chic Ceiling Light Shade | Pendant Lights, Home Décor & Improvement Essential | 18cm Width Metal Lampshade Drum with Flower Pattern for Lamps Black Lamp Shades 4.7×7.9in Table Floor lampshades Industrial UK cages Hanging Bedroom",
+   "pre_post_value": "Modern Ornate Shabby Chic Ceiling Light Shade | Pendant Lights, Home Décor & Improvement Essential | 18cm Shade Width Metal Lampshade Metal Drum Lampshade with Flower Pattern for Pendant Lamps Black Pendant Lamp Shades 4.7×7.9in for Table Lamps Floor Light Ceiling light shade Ceiling lampshades Pendant light shades Industrial ceiling light, Ceiling lampshade UK Pendant cages Light cages Cages Ceiling cages Light shades Hanging lampshade Bedroom lampshade Lampshades for floor lamps"
   },
   "B0C43N2F3D|WCDTWH+RPR44WH|8": {
    "asin": "B0C43N2F3D",
@@ -452,7 +1267,7 @@
    "report_row": "B0C43N2F3D|WCDTWH+RPR44WH",
    "submission_id": "324c34a464c24b439fa5da5b5ea0e1cd",
    "proposed": "hanging lamp shade bulb cover wire ceiling lampshade cage for diy style industrial wall light fitting lampshades stylish metallic birds slim inside one oversized japanese designer cages elegant lighshade steel jewel scandi cube lamo coloured spiderman lavender patterned through crushed centre study moon binding wide cottage vintage shafe shades lights fittings hallway bathroom black bedroom",
-   "status": "POST Accepted — Live Verification Pending",
+   "status": "POST Accepted — Monitoring",
    "first_verified_at": null,
    "last_verified_at": null,
    "last_post_at": "2026-09-28T17:23:50",
@@ -467,7 +1282,66 @@
      "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
     }
    ],
-   "next_due": "2026-10-05"
+   "next_due": "2026-10-05",
+   "live_updates": [
+    {
+     "date": "2026-09-29",
+     "confirmed_at": "2026-09-28T17:23:50",
+     "source": "original submission POST Accepted (common monitoring anchor)",
+     "user_reported_date": null,
+     "value": "hanging lamp shade bulb cover wire ceiling lampshade cage for diy style industrial wall light fitting lampshades stylish metallic birds slim inside one oversized japanese designer cages elegant lighshade steel jewel scandi cube lamo coloured spiderman lavender patterned through crushed centre study moon binding wide cottage vintage shafe shades lights fittings hallway bathroom black bedroom"
+    }
+   ],
+   "live_value": "hanging lamp shade bulb cover wire ceiling lampshade cage for diy style industrial wall light fitting lampshades stylish metallic birds slim inside one oversized japanese designer cages elegant lighshade steel jewel scandi cube lamo coloured spiderman lavender patterned through crushed centre study moon binding wide cottage vintage shafe shades lights fittings hallway bathroom black bedroom",
+   "last_dry_run": {
+    "event": "weekly check",
+    "week": "2026-10-05",
+    "at": "2026-10-05T09:35:08",
+    "mode": "dry_run",
+    "status_before": "POST Accepted — Monitoring",
+    "live_before": "hanging lamp shade bulb cover wire shade ceiling lampshade wire cage for diy style industrial wall light fitting lampshades wire shade stylish metallic birds slim inside one ceiling oversized japanese designer cages elegant lighshade steel wire cage shade jewel scandi cube lamo light coloured spiderman lavender patterned bulb through crushed centre study moon binding wide cottage vintage light shade shafe lamp shades lampshade lights fittings hallway bathroom black bedroom bathroom bulb",
+    "live_entries": [
+     "hanging lamp shade bulb cover wire shade ceiling lampshade wire cage for diy style industrial wall light fitting lampshades wire shade stylish metallic birds slim inside one ceiling oversized japanese designer cages elegant lighshade steel wire cage shade jewel scandi cube lamo light coloured spiderman lavender patterned bulb through crushed centre study moon binding wide cottage vintage light shade shafe lamp shades lampshade lights fittings hallway bathroom black bedroom bathroom bulb"
+    ],
+    "cleaned": "hanging lamp shade bulb cover wire ceiling lampshade cage for diy style industrial wall light fitting lampshades stylish metallic birds slim inside one oversized japanese designer cages elegant lighshade steel jewel scandi cube lamo coloured spiderman lavender patterned through crushed centre study moon binding wide cottage vintage shafe shades lights fittings hallway bathroom black bedroom",
+    "duplicate_issue": true,
+    "issue": "Duplicate words",
+    "removed_words": [
+     "shade",
+     "wire",
+     "wire",
+     "shade",
+     "ceiling",
+     "wire",
+     "cage",
+     "shade",
+     "light",
+     "bulb",
+     "light",
+     "shade",
+     "lamp",
+     "lampshade",
+     "bathroom",
+     "bulb"
+    ],
+    "repeated_entries": [],
+    "original_meta": {
+     "entries": 1,
+     "words": 71,
+     "bytes": 491
+    },
+    "cleaned_meta": {
+     "entries": 1,
+     "words": 55,
+     "bytes": 393
+    },
+    "status_after": "POST Accepted — Monitoring",
+    "action": "no POST",
+    "live_after": "hanging lamp shade bulb cover wire shade ceiling lampshade wire cage for diy style industrial wall light fitting lampshades wire shade stylish metallic birds slim inside one ceiling oversized japanese designer cages elegant lighshade steel wire cage shade jewel scandi cube lamo light coloured spiderman lavender patterned bulb through crushed centre study moon binding wide cottage vintage light shade shafe lamp shades lampshade lights fittings hallway bathroom black bedroom bathroom bulb",
+    "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+   },
+   "accepted_value": "hanging lamp shade bulb cover wire ceiling lampshade cage for diy style industrial wall light fitting lampshades stylish metallic birds slim inside one oversized japanese designer cages elegant lighshade steel jewel scandi cube lamo coloured spiderman lavender patterned through crushed centre study moon binding wide cottage vintage shafe shades lights fittings hallway bathroom black bedroom",
+   "pre_post_value": "hanging lamp shade bulb cover wire shade ceiling lampshade wire cage for diy style industrial wall light fitting lampshades wire shade stylish metallic birds slim inside one ceiling oversized japanese designer cages elegant lighshade steel wire cage shade jewel scandi cube lamo light coloured spiderman lavender patterned bulb through crushed centre study moon binding wide cottage vintage light shade shafe lamp shades lampshade lights fittings hallway bathroom black bedroom bathroom bulb"
   },
   "B0D59PP6PC|WCB1BM2PK+RPR44WH2PK VD|6": {
    "asin": "B0D59PP6PC",
@@ -478,7 +1352,7 @@
    "report_row": "B0D59PP6PC|WCB1BM2PK+RPR44WH2PK VD",
    "submission_id": "0ac83a65a93c42bfa828518068fea615",
    "proposed": "Lampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Lamp Shades Indoor Geometric Wall Kitchen Living Room Hallway",
-   "status": "POST Accepted — Live Verification Pending",
+   "status": "POST Accepted — Monitoring",
    "first_verified_at": null,
    "last_verified_at": null,
    "last_post_at": "2026-09-28T17:24:05",
@@ -493,7 +1367,65 @@
      "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
     }
    ],
-   "next_due": "2026-10-05"
+   "next_due": "2026-10-05",
+   "live_updates": [
+    {
+     "date": "2026-09-29",
+     "confirmed_at": "2026-09-28T17:24:05",
+     "source": "original submission POST Accepted (common monitoring anchor)",
+     "user_reported_date": null,
+     "value": "Lampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Lamp Shades Indoor Geometric Wall Kitchen Living Room Hallway"
+    }
+   ],
+   "live_value": "Lampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Lamp Shades Indoor Geometric Wall Kitchen Living Room Hallway",
+   "last_dry_run": {
+    "event": "weekly check",
+    "week": "2026-10-05",
+    "at": "2026-10-05T09:35:08",
+    "mode": "dry_run",
+    "status_before": "POST Accepted — Monitoring",
+    "live_before": "Lampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Ceiling Light Shade, Lamp Shades Ceiling for Indoor Pendant Light Shade Industrial Geometric Ceiling Pendant Light Shade for Wall Light Kitchen Living Room Hallway",
+    "live_entries": [
+     "Lampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Ceiling Light Shade, Lamp Shades Ceiling for Indoor Pendant Light Shade Industrial Geometric Ceiling Pendant Light Shade for Wall Light Kitchen Living Room Hallway"
+    ],
+    "cleaned": "Lampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Lamp Shades Indoor Geometric Wall Kitchen Living Room Hallway",
+    "duplicate_issue": true,
+    "issue": "Duplicate words",
+    "removed_words": [
+     "Ceiling",
+     "Light",
+     "Shade,",
+     "Ceiling",
+     "for",
+     "Pendant",
+     "Light",
+     "Shade",
+     "Industrial",
+     "Ceiling",
+     "Pendant",
+     "Light",
+     "Shade",
+     "for",
+     "Light"
+    ],
+    "repeated_entries": [],
+    "original_meta": {
+     "entries": 1,
+     "words": 33,
+     "bytes": 231
+    },
+    "cleaned_meta": {
+     "entries": 1,
+     "words": 18,
+     "bytes": 129
+    },
+    "status_after": "POST Accepted — Monitoring",
+    "action": "no POST",
+    "live_after": "Lampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Ceiling Light Shade, Lamp Shades Ceiling for Indoor Pendant Light Shade Industrial Geometric Ceiling Pendant Light Shade for Wall Light Kitchen Living Room Hallway",
+    "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+   },
+   "accepted_value": "Lampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Lamp Shades Indoor Geometric Wall Kitchen Living Room Hallway",
+   "pre_post_value": "Lampshade for Ceiling Light Shade Industrial Metal Pendant Lighting Ceiling Light Shade, Lamp Shades Ceiling for Indoor Pendant Light Shade Industrial Geometric Ceiling Pendant Light Shade for Wall Light Kitchen Living Room Hallway"
   },
   "B0C43L42DK|WCDTRE+RPR44WH|8": {
    "asin": "B0C43L42DK",
@@ -504,9 +1436,9 @@
    "report_row": "B0C43L42DK|WCDTRE+RPR44WH",
    "submission_id": "7287d2fc89474d549a74bb5b3e02e572",
    "proposed": "Metal Ceiling Lamp Shade, Geometric Lampshade with Reducer Ring, Pendant Wire Cage Light for Kitchen, Dinning Room, Bedroom, Hallway, Rose Gold",
-   "status": "POST Accepted — Live Verification Pending",
-   "first_verified_at": null,
-   "last_verified_at": null,
+   "status": "Live Verified",
+   "first_verified_at": "2026-10-01T11:29:03Z",
+   "last_verified_at": "2026-10-01T11:29:03Z",
    "last_post_at": "2026-09-28T17:24:20",
    "last_check_week": null,
    "post_attempts": 1,
@@ -517,9 +1449,27 @@
      "submission_id": "7287d2fc89474d549a74bb5b3e02e572",
      "proposed": "Metal Ceiling Lamp Shade, Geometric Lampshade with Reducer Ring, Pendant Wire Cage Light for Kitchen, Dinning Room, Bedroom, Hallway, Rose Gold",
      "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
+    },
+    {
+     "event": "evidence reconciliation",
+     "at": "2026-10-01T11:29:03Z",
+     "status_after": "Live Verified",
+     "detail": "Listing Management showed the submitted keywords (07_live_keyword_verification.json)"
     }
    ],
-   "next_due": "2026-10-05"
+   "next_due": "2026-10-08",
+   "live_updates": [
+    {
+     "date": "2026-09-29",
+     "confirmed_at": "2026-09-28T17:24:20",
+     "source": "original submission POST Accepted (common monitoring anchor)",
+     "user_reported_date": null,
+     "value": "Metal Ceiling Lamp Shade, Geometric Lampshade with Reducer Ring, Pendant Wire Cage Light for Kitchen, Dinning Room, Bedroom, Hallway, Rose Gold"
+    }
+   ],
+   "live_value": "Metal Ceiling Lamp Shade, Geometric Lampshade with Reducer Ring, Pendant Wire Cage Light for Kitchen, Dinning Room, Bedroom, Hallway, Rose Gold",
+   "accepted_value": "Metal Ceiling Lamp Shade, Geometric Lampshade with Reducer Ring, Pendant Wire Cage Light for Kitchen, Dinning Room, Bedroom, Hallway, Rose Gold",
+   "pre_post_value": "Metal Ceiling Lamp Shade, Geometric Lampshade with Reducer Ring, Pendant Wire Cage Light Shade for Kitchen, Dinning Room, Bedroom, Hallway, Rose Gold"
   },
   "B0D93PN1ZS|WCDTGR2PK+RPR44WH2PK|8": {
    "asin": "B0D93PN1ZS",
@@ -530,7 +1480,7 @@
    "report_row": "B0D93PN1ZS|WCDTGR2PK+RPR44WH2PK",
    "submission_id": "b4bdbebf01b14927bf6cd5ee6e46853b",
    "proposed": "cage light shade geometric lampshade copper wire industrial black metal lamp shades ceiling ceilings pendant",
-   "status": "POST Accepted — Live Verification Pending",
+   "status": "POST Accepted — Monitoring",
    "first_verified_at": null,
    "last_verified_at": null,
    "last_post_at": "2026-09-28T17:24:41",
@@ -545,7 +1495,87 @@
      "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
     }
    ],
-   "next_due": "2026-10-05"
+   "next_due": "2026-10-05",
+   "live_updates": [
+    {
+     "date": "2026-09-29",
+     "confirmed_at": "2026-09-28T17:24:41",
+     "source": "original submission POST Accepted (common monitoring anchor)",
+     "user_reported_date": null,
+     "value": "cage light shade geometric lampshade copper wire industrial black metal lamp shades ceiling ceilings pendant"
+    }
+   ],
+   "live_value": "cage light shade geometric lampshade copper wire industrial black metal lamp shades ceiling ceilings pendant",
+   "last_dry_run": {
+    "event": "weekly check",
+    "week": "2026-10-05",
+    "at": "2026-10-05T09:35:08",
+    "mode": "dry_run",
+    "status_before": "POST Accepted — Monitoring",
+    "live_before": "cage light shade geometric lampshade copper lampshade geometric light shade wire lampshade industrial light shade black wire lampshade black metal light shade metal lamp shade industrial metal lamp shades lamp shades ceiling black black metal light shades ceiling metal lamp shades ceilings black light shades black pendant light shade black lamp shades",
+    "live_entries": [
+     "cage light shade geometric lampshade copper lampshade geometric light shade wire lampshade industrial light shade black wire lampshade black metal light shade metal lamp shade industrial metal lamp shades lamp shades ceiling black black metal light shades ceiling metal lamp shades ceilings black light shades black pendant light shade black lamp shades"
+    ],
+    "cleaned": "cage light shade geometric lampshade copper wire industrial black metal lamp shades ceiling ceilings pendant",
+    "duplicate_issue": true,
+    "issue": "Duplicate words",
+    "removed_words": [
+     "lampshade",
+     "geometric",
+     "light",
+     "shade",
+     "lampshade",
+     "light",
+     "shade",
+     "wire",
+     "lampshade",
+     "black",
+     "light",
+     "shade",
+     "metal",
+     "shade",
+     "industrial",
+     "metal",
+     "lamp",
+     "lamp",
+     "shades",
+     "black",
+     "black",
+     "metal",
+     "light",
+     "shades",
+     "ceiling",
+     "metal",
+     "lamp",
+     "shades",
+     "black",
+     "light",
+     "shades",
+     "black",
+     "light",
+     "shade",
+     "black",
+     "lamp",
+     "shades"
+    ],
+    "repeated_entries": [],
+    "original_meta": {
+     "entries": 1,
+     "words": 52,
+     "bytes": 353
+    },
+    "cleaned_meta": {
+     "entries": 1,
+     "words": 15,
+     "bytes": 108
+    },
+    "status_after": "POST Accepted — Monitoring",
+    "action": "no POST",
+    "live_after": "cage light shade geometric lampshade copper lampshade geometric light shade wire lampshade industrial light shade black wire lampshade black metal light shade metal lamp shade industrial metal lamp shades lamp shades ceiling black black metal light shades ceiling metal lamp shades ceilings black light shades black pendant light shade black lamp shades",
+    "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+   },
+   "accepted_value": "cage light shade geometric lampshade copper wire industrial black metal lamp shades ceiling ceilings pendant",
+   "pre_post_value": "cage light shade geometric lampshade copper lampshade geometric light shade wire lampshade industrial light shade black wire lampshade black metal light shade metal lamp shade industrial metal lamp shades lamp shades ceiling black black metal light shades ceiling metal lamp shades ceilings black light shades black pendant light shade black lamp shades"
   },
   "B084RL7K8J|LSBLP4BSR|8": {
    "asin": "B084RL7K8J",
@@ -556,7 +1586,7 @@
    "report_row": "B084RL7K8J|LSBLP4BSR",
    "submission_id": "fa2860ea03a249598872ddde467b1b1c",
    "proposed": "geometric lampshade black cage light pendant Lampshades Ceiling shade shades Chandelier Hanging",
-   "status": "POST Accepted — Live Verification Pending",
+   "status": "POST Accepted — Monitoring",
    "first_verified_at": null,
    "last_verified_at": null,
    "last_post_at": "2026-09-28T17:24:56",
@@ -571,7 +1601,82 @@
      "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
     }
    ],
-   "next_due": "2026-10-05"
+   "next_due": "2026-10-05",
+   "live_updates": [
+    {
+     "date": "2026-09-29",
+     "confirmed_at": "2026-09-28T17:24:56",
+     "source": "original submission POST Accepted (common monitoring anchor)",
+     "user_reported_date": null,
+     "value": "geometric lampshade black cage light pendant Lampshades Ceiling shade shades Chandelier Hanging"
+    }
+   ],
+   "live_value": "geometric lampshade black cage light pendant Lampshades Ceiling shade shades Chandelier Hanging",
+   "last_dry_run": {
+    "event": "weekly check",
+    "week": "2026-10-05",
+    "at": "2026-10-05T09:35:08",
+    "mode": "dry_run",
+    "status_before": "POST Accepted — Monitoring",
+    "live_before": "geometric lampshade black cage light pendant black cage light Lampshades Ceiling light shade Ceiling lampshades Pendant light shades Light shade ceiling Chandelier lampshade Light shades Ceiling light shades Pendant shades Hanging lampshade",
+    "live_entries": [
+     "geometric lampshade black",
+     " cage light pendant",
+     " black cage light ",
+     "Lampshades",
+     " Ceiling light shade",
+     " Ceiling lampshades",
+     " Pendant light shades",
+     " Light shade ceiling",
+     " Chandelier lampshade",
+     " Light shades",
+     " Ceiling light shades",
+     "Pendant shades",
+     "Hanging lampshade"
+    ],
+    "cleaned": "geometric lampshade black cage light pendant Lampshades Ceiling shade shades Chandelier Hanging",
+    "duplicate_issue": true,
+    "issue": "Duplicate words",
+    "removed_words": [
+     "black",
+     "cage",
+     "light",
+     "light",
+     "Ceiling",
+     "lampshades",
+     "Pendant",
+     "light",
+     "Light",
+     "shade",
+     "ceiling",
+     "lampshade",
+     "Light",
+     "shades",
+     "Ceiling",
+     "light",
+     "shades",
+     "Pendant",
+     "shades",
+     "lampshade"
+    ],
+    "repeated_entries": [],
+    "original_meta": {
+     "entries": 13,
+     "words": 32,
+     "bytes": 240
+    },
+    "cleaned_meta": {
+     "entries": 1,
+     "words": 12,
+     "bytes": 95
+    },
+    "status_after": "POST Accepted — Monitoring",
+    "action": "no POST",
+    "live_after": "geometric lampshade black cage light pendant black cage light Lampshades Ceiling light shade Ceiling lampshades Pendant light shades Light shade ceiling Chandelier lampshade Light shades Ceiling light shades Pendant shades Hanging lampshade",
+    "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+   },
+   "accepted_value": "geometric lampshade black cage light pendant Lampshades Ceiling shade shades Chandelier Hanging",
+   "pre_post_value": "geometric lampshade black cage light pendant black cage light Lampshades Ceiling light shade Ceiling lampshades Pendant light shades Light shade ceiling Chandelier lampshade Light shades Ceiling light shades Pendant shades Hanging lampshade"
   },
   "B08VGPPCY1|WCDTBM+RPR44WH R|6": {
    "asin": "B08VGPPCY1",
@@ -582,7 +1687,7 @@
    "report_row": "B08VGPPCY1|WCDTBM+RPR44WH R",
    "submission_id": "e2238e75a41a4e5f8b3214e6cce379d5",
    "proposed": "lamp shades ceiling light shade lampshades for lights fittings ceilings lampshade rattan living room",
-   "status": "POST Accepted — Live Verification Pending",
+   "status": "POST Accepted — Monitoring",
    "first_verified_at": null,
    "last_verified_at": null,
    "last_post_at": "2026-09-28T17:25:11",
@@ -597,7 +1702,69 @@
      "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
     }
    ],
-   "next_due": "2026-10-05"
+   "next_due": "2026-10-05",
+   "live_updates": [
+    {
+     "date": "2026-09-29",
+     "confirmed_at": "2026-09-28T17:25:11",
+     "source": "original submission POST Accepted (common monitoring anchor)",
+     "user_reported_date": null,
+     "value": "lamp shades ceiling light shade lampshades for lights fittings ceilings lampshade rattan living room"
+    }
+   ],
+   "live_value": "lamp shades ceiling light shade lampshades for lights fittings ceilings lampshade rattan living room",
+   "last_dry_run": {
+    "event": "weekly check",
+    "week": "2026-10-05",
+    "at": "2026-10-05T09:35:08",
+    "mode": "dry_run",
+    "status_before": "POST Accepted — Monitoring",
+    "live_before": "lamp shades ceiling light shade lamp shade lampshades for ceiling lights ceiling light shade light shade ceiling light fittings ceilings lampshade rattan lampshade light shades light shades ceiling living room lampshades ceiling lampshades",
+    "live_entries": [
+     "lamp shades ceiling light shade lamp shade lampshades for ceiling lights ceiling light shade light shade ceiling light fittings ceilings lampshade rattan lampshade light shades light shades ceiling living room lampshades ceiling lampshades"
+    ],
+    "cleaned": "lamp shades ceiling light shade lampshades for lights fittings ceilings lampshade rattan living room",
+    "duplicate_issue": true,
+    "issue": "Duplicate words",
+    "removed_words": [
+     "lamp",
+     "shade",
+     "ceiling",
+     "ceiling",
+     "light",
+     "shade",
+     "light",
+     "shade",
+     "ceiling",
+     "light",
+     "lampshade",
+     "light",
+     "shades",
+     "light",
+     "shades",
+     "ceiling",
+     "lampshades",
+     "ceiling",
+     "lampshades"
+    ],
+    "repeated_entries": [],
+    "original_meta": {
+     "entries": 1,
+     "words": 33,
+     "bytes": 239
+    },
+    "cleaned_meta": {
+     "entries": 1,
+     "words": 14,
+     "bytes": 100
+    },
+    "status_after": "POST Accepted — Monitoring",
+    "action": "no POST",
+    "live_after": "lamp shades ceiling light shade lamp shade lampshades for ceiling lights ceiling light shade light shade ceiling light fittings ceilings lampshade rattan lampshade light shades light shades ceiling living room lampshades ceiling lampshades",
+    "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+   },
+   "accepted_value": "lamp shades ceiling light shade lampshades for lights fittings ceilings lampshade rattan living room",
+   "pre_post_value": "lamp shades ceiling light shade lamp shade lampshades for ceiling lights ceiling light shade light shade ceiling light fittings ceilings lampshade rattan lampshade light shades light shades ceiling living room lampshades ceiling lampshades"
   },
   "B0FXFMZLWV|WCBCFBM2PK|8": {
    "asin": "B0FXFMZLWV",
@@ -608,7 +1775,7 @@
    "report_row": "B0FXFMZLWV|WCBCFBM2PK",
    "submission_id": "f0a2027aa7e2461fbc783631b39ed586",
    "proposed": "black ceiling light shade modern pendant metal cage lampshade industrial lamp easy fit E27 30cm decorative lighting for bedroom kitchen set cover wire home drum minimalist fixture retro",
-   "status": "POST Accepted — Live Verification Pending",
+   "status": "POST Accepted — Monitoring",
    "first_verified_at": null,
    "last_verified_at": null,
    "last_post_at": "2026-09-28T17:25:26",
@@ -623,7 +1790,80 @@
      "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
     }
    ],
-   "next_due": "2026-10-05"
+   "next_due": "2026-10-05",
+   "live_updates": [
+    {
+     "date": "2026-09-29",
+     "confirmed_at": "2026-09-28T17:25:26",
+     "source": "original submission POST Accepted (common monitoring anchor)",
+     "user_reported_date": null,
+     "value": "black ceiling light shade modern pendant metal cage lampshade industrial lamp easy fit E27 30cm decorative lighting for bedroom kitchen set cover wire home drum minimalist fixture retro"
+    }
+   ],
+   "live_value": "black ceiling light shade modern pendant metal cage lampshade industrial lamp easy fit E27 30cm decorative lighting for bedroom kitchen set cover wire home drum minimalist fixture retro",
+   "last_dry_run": {
+    "event": "weekly check",
+    "week": "2026-10-05",
+    "at": "2026-10-05T09:35:08",
+    "mode": "dry_run",
+    "status_before": "POST Accepted — Monitoring",
+    "live_before": "black ceiling light shade modern pendant light shade metal cage lampshade industrial ceiling lamp easy fit ceiling shade E27 pendant lampshade 30cm light shade decorative ceiling lighting lampshade for bedroom lampshade for kitchen black lampshade set ceiling light cover industrial pendant lamp wire cage ceiling shade modern home lighting black drum lampshade minimalist light fixture retro ceiling lampshade",
+    "live_entries": [
+     "black ceiling light shade  modern pendant light shade  metal cage lampshade  industrial ceiling lamp  easy fit ceiling shade  E27 pendant lampshade  30cm light shade  decorative ceiling lighting  lampshade for bedroom  lampshade for kitchen  black lampshade set  ceiling light cover  industrial pendant lamp  wire cage ceiling shade  modern home lighting  black drum lampshade  minimalist light fixture  retro ceiling lampshade"
+    ],
+    "cleaned": "black ceiling light shade modern pendant metal cage lampshade industrial lamp easy fit E27 30cm decorative lighting for bedroom kitchen set cover wire home drum minimalist fixture retro",
+    "duplicate_issue": true,
+    "issue": "Duplicate words",
+    "removed_words": [
+     "light",
+     "shade",
+     "ceiling",
+     "ceiling",
+     "shade",
+     "pendant",
+     "lampshade",
+     "light",
+     "shade",
+     "ceiling",
+     "lampshade",
+     "lampshade",
+     "for",
+     "black",
+     "lampshade",
+     "ceiling",
+     "light",
+     "industrial",
+     "pendant",
+     "lamp",
+     "cage",
+     "ceiling",
+     "shade",
+     "modern",
+     "lighting",
+     "black",
+     "lampshade",
+     "light",
+     "ceiling",
+     "lampshade"
+    ],
+    "repeated_entries": [],
+    "original_meta": {
+     "entries": 1,
+     "words": 58,
+     "bytes": 410
+    },
+    "cleaned_meta": {
+     "entries": 1,
+     "words": 28,
+     "bytes": 185
+    },
+    "status_after": "POST Accepted — Monitoring",
+    "action": "no POST",
+    "live_after": "black ceiling light shade modern pendant light shade metal cage lampshade industrial ceiling lamp easy fit ceiling shade E27 pendant lampshade 30cm light shade decorative ceiling lighting lampshade for bedroom lampshade for kitchen black lampshade set ceiling light cover industrial pendant lamp wire cage ceiling shade modern home lighting black drum lampshade minimalist light fixture retro ceiling lampshade",
+    "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+   },
+   "accepted_value": "black ceiling light shade modern pendant metal cage lampshade industrial lamp easy fit E27 30cm decorative lighting for bedroom kitchen set cover wire home drum minimalist fixture retro",
+   "pre_post_value": "black ceiling light shade modern pendant light shade metal cage lampshade industrial ceiling lamp easy fit ceiling shade E27 pendant lampshade 30cm light shade decorative ceiling lighting lampshade for bedroom lampshade for kitchen black lampshade set ceiling light cover industrial pendant lamp wire cage ceiling shade modern home lighting black drum lampshade minimalist light fixture retro ceiling lampshade"
   },
   "B0CCDR7C3Y|WCVCBS2PK+RPR44WH2PK|8": {
    "asin": "B0CCDR7C3Y",
@@ -634,7 +1874,7 @@
    "report_row": "B0CCDR7C3Y|WCVCBS2PK+RPR44WH2PK",
    "submission_id": "787608fcdf404f23aa81d56efcfc4fdb",
    "proposed": "Black Ceiling Light Wire Basket Metal Pendant Lighting Shade,Black Industrial Style for Indoor Kitchen Islands Living Room 1X E27 Base AC 220V Lamp Guard, Vintage Cage Lights, Antique Holders, Fixture Shade Iron Diamonds Shape Pack of 3 cages shades lampshade gold lamps copper",
-   "status": "POST Accepted — Live Verification Pending",
+   "status": "POST Accepted — Monitoring",
    "first_verified_at": null,
    "last_verified_at": null,
    "last_post_at": "2026-09-28T17:25:42",
@@ -649,7 +1889,107 @@
      "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
     }
    ],
-   "next_due": "2026-10-05"
+   "next_due": "2026-10-05",
+   "live_updates": [
+    {
+     "date": "2026-09-29",
+     "confirmed_at": "2026-09-28T17:25:42",
+     "source": "original submission POST Accepted (common monitoring anchor)",
+     "user_reported_date": null,
+     "value": "Black Ceiling Light Wire Basket Metal Pendant Lighting Shade,Black Industrial Style for Indoor Kitchen Islands Living Room 1X E27 Base AC 220V Lamp Guard, Vintage Cage Lights, Antique Holders, Fixture Shade Iron Diamonds Shape Pack of 3 cages shades lampshade gold lamps copper"
+    }
+   ],
+   "live_value": "Black Ceiling Light Wire Basket Metal Pendant Lighting Shade,Black Industrial Style for Indoor Kitchen Islands Living Room 1X E27 Base AC 220V Lamp Guard, Vintage Cage Lights, Antique Holders, Fixture Shade Iron Diamonds Shape Pack of 3 cages shades lampshade gold lamps copper",
+   "last_dry_run": {
+    "event": "weekly check",
+    "week": "2026-10-05",
+    "at": "2026-10-05T09:35:08",
+    "mode": "dry_run",
+    "status_before": "POST Accepted — Monitoring",
+    "live_before": "Black Ceiling Light Wire Basket Metal Basket Pendant Lighting Ceiling Light Shade,Black Pendant Light Industrial Style Light for Indoor Kitchen Islands Living Room 1X E27 Base AC 220V Lamp Guard, Black Industrial Vintage Style Light Cage for Pendant Lights, Antique Lamp Holders, Industrial Ceiling Fixture Lamp Shade Iron Wire Diamonds Shape Pack of 3 iron wire cages lamp shades ceiling light shade ceiling light shade lampshade for ceiling lampshade gold light shade lamps shades metal lampshade black wire lampshade copper ceiling lights copper light shade Wire Cages",
+    "live_entries": [
+     "Black Ceiling Light Wire Basket Metal Basket Pendant Lighting Ceiling Light Shade,Black Pendant Light Industrial Style Light for Indoor Kitchen Islands Living Room 1X E27 Base AC 220V Lamp Guard, Black Industrial Vintage Style Light Cage for Pendant Lights, Antique Lamp Holders, Industrial Ceiling Fixture Lamp Shade Iron Wire Diamonds Shape Pack of 3",
+     " iron wire cages",
+     " lamp shades ceiling",
+     " light shade ceiling",
+     " light shade",
+     " lampshade for ceiling",
+     " lampshade",
+     " gold light shade",
+     " lamps shades",
+     " metal lampshade",
+     " black wire lampshade",
+     " copper ceiling lights",
+     " copper light shade",
+     " Wire Cages"
+    ],
+    "cleaned": "Black Ceiling Light Wire Basket Metal Pendant Lighting Shade,Black Industrial Style for Indoor Kitchen Islands Living Room 1X E27 Base AC 220V Lamp Guard, Vintage Cage Lights, Antique Holders, Fixture Shade Iron Diamonds Shape Pack of 3 cages shades lampshade gold lamps copper",
+    "duplicate_issue": true,
+    "issue": "Duplicate words",
+    "removed_words": [
+     "Basket",
+     "Ceiling",
+     "Light",
+     "Pendant",
+     "Light",
+     "Light",
+     "Black",
+     "Industrial",
+     "Style",
+     "Light",
+     "for",
+     "Pendant",
+     "Lamp",
+     "Industrial",
+     "Ceiling",
+     "Lamp",
+     "Wire",
+     "iron",
+     "wire",
+     "lamp",
+     "ceiling",
+     "light",
+     "shade",
+     "ceiling",
+     "light",
+     "shade",
+     "for",
+     "ceiling",
+     "lampshade",
+     "light",
+     "shade",
+     "shades",
+     "metal",
+     "lampshade",
+     "black",
+     "wire",
+     "lampshade",
+     "ceiling",
+     "lights",
+     "copper",
+     "light",
+     "shade",
+     "Wire",
+     "Cages"
+    ],
+    "repeated_entries": [],
+    "original_meta": {
+     "entries": 14,
+     "words": 87,
+     "bytes": 571
+    },
+    "cleaned_meta": {
+     "entries": 1,
+     "words": 43,
+     "bytes": 277
+    },
+    "status_after": "POST Accepted — Monitoring",
+    "action": "no POST",
+    "live_after": "Black Ceiling Light Wire Basket Metal Basket Pendant Lighting Ceiling Light Shade,Black Pendant Light Industrial Style Light for Indoor Kitchen Islands Living Room 1X E27 Base AC 220V Lamp Guard, Black Industrial Vintage Style Light Cage for Pendant Lights, Antique Lamp Holders, Industrial Ceiling Fixture Lamp Shade Iron Wire Diamonds Shape Pack of 3 iron wire cages lamp shades ceiling light shade ceiling light shade lampshade for ceiling lampshade gold light shade lamps shades metal lampshade black wire lampshade copper ceiling lights copper light shade Wire Cages",
+    "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+   },
+   "accepted_value": "Black Ceiling Light Wire Basket Metal Pendant Lighting Shade,Black Industrial Style for Indoor Kitchen Islands Living Room 1X E27 Base AC 220V Lamp Guard, Vintage Cage Lights, Antique Holders, Fixture Shade Iron Diamonds Shape Pack of 3 cages shades lampshade gold lamps copper",
+   "pre_post_value": "Black Ceiling Light Wire Basket Metal Basket Pendant Lighting Ceiling Light Shade,Black Pendant Light Industrial Style Light for Indoor Kitchen Islands Living Room 1X E27 Base AC 220V Lamp Guard, Black Industrial Vintage Style Light Cage for Pendant Lights, Antique Lamp Holders, Industrial Ceiling Fixture Lamp Shade Iron Wire Diamonds Shape Pack of 3 iron wire cages lamp shades ceiling light shade ceiling light shade lampshade for ceiling lampshade gold light shade lamps shades metal lampshade black wire lampshade copper ceiling lights copper light shade Wire Cages"
   },
   "B0GXB1RGJB|WCBSF90FG+RPR44WH|8": {
    "asin": "B0GXB1RGJB",
@@ -660,7 +2000,7 @@
    "report_row": "B0GXB1RGJB|WCBSF90FG+RPR44WH",
    "submission_id": "9aee1ad5fb29401783bd825eedf8a048",
    "proposed": "Gold Easy Fit Metal Cut Out Lampshade Acrylic Jewel Drum Ceiling Light Shade | Shades, Home Décor & Improvement EGold | & Essential | Included LED Bulb ssential | 24cm Width,,",
-   "status": "POST Accepted — Live Verification Pending",
+   "status": "POST Accepted — Monitoring",
    "first_verified_at": null,
    "last_verified_at": null,
    "last_post_at": "2026-09-28T17:25:57",
@@ -675,7 +2015,67 @@
      "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
     }
    ],
-   "next_due": "2026-10-05"
+   "next_due": "2026-10-05",
+   "live_updates": [
+    {
+     "date": "2026-09-29",
+     "confirmed_at": "2026-09-28T17:25:57",
+     "source": "original submission POST Accepted (common monitoring anchor)",
+     "user_reported_date": null,
+     "value": "Gold Easy Fit Metal Cut Out Lampshade Acrylic Jewel Drum Ceiling Light Shade | Shades, Home Décor & Improvement EGold | & Essential | Included LED Bulb ssential | 24cm Width,,"
+    }
+   ],
+   "live_value": "Gold Easy Fit Metal Cut Out Lampshade Acrylic Jewel Drum Ceiling Light Shade | Shades, Home Décor & Improvement EGold | & Essential | Included LED Bulb ssential | 24cm Width,,",
+   "last_dry_run": {
+    "event": "weekly check",
+    "week": "2026-10-05",
+    "at": "2026-10-05T09:35:08",
+    "mode": "dry_run",
+    "status_before": "POST Accepted — Monitoring",
+    "live_before": "Gold Easy Fit Metal Cut Out Lampshade Acrylic Jewel Drum Ceiling Light Shade | Shades, Home Décor & Improvement EGold Easy Fit Metal Cut Out Lampshade Acrylic Jewel Drum Ceiling Light Shade | Shades, Home Décor & Improvement Essential | Included LED Bulb ssential | 24cm Shade Width,,",
+    "live_entries": [
+     "Gold Easy Fit Metal Cut Out Lampshade Acrylic Jewel Drum Ceiling Light Shade | Shades, Home Décor & Improvement EGold Easy Fit Metal Cut Out Lampshade Acrylic Jewel Drum Ceiling Light Shade | Shades, Home Décor & Improvement Essential | Included LED Bulb ssential | 24cm Shade Width,,"
+    ],
+    "cleaned": "Gold Easy Fit Metal Cut Out Lampshade Acrylic Jewel Drum Ceiling Light Shade | Shades, Home Décor & Improvement EGold | & Essential | Included LED Bulb ssential | 24cm Width,,",
+    "duplicate_issue": true,
+    "issue": "Duplicate words",
+    "removed_words": [
+     "Easy",
+     "Fit",
+     "Metal",
+     "Cut",
+     "Out",
+     "Lampshade",
+     "Acrylic",
+     "Jewel",
+     "Drum",
+     "Ceiling",
+     "Light",
+     "Shade",
+     "Shades,",
+     "Home",
+     "Décor",
+     "Improvement",
+     "Shade"
+    ],
+    "repeated_entries": [],
+    "original_meta": {
+     "entries": 1,
+     "words": 48,
+     "bytes": 286
+    },
+    "cleaned_meta": {
+     "entries": 1,
+     "words": 31,
+     "bytes": 176
+    },
+    "status_after": "POST Accepted — Monitoring",
+    "action": "no POST",
+    "live_after": "Gold Easy Fit Metal Cut Out Lampshade Acrylic Jewel Drum Ceiling Light Shade | Shades, Home Décor & Improvement EGold Easy Fit Metal Cut Out Lampshade Acrylic Jewel Drum Ceiling Light Shade | Shades, Home Décor & Improvement Essential | Included LED Bulb ssential | 24cm Shade Width,,",
+    "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+   },
+   "accepted_value": "Gold Easy Fit Metal Cut Out Lampshade Acrylic Jewel Drum Ceiling Light Shade | Shades, Home Décor & Improvement EGold | & Essential | Included LED Bulb ssential | 24cm Width,,",
+   "pre_post_value": "Gold Easy Fit Metal Cut Out Lampshade Acrylic Jewel Drum Ceiling Light Shade | Shades, Home Décor & Improvement EGold Easy Fit Metal Cut Out Lampshade Acrylic Jewel Drum Ceiling Light Shade | Shades, Home Décor & Improvement Essential | Included LED Bulb ssential | 24cm Shade Width,,"
   },
   "B07RTY1TFK|WCGEBNCR-A|6": {
    "asin": "B07RTY1TFK",
@@ -686,7 +2086,7 @@
    "report_row": "B07RTY1TFK|WCGEBNCR-A",
    "submission_id": "9401fc116b1140ed924011122686f5ed",
    "proposed": "ceiling lampshades for bedroom, Brushed copper wire lampshade, pendant light shade, Diamond cage lamp shades ceilings, metal hall hallway shape bedroom,ceiling living room, bathroom",
-   "status": "POST Accepted — Live Verification Pending",
+   "status": "POST Accepted — Monitoring",
    "first_verified_at": null,
    "last_verified_at": null,
    "last_post_at": "2026-09-28T17:26:12",
@@ -701,7 +2101,95 @@
      "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
     }
    ],
-   "next_due": "2026-10-05"
+   "next_due": "2026-10-05",
+   "live_updates": [
+    {
+     "date": "2026-09-29",
+     "confirmed_at": "2026-09-28T17:26:12",
+     "source": "original submission POST Accepted (common monitoring anchor)",
+     "user_reported_date": null,
+     "value": "ceiling lampshades for bedroom, Brushed copper wire lampshade, pendant light shade, Diamond cage lamp shades ceilings, metal hall hallway shape bedroom,ceiling living room, bathroom"
+    }
+   ],
+   "live_value": "ceiling lampshades for bedroom, Brushed copper wire lampshade, pendant light shade, Diamond cage lamp shades ceilings, metal hall hallway shape bedroom,ceiling living room, bathroom",
+   "last_dry_run": {
+    "event": "weekly check",
+    "week": "2026-10-05",
+    "at": "2026-10-05T09:35:08",
+    "mode": "dry_run",
+    "status_before": "POST Accepted — Monitoring",
+    "live_before": "ceiling lampshades for bedroom, Brushed copper wire lampshade, pendant light shade, lampshades for ceiling light, lampshades for ceiling, Diamond cage pendant light, Brushed Copper lamp shades ceilings, lampshade, metal lamp shades, bedroom light shades for ceiling, hall light shades bedroom lamp shade, hallway lampshades for ceiling, Diamond shape lamp shade bedroom,ceiling lamp shades bedroom, cage light shade, hallway light shades, ceiling lamp shades for living room, bathroom light shade",
+    "live_entries": [
+     "ceiling lampshades for bedroom, Brushed copper wire lampshade, pendant light shade, lampshades for ceiling light, lampshades for ceiling, Diamond cage pendant light, Brushed Copper lamp shades ceilings, lampshade, metal lamp shades, bedroom light shades for ceiling, hall light shades bedroom lamp shade, hallway lampshades for ceiling, Diamond shape lamp shade bedroom,ceiling lamp shades bedroom, cage light shade, hallway light shades, ceiling lamp shades for living room, bathroom light shade"
+    ],
+    "cleaned": "ceiling lampshades for bedroom, Brushed copper wire lampshade, pendant light shade, Diamond cage lamp shades ceilings, metal hall hallway shape bedroom,ceiling living room, bathroom",
+    "duplicate_issue": true,
+    "issue": "Duplicate words",
+    "removed_words": [
+     "lampshades",
+     "for",
+     "ceiling",
+     "light,",
+     "lampshades",
+     "for",
+     "ceiling,",
+     "pendant",
+     "light,",
+     "Brushed",
+     "Copper",
+     "lampshade,",
+     "lamp",
+     "shades,",
+     "bedroom",
+     "light",
+     "shades",
+     "for",
+     "ceiling,",
+     "light",
+     "shades",
+     "bedroom",
+     "lamp",
+     "shade,",
+     "lampshades",
+     "for",
+     "ceiling,",
+     "Diamond",
+     "lamp",
+     "shade",
+     "lamp",
+     "shades",
+     "bedroom,",
+     "cage",
+     "light",
+     "shade,",
+     "hallway",
+     "light",
+     "shades,",
+     "ceiling",
+     "lamp",
+     "shades",
+     "for",
+     "light",
+     "shade"
+    ],
+    "repeated_entries": [],
+    "original_meta": {
+     "entries": 1,
+     "words": 69,
+     "bytes": 496
+    },
+    "cleaned_meta": {
+     "entries": 1,
+     "words": 24,
+     "bytes": 181
+    },
+    "status_after": "POST Accepted — Monitoring",
+    "action": "no POST",
+    "live_after": "ceiling lampshades for bedroom, Brushed copper wire lampshade, pendant light shade, lampshades for ceiling light, lampshades for ceiling, Diamond cage pendant light, Brushed Copper lamp shades ceilings, lampshade, metal lamp shades, bedroom light shades for ceiling, hall light shades bedroom lamp shade, hallway lampshades for ceiling, Diamond shape lamp shade bedroom,ceiling lamp shades bedroom, cage light shade, hallway light shades, ceiling lamp shades for living room, bathroom light shade",
+    "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+   },
+   "accepted_value": "ceiling lampshades for bedroom, Brushed copper wire lampshade, pendant light shade, Diamond cage lamp shades ceilings, metal hall hallway shape bedroom,ceiling living room, bathroom",
+   "pre_post_value": "ceiling lampshades for bedroom, Brushed copper wire lampshade, pendant light shade, lampshades for ceiling light, lampshades for ceiling, Diamond cage pendant light, Brushed Copper lamp shades ceilings, lampshade, metal lamp shades, bedroom light shades for ceiling, hall light shades bedroom lamp shade, hallway lampshades for ceiling, Diamond shape lamp shade bedroom,ceiling lamp shades bedroom, cage light shade, hallway light shades, ceiling lamp shades for living room, bathroom light shade"
   },
   "B0CCDKF18M|WCB3B+RPR44WH|8": {
    "asin": "B0CCDKF18M",
@@ -712,7 +2200,7 @@
    "report_row": "B0CCDKF18M|WCB3B+RPR44WH",
    "submission_id": "a49e28c0e10940d8a7c3f01d240de28a",
    "proposed": "vintage lamp shade industrial metal cage wire light black ceiling pendant retro loft style lighting e27 diy home dining room bedroom kitchen hallway bar",
-   "status": "POST Accepted — Live Verification Pending",
+   "status": "POST Accepted — Monitoring",
    "first_verified_at": null,
    "last_verified_at": null,
    "last_post_at": "2026-09-28T17:26:28",
@@ -727,7 +2215,91 @@
      "state_at_seed": "POST_ACCEPTED_PENDING_SYNC"
     }
    ],
-   "next_due": "2026-10-05"
+   "next_due": "2026-10-05",
+   "live_updates": [
+    {
+     "date": "2026-09-29",
+     "confirmed_at": "2026-09-28T17:26:28",
+     "source": "original submission POST Accepted (common monitoring anchor)",
+     "user_reported_date": null,
+     "value": "vintage lamp shade industrial metal cage wire light black ceiling pendant retro loft style lighting e27 diy home dining room bedroom kitchen hallway bar"
+    }
+   ],
+   "live_value": "vintage lamp shade industrial metal cage wire light black ceiling pendant retro loft style lighting e27 diy home dining room bedroom kitchen hallway bar",
+   "last_dry_run": {
+    "event": "weekly check",
+    "week": "2026-10-05",
+    "at": "2026-10-05T09:35:08",
+    "mode": "dry_run",
+    "status_before": "POST Accepted — Monitoring",
+    "live_before": "vintage lamp shade industrial lamp shade metal cage lamp shade wire cage light shade black metal lamp shade ceiling pendant lamp shade industrial ceiling light retro pendant light shade loft style lighting e27 lamp shade diy pendant light cage ceiling light metal wire light shade industrial home lighting dining room pendant light bedroom ceiling lamp shade kitchen pendant lighting hallway ceiling light bar pendant light",
+    "live_entries": [
+     "vintage lamp shade  industrial lamp shade  metal cage lamp shade  wire cage light shade  black metal lamp shade  ceiling pendant lamp shade  industrial ceiling light  retro pendant light shade  loft style lighting  e27 lamp shade  diy pendant light  cage ceiling light  metal wire light shade  industrial home lighting  dining room pendant light  bedroom ceiling lamp shade  kitchen pendant lighting  hallway ceiling light  bar pendant light"
+    ],
+    "cleaned": "vintage lamp shade industrial metal cage wire light black ceiling pendant retro loft style lighting e27 diy home dining room bedroom kitchen hallway bar",
+    "duplicate_issue": true,
+    "issue": "Duplicate words",
+    "removed_words": [
+     "lamp",
+     "shade",
+     "lamp",
+     "shade",
+     "cage",
+     "shade",
+     "metal",
+     "lamp",
+     "shade",
+     "lamp",
+     "shade",
+     "industrial",
+     "ceiling",
+     "light",
+     "pendant",
+     "light",
+     "shade",
+     "lamp",
+     "shade",
+     "pendant",
+     "light",
+     "cage",
+     "ceiling",
+     "light",
+     "metal",
+     "wire",
+     "light",
+     "shade",
+     "industrial",
+     "lighting",
+     "pendant",
+     "light",
+     "ceiling",
+     "lamp",
+     "shade",
+     "pendant",
+     "lighting",
+     "ceiling",
+     "light",
+     "pendant",
+     "light"
+    ],
+    "repeated_entries": [],
+    "original_meta": {
+     "entries": 1,
+     "words": 65,
+     "bytes": 423
+    },
+    "cleaned_meta": {
+     "entries": 1,
+     "words": 24,
+     "bytes": 152
+    },
+    "status_after": "POST Accepted — Monitoring",
+    "action": "no POST",
+    "live_after": "vintage lamp shade industrial lamp shade metal cage lamp shade wire cage light shade black metal lamp shade ceiling pendant lamp shade industrial ceiling light retro pendant light shade loft style lighting e27 lamp shade diy pendant light cage ceiling light metal wire light shade industrial home lighting dining room pendant light bedroom ceiling lamp shade kitchen pendant lighting hallway ceiling light bar pendant light",
+    "detail": "audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor"
+   },
+   "accepted_value": "vintage lamp shade industrial metal cage wire light black ceiling pendant retro loft style lighting e27 diy home dining room bedroom kitchen hallway bar",
+   "pre_post_value": "vintage lamp shade industrial lamp shade metal cage lamp shade wire cage light shade black metal lamp shade ceiling pendant lamp shade industrial ceiling light retro pendant light shade loft style lighting e27 lamp shade diy pendant light cage ceiling light metal wire light shade industrial home lighting dining room pendant light bedroom ceiling lamp shade kitchen pendant lighting hallway ceiling light bar pendant light"
   },
   "B0DTTKL6KX|WCVCBM3PK+RPR44WH3P BM|6": {
    "asin": "B0DTTKL6KX",
@@ -748,8 +2320,8 @@
    "next_due": null,
    "last_dry_run": {
     "event": "weekly check",
-    "week": "2026-09-28",
-    "at": "2026-09-29T16:04:24",
+    "week": "2026-10-05",
+    "at": "2026-10-05T09:35:08",
     "mode": "dry_run",
     "status_before": "Awaiting first weekly check",
     "live_before": "",
@@ -772,7 +2344,9 @@
     "status_after": "No backend keywords (nothing to clean)",
     "action": "no POST",
     "detail": "the live listing has no backend keywords"
-   }
+   },
+   "live_updates": [],
+   "live_value": null
   }
  }
 }

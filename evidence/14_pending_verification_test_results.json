@@ -1,5 +1,5 @@
 {
- "run_at": "2026-09-29T16:04:03",
+ "run_at": "2026-10-05T10:15:56",
  "mode": "fake DB/Listing Management reads, temp evidence copies; read-only path",
  "passed": 15,
  "failed": 0,
@@ -72,25 +72,25 @@
   },
   {
    "id": "P12",
-   "test": "build: newly verified pending submission -> Live-verified, dated by the verification; 22-submission history kept",
+   "test": "build (rule 2026-10-05): a later GET verification is AUDIT only - the submission stays Monitoring from the common update date 2026-09-29, like all 22 POST Accepted submissions; audit count +1, 0 pending",
    "result": "PASS",
-   "detail": "('Live-verified', 3)"
+   "detail": "('Monitoring', '2026-09-29', 4, 3)"
   },
   {
    "id": "P13",
-   "test": "it enters normal monitoring: tracked, new 7-day cycle from the verification (next Sunday 4 Oct)",
+   "test": "monitoring anchored on 2026-09-29 (not the 2 Oct GET date): Week 1 = 29 Sep..5 Oct, Week 2 = 6..12 Oct; status follows the loaded days, no Week 1 total before 7/7 days",
    "result": "PASS",
-   "detail": "{'skus': ['WCB6BM2PK'], 'last_live_verification_date': '2026-10-02', 'last_fine_tuning_date': '2026-09-28'}"
+   "detail": "{'key': 'B0D7944QDY|2026-09-29', 'kind': 'cycle', 'asin': 'B0D7944QDY', 'skus': ['WCB6BM2PK'], 'sku': 'WCB6BM2PK', 'backend_keyword_status': 'Live-verified', 'live_update_date': '2026-09-29', 'live_confirmed_at': '2026-09-28T17:21:17', 'live_update_source': 'original submission POST Accepted (common monitoring anchor)', 'monitoring_status': 'Monitoring — Week 1', 'week1_start': '2026-09-29', 'week"
   },
   {
    "id": "P14",
-   "test": "the other pending submissions stay unverified (not tracked for monitoring yet)",
+   "test": "every POST Accepted submission is monitored without a GET gate: one 2026-09-29 cycle per ASIN (21 ASINs / 22 listings), no 'Update Pending' entry, ledger rows not left as Live Verification Pending",
    "result": "PASS",
-   "detail": ""
+   "detail": "['B07RTY1TFK|2026-09-29', 'B084RL7K8J|2026-09-29', 'B08VGPPCY1|2026-09-29']"
   },
   {
    "id": "P15",
-   "test": "pending rows are handled by the weekly keyword check (fresh GET + POST if needed); no separate read-only stage",
+   "test": "pending rows are handled by the weekly keyword check (fresh GET + POST if needed); no separate read-only stage, no e-mail stage",
    "result": "PASS",
    "detail": ""
   }

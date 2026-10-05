@@ -80,10 +80,11 @@ def main(path=HTML):
     m = re.search(r'<script id="report-data" type="application/json">(.*?)</script>', src, re.S)
     try:
         d = json.loads(m.group(1))
-        ok = "alert_monitoring" in d and "monitoring_performance" in d
+        ok = ("keyword_monitoring" in d and "monitoring" in d["keyword_monitoring"] and "monitoring_performance" in d
+              and "alert_monitoring" not in d)
     except Exception as e:  # noqa: BLE001
         ok, d = False, e
-    check("embedded JSON parses and carries monitoring data", ok)
+    check("embedded JSON parses and carries the Week 1 / Week 2 monitoring data (no e-mail alert record)", ok)
     secrets = re.findall(r"ya29\.[A-Za-z0-9_-]{20,}|1//0[A-Za-z0-9_-]{20,}|GOCSPX-[A-Za-z0-9_-]{10,}|re_[A-Za-z0-9]{8,}_", src)
     check("no token / client-secret / API-key shaped strings in the dashboard", not secrets, secrets[:2])
     f = sum(r["result"] == "FAIL" for r in res)
