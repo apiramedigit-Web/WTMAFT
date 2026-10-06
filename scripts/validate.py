@@ -213,13 +213,23 @@ wk_days = {n: [(dt.date(2026, 9, 29) + dt.timedelta(days=7 * (n - 1) + i)).isofo
 raw = collections.defaultdict(lambda: collections.defaultdict(int))
 for r in EXTRACT["daily_orders"]:
     raw[r["asin"]][r["date"][:10]] += int(r["orders"])
-exp_mwo = {r["asin"]: {f"week{n}": (sum(raw[r["asin"]].get(x, 0) for x in wk_days[n]) if all(x in av_set for x in wk_days[n]) else None)
-                       for n in (1, 2)} for r in P}
-check("Section 3 Week 1 / Week 2 Orders = real 7-day totals (29 Sep..5 Oct, 6..12 Oct) only when all 7 days are loaded, else '—'",
+# days with raw Business Report rows for at least one account (recomputed from the extract's day coverage)
+data_set = {c["date"][:10] for c in EXTRACT["day_coverage"] if int(c["accounts"]) >= 1}
+wk_data = {n: [x for x in wk_days[n] if x in data_set] for n in (1, 2)}
+exp_mwo = {r["asin"]: {**{f"week{n}": (sum(raw[r["asin"]].get(x, 0) for x in wk_days[n]) if all(x in av_set for x in wk_days[n]) else None)
+                          for n in (1, 2)},
+                       **{f"week{n}_to_date": (sum(raw[r["asin"]].get(x, 0) for x in wk_data[n])
+                                               if wk_data[n] and not all(x in av_set for x in wk_days[n]) else None) for n in (1, 2)}}
+           for r in P}
+check("Section 3 Week 1 / Week 2 Orders = final 7-day totals (29 Sep..5 Oct, 6..12 Oct) only when all 7 days are loaded; "
+      "before that the actual DB orders to date of the days with data (labelled, missing days listed, never estimated)",
       MWO["anchor"] == "2026-09-29" and MWO["week1"] == ["2026-09-29", "2026-10-05"] and MWO["week2"] == ["2026-10-06", "2026-10-12"]
-      and MWO["orders"] == exp_mwo,
-      f'Week 1 {MWO["week1_days_loaded"]}/7 days, Week 2 {MWO["week2_days_loaded"]}/7 days; '
-      f'{sum(v["week1"] is not None for v in exp_mwo.values())} Week 1 totals, {sum(v["week2"] is not None for v in exp_mwo.values())} Week 2 totals')
+      and MWO["orders"] == exp_mwo
+      and all(MWO[f"week{n}_days_with_data"] == len(wk_data[n])
+              and MWO[f"week{n}_missing_days"] == [x for x in wk_days[n] if x not in data_set] for n in (1, 2)),
+      f'Week 1 {MWO["week1_days_loaded"]}/7 days loaded ({MWO["week1_days_with_data"]} with data, missing {MWO["week1_missing_days"]}), '
+      f'Week 2 {MWO["week2_days_loaded"]}/7; {sum(v["week1"] is not None for v in exp_mwo.values())} final Week 1 totals, '
+      f'{sum(v["week1_to_date"] is not None for v in exp_mwo.values())} Week 1 to-date values')
 
 # ---- monitored ASINs (Full Optimization Review monitoring, Section 12) ------------------------
 MP = {r["asin"]: r for r in DS["monitoring_performance"]}

@@ -1,5 +1,5 @@
 {
- "run_at": "2026-10-05T10:15:42",
+ "run_at": "2026-10-06T08:49:06",
  "passed": 27,
  "failed": 0,
  "tests": [
@@ -14,9 +14,9 @@
    "detail": "(['ASIN', 'Week 1 Orders', 'Week 2 Orders', 'Order Change %', 'Week 1 Impressions', 'Week 2 Impressions', 'Impression Change %', 'Result'], 22)"
   },
   {
-   "test": "T1c Real data (5/7 Week 1 days loaded): Result 'Monitoring — Week 1', Week 1 orders '—' + 'Week 1 monitoring' until 7/7, no verdict",
+   "test": "T1c Real data (6/7 Week 1 days loaded): Result 'Monitoring — Week 1', Week 1 orders = actual DB orders 'to date' (labelled, not a 7-day total) until 7/7, no verdict",
    "result": "PASS",
-   "detail": "{'start': '2026-09-29', 'result': 'Monitoring — Week 1', 'ASIN': 'B0DH4KYFPD\\nWCDTBM2PK+RPR44WH2PK · changed 29 Sept 2026', 'Week 1 Orders': '—\\n29 Sept 2026 → 05 Oct 2026\\nWeek 1 monitoring', 'Week 2 Orders': '—\\n06 Oct 2026 → 12 Oct 2026\\n0/7 days loaded', 'Order Change %': '—', 'Week 1 Impressions': '—\\nweekly data only', 'Week 2 Impressions': '—\\nweekly data only', 'Impression Change %': '—\\nweekly data only', 'Result': 'Monitoring — Week 1\\nWeek 1 monitoring'}"
+   "detail": "{'start': '2026-09-29', 'result': 'Monitoring — Week 1', 'ASIN': 'B0DH4KYFPD\\nWCDTBM2PK+RPR44WH2PK · changed 29 Sept 2026', 'Week 1 Orders': '21\\n29 Sept 2026 → 05 Oct 2026\\nto date · 6/7 days', 'Week 2 Orders': '—\\n06 Oct 2026 → 12 Oct 2026\\n0/7 days loaded', 'Order Change %': '—', 'Week 1 Impressions': '—\\nweekly data only', 'Week 2 Impressions': '—\\nweekly data only', 'Impression Change %': '—\\nweekly data only', 'Result': 'Monitoring — Week 1\\nWeek 1 monitoring'}"
   },
   {
    "test": "T1d KPI cards: Completed 0, Live Verification Pending 0, Under Monitoring 22, POSTs Accepted 22",
@@ -31,7 +31,7 @@
   {
    "test": "T3a Save shows Unsaved -> Saved state",
    "result": "PASS",
-   "detail": "['● Unsaved changes\\nStatus: Monitoring · Change Date: 29 Sept 2026 · Monitoring — Week 1: Week 1 5/7 days loaded (Week 1 29 Sept 2026 → 05 Oct 2026 · Week 2 06 Oct 2026 → 12 Oct 2026)', '✓ Saved 05 Oct 2026, 10:15\\nStatus: Live-verified · Date Changed: 29 Sept 2026 · set Monitoring to track Week 1 / Week 2']"
+   "detail": "['● Unsaved changes\\nStatus: Monitoring · Change Date: 29 Sept 2026 · Monitoring — Week 1: Week 1 6/7 days loaded (Week 1 29 Sept 2026 → 05 Oct 2026 · Week 2 06 Oct 2026 → 12 Oct 2026)', '✓ Saved 06 Oct 2026, 08:49\\nStatus: Live-verified · Date Changed: 29 Sept 2026 · set Monitoring to track Week 1 / Week 2']"
   },
   {
    "test": "T3b Record persists after page refresh",
@@ -41,7 +41,7 @@
   {
    "test": "T3c Section 7 info: Change Date 29 Sep, current monitoring week and both windows",
    "result": "PASS",
-   "detail": "✓ Saved 05 Oct 2026, 10:15\nStatus: Monitoring · Change Date: 29 Sept 2026 · Monitoring — Week 1: Week 1 5/7 days loaded (Week 1 29 Sept 2026 → 05 Oct 2026 · Week 2 06 Oct 2026 → 12 Oct 2026)"
+   "detail": "✓ Saved 06 Oct 2026, 08:49\nStatus: Monitoring · Change Date: 29 Sept 2026 · Monitoring — Week 1: Week 1 6/7 days loaded (Week 1 29 Sept 2026 → 05 Oct 2026 · Week 2 06 Oct 2026 → 12 Oct 2026)"
   },
   {
    "test": "T3d Sections 7/8/12: no horizontal scrollbar at 1920/1366/1024/390px",
@@ -61,7 +61,7 @@
   {
    "test": "T7 Export: saved record downloads as change_records.json",
    "result": "PASS",
-   "detail": "{'key': 'B0DH4KYFPD|WCDTBM2PK+RPR44WH2PK', 'asin': 'B0DH4KYFPD', 'sku': 'WCDTBM2PK+RPR44WH2PK', 'issue_detected': 'Conversion Drop', 'optimization_action': 'Removed duplicates', 'change_type': 'Backend Keyword Fine-Tuning', 'date_changed': '2026-09-30', 'status': 'Monitoring', 'saved_at': '2026-10-05T04:45:38.795Z'}"
+   "detail": "{'key': 'B0DH4KYFPD|WCDTBM2PK+RPR44WH2PK', 'asin': 'B0DH4KYFPD', 'sku': 'WCDTBM2PK+RPR44WH2PK', 'issue_detected': 'Conversion Drop', 'optimization_action': 'Removed duplicates', 'change_type': 'Backend Keyword Fine-Tuning', 'date_changed': '2026-09-30', 'status': 'Monitoring', 'saved_at': '2026-10-06T03:19:02.654Z'}"
   },
   {
    "test": "T8a Week 2 complete, 14 -> 7: Week 1 Orders 14, Week 2 Orders 7, Order Change -50.0%, Result Performance Decline",
@@ -81,7 +81,7 @@
   {
    "test": "T8d Completed can be saved once Week 2 is complete; it persists with the result",
    "result": "PASS",
-   "detail": "✓ Saved 05 Oct 2026, 10:15\nStatus: Completed · Change Date: 29 Sept 2026 · Completed · Week 1 29 Sept 2026 → 05 Oct 2026 · Week 2 06 Oct 2026 → 12 Oct 2026 · Performance Decline"
+   "detail": "✓ Saved 06 Oct 2026, 08:49\nStatus: Completed · Change Date: 29 Sept 2026 · Completed · Week 1 29 Sept 2026 → 05 Oct 2026 · Week 2 06 Oct 2026 → 12 Oct 2026 · Performance Decline"
   },
   {
    "test": "No JavaScript errors (fixture F1)",
@@ -89,14 +89,14 @@
    "detail": "[]"
   },
   {
-   "test": "T9a Week 1 in progress (5/7 internally): Result 'Monitoring — Week 1', Week 1 orders '—' with 'Week 1 monitoring' (no 7/7, no total)",
+   "test": "T9a Week 1 in progress (5/7): Result 'Monitoring — Week 1', Week 1 orders = 10 to date (5 days x 2), labelled 'to date · 5/7 days', no 7-day total",
    "result": "PASS",
-   "detail": "{'start': '2026-09-29', 'result': 'Monitoring — Week 1', 'ASIN': 'B0DH4KYFPD\\nWCDTBM2PK+RPR44WH2PK · changed 29 Sept 2026', 'Week 1 Orders': '—\\n29 Sept 2026 → 05 Oct 2026\\nWeek 1 monitoring', 'Week 2 Orders': '—\\n06 Oct 2026 → 12 Oct 2026\\n0/7 days loaded', 'Order Change %': '—', 'Week 1 Impressions': '—\\nweekly data only', 'Week 2 Impressions': '—\\nweekly data only', 'Impression Change %': '—\\nweekly data only', 'Result': 'Monitoring — Week 1\\nWeek 1 monitoring'}"
+   "detail": "{'start': '2026-09-29', 'result': 'Monitoring — Week 1', 'ASIN': 'B0DH4KYFPD\\nWCDTBM2PK+RPR44WH2PK · changed 29 Sept 2026', 'Week 1 Orders': '10\\n29 Sept 2026 → 05 Oct 2026\\nto date · 5/7 days', 'Week 2 Orders': '—\\n06 Oct 2026 → 12 Oct 2026\\n0/7 days loaded', 'Order Change %': '—', 'Week 1 Impressions': '—\\nweekly data only', 'Week 2 Impressions': '—\\nweekly data only', 'Impression Change %': '—\\nweekly data only', 'Result': 'Monitoring — Week 1\\nWeek 1 monitoring'}"
   },
   {
-   "test": "T9b Week 2 in progress (5/7): Result 'Monitoring — Week 2', Week 1 = 14 shown, Week 2 '—', NO verdict, Completed disabled",
+   "test": "T9b Week 2 in progress (5/7): Result 'Monitoring — Week 2', Week 1 = 14 shown, Week 2 = 5 to date, NO verdict, Completed disabled",
    "result": "PASS",
-   "detail": "{'start': '2026-09-29', 'result': 'Monitoring — Week 2', 'ASIN': 'B0DH4KYFPD\\nWCDTBM2PK+RPR44WH2PK · changed 29 Sept 2026', 'Week 1 Orders': '14\\n29 Sept 2026 → 05 Oct 2026', 'Week 2 Orders': '—\\n06 Oct 2026 → 12 Oct 2026\\n5/7 days loaded', 'Order Change %': '—', 'Week 1 Impressions': '—\\nweekly data only', 'Week 2 Impressions': '—\\nweekly data only', 'Impression Change %': '—\\nweekly data only', 'Result': 'Monitoring — Week 2\\nWeek 1 complete · Week 2 5/7 days loaded'}"
+   "detail": "{'start': '2026-09-29', 'result': 'Monitoring — Week 2', 'ASIN': 'B0DH4KYFPD\\nWCDTBM2PK+RPR44WH2PK · changed 29 Sept 2026', 'Week 1 Orders': '14\\n29 Sept 2026 → 05 Oct 2026', 'Week 2 Orders': '5\\n06 Oct 2026 → 12 Oct 2026\\nto date · 5/7 days', 'Order Change %': '—', 'Week 1 Impressions': '—\\nweekly data only', 'Week 2 Impressions': '—\\nweekly data only', 'Impression Change %': '—\\nweekly data only', 'Result': 'Monitoring — Week 2\\nWeek 1 complete · Week 2 5/7 days loaded'}"
   },
   {
    "test": "T9c KPI while monitoring: Completed 0, Under Monitoring 22",

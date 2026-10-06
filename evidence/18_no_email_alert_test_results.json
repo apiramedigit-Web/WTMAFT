@@ -1,5 +1,5 @@
 {
- "run_at": "2026-10-05T10:15:54",
+ "run_at": "2026-10-06T08:48:47",
  "rule": "e-mail alerts removed from the production workflow (business instruction 2026-10-02)",
  "mode": "static source checks + refused CLI calls + temp-ledger monitoring run; network calls patched to fail",
  "passed": 9,

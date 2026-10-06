@@ -327,25 +327,37 @@ def main():
         if r["asin"] in daily:
             daily[r["asin"]][r["date"][:10]] = int(r["orders"])
     available = [c["date"][:10] for c in d["day_coverage"] if c["accounts"] == len(acct)]
-    monitoring_data = {"daily_from": d["daily_from"], "available_dates": available,
+    # data_dates = every date with Business Report rows for at least one account: the "to date" figures sum the
+    # actual DB orders of these days (a day with only one account loaded is real data, flagged, never discarded).
+    data_dates = [c["date"][:10] for c in d["day_coverage"] if c["accounts"] >= 1]
+    monitoring_data = {"daily_from": d["daily_from"], "available_dates": available, "data_dates": data_dates,
                        "available_through": max(available) if available else None, "orders": daily}
 
     # Section 3 Week 1 / Week 2 Orders: each report ASIN's ASIN-level daily orders (both accounts summed) over the
-    # monitoring weeks from the common anchor (Week 1 = D..D+6, Week 2 = D+7..D+13). A total exists only when all
-    # 7 days are loaded for both accounts (same rule as Section 8); otherwise None ("—"). Never a partial total.
+    # monitoring weeks from the common anchor (Week 1 = D..D+6, Week 2 = D+7..D+13). week<n> = the FINAL 7-day
+    # total, only when all 7 days are loaded for both accounts (same rule as Section 8); otherwise None.
+    # week<n>_to_date = the actual DB orders of the week's days that have data so far (business instruction
+    # 2026-10-06: show what the DB has), labelled "to date" with the missing days - never presented as a 7-day total.
     anchor = dt.date.fromisoformat(ORIGINAL_ANCHOR)
     weeks = {n: [(anchor + dt.timedelta(days=7 * (n - 1) + i)).isoformat() for i in range(7)] for n in (1, 2)}
-    avail_set, p_asins = set(available), {r["asin"] for r in perf_rows}
+    avail_set, data_set, p_asins = set(available), set(data_dates), {r["asin"] for r in perf_rows}
     p_daily = collections.defaultdict(dict)
     for r in d["daily_orders"]:
         if r["asin"] in p_asins:
             p_daily[r["asin"]][r["date"][:10]] = int(r["orders"])
     week_days = {n: sum(1 for x in weeks[n] if x in avail_set) for n in (1, 2)}
+    data_days = {n: [x for x in weeks[n] if x in data_set] for n in (1, 2)}
     monitoring_week_orders = {
         "anchor": ORIGINAL_ANCHOR, "week1": [weeks[1][0], weeks[1][-1]], "week2": [weeks[2][0], weeks[2][-1]],
         "week1_days_loaded": week_days[1], "week2_days_loaded": week_days[2],
-        "orders": {a: {f"week{n}": (sum(p_daily[a].get(x, 0) for x in weeks[n]) if week_days[n] == 7 else None)
-                       for n in (1, 2)} for a in sorted(p_asins)}}
+        **{f"week{n}_days_with_data": len(data_days[n]) for n in (1, 2)},
+        **{f"week{n}_missing_days": [x for x in weeks[n] if x not in data_set] for n in (1, 2)},
+        **{f"week{n}_one_account_days": [x for x in data_days[n] if x not in avail_set] for n in (1, 2)},
+        "orders": {a: {**{f"week{n}": (sum(p_daily[a].get(x, 0) for x in weeks[n]) if week_days[n] == 7 else None)
+                          for n in (1, 2)},
+                       **{f"week{n}_to_date": (sum(p_daily[a].get(x, 0) for x in data_days[n])
+                                               if data_days[n] and week_days[n] < 7 else None) for n in (1, 2)}}
+                   for a in sorted(p_asins)}}
 
     # Monitored ASINs = change-record ASINs + ASINs already in the monitoring-cycle ledger, so an
     # ASIN keeps being measured after it leaves the top 50. Same metric code as Section 3.

@@ -14,7 +14,7 @@
    "2026-09-13",
    "2026-09-19"
   ],
-  "extracted_at": "2026-10-05T09:35:07",
+  "extracted_at": "2026-10-06T08:46:43",
   "top_moving_n": 50,
   "top_moving_candidates": 163,
   "ph_scope": {
@@ -5038,9 +5038,90 @@
    "2026-09-30",
    "2026-10-01",
    "2026-10-02",
-   "2026-10-03"
+   "2026-10-03",
+   "2026-10-04"
   ],
-  "available_through": "2026-10-03",
+  "data_dates": [
+   "2026-07-19",
+   "2026-07-20",
+   "2026-07-21",
+   "2026-07-22",
+   "2026-07-23",
+   "2026-07-24",
+   "2026-07-25",
+   "2026-07-26",
+   "2026-07-27",
+   "2026-07-28",
+   "2026-07-29",
+   "2026-07-30",
+   "2026-07-31",
+   "2026-08-01",
+   "2026-08-02",
+   "2026-08-03",
+   "2026-08-04",
+   "2026-08-05",
+   "2026-08-06",
+   "2026-08-07",
+   "2026-08-08",
+   "2026-08-09",
+   "2026-08-10",
+   "2026-08-11",
+   "2026-08-12",
+   "2026-08-13",
+   "2026-08-14",
+   "2026-08-15",
+   "2026-08-16",
+   "2026-08-17",
+   "2026-08-18",
+   "2026-08-19",
+   "2026-08-20",
+   "2026-08-21",
+   "2026-08-22",
+   "2026-08-23",
+   "2026-08-24",
+   "2026-08-25",
+   "2026-08-26",
+   "2026-08-27",
+   "2026-08-28",
+   "2026-08-29",
+   "2026-08-30",
+   "2026-08-31",
+   "2026-09-01",
+   "2026-09-02",
+   "2026-09-03",
+   "2026-09-04",
+   "2026-09-05",
+   "2026-09-06",
+   "2026-09-07",
+   "2026-09-08",
+   "2026-09-09",
+   "2026-09-10",
+   "2026-09-11",
+   "2026-09-12",
+   "2026-09-13",
+   "2026-09-14",
+   "2026-09-15",
+   "2026-09-16",
+   "2026-09-17",
+   "2026-09-18",
+   "2026-09-19",
+   "2026-09-20",
+   "2026-09-21",
+   "2026-09-22",
+   "2026-09-23",
+   "2026-09-24",
+   "2026-09-25",
+   "2026-09-26",
+   "2026-09-27",
+   "2026-09-28",
+   "2026-09-29",
+   "2026-09-30",
+   "2026-10-01",
+   "2026-10-02",
+   "2026-10-03",
+   "2026-10-04"
+  ],
+  "available_through": "2026-10-04",
   "orders": {
    "B07RTY1TFK": {
     "2026-07-26": 1,
@@ -5082,6 +5163,7 @@
     "2026-08-22": 1,
     "2026-08-15": 1,
     "2026-10-01": 1,
+    "2026-10-04": 1,
     "2026-07-25": 1,
     "2026-08-01": 1,
     "2026-09-29": 2,
@@ -5152,6 +5234,7 @@
     "2026-08-03": 1,
     "2026-07-28": 1,
     "2026-07-21": 1,
+    "2026-10-04": 1,
     "2026-07-24": 1,
     "2026-09-06": 2,
     "2026-08-21": 1,
@@ -5244,6 +5327,7 @@
     "2026-08-15": 2,
     "2026-08-16": 1,
     "2026-09-07": 1,
+    "2026-10-04": 6,
     "2026-10-01": 2,
     "2026-09-17": 2,
     "2026-08-02": 2,
@@ -5301,6 +5385,7 @@
     "2026-07-24": 1,
     "2026-08-26": 1,
     "2026-09-11": 1,
+    "2026-10-04": 1,
     "2026-08-19": 1,
     "2026-09-10": 1,
     "2026-09-29": 1,
@@ -5365,208 +5450,324 @@
    "2026-10-06",
    "2026-10-12"
   ],
-  "week1_days_loaded": 5,
+  "week1_days_loaded": 6,
   "week2_days_loaded": 0,
+  "week1_days_with_data": 6,
+  "week2_days_with_data": 0,
+  "week1_missing_days": [
+   "2026-10-05"
+  ],
+  "week2_missing_days": [
+   "2026-10-06",
+   "2026-10-07",
+   "2026-10-08",
+   "2026-10-09",
+   "2026-10-10",
+   "2026-10-11",
+   "2026-10-12"
+  ],
+  "week1_one_account_days": [],
+  "week2_one_account_days": [],
   "orders": {
    "B084R7QN2X": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 2,
+    "week2_to_date": null
    },
    "B084RL7K8J": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B084RNS6JW": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B08V8GXTQ1": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B08XVT2VKW": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B08XWSBPHW": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 2,
+    "week2_to_date": null
    },
    "B09MQSJ72N": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B09MQTBVVQ": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B0C43L42DK": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 4,
+    "week2_to_date": null
    },
    "B0C43LY8DB": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B0C43N2F3D": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B0C8NJDTJS": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 4,
+    "week2_to_date": null
    },
    "B0CBLWLZ4W": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B0CBLXL9R1": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 1,
+    "week2_to_date": null
    },
    "B0CBPQG9G7": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 2,
+    "week2_to_date": null
    },
    "B0CBPQVC6K": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B0CCDR7C3Y": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B0CCJSK84F": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B0CDBYNK9B": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B0CMX4P499": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B0CNJSDYVG": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B0CNJX1DV8": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 1,
+    "week2_to_date": null
    },
    "B0CS3LSTMS": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B0CV55T6YK": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B0D53FZ8GS": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 1,
+    "week2_to_date": null
    },
    "B0D56WV9GR": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B0D56YL7CS": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B0D56ZN8NP": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B0D5711PRY": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 1,
+    "week2_to_date": null
    },
    "B0D59MHSXN": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 1,
+    "week2_to_date": null
    },
    "B0D59PJ89M": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B0D59PP6PC": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B0D59Q2DL8": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 2,
+    "week2_to_date": null
    },
    "B0D7944QDY": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B0D83PFMTP": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B0D93PN1ZS": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B0D94627RM": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B0D9RQQZYB": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 1,
+    "week2_to_date": null
    },
    "B0D9RVLLF7": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B0DH4KYFPD": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 21,
+    "week2_to_date": null
    },
    "B0DH4LFC25": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 2,
+    "week2_to_date": null
    },
    "B0DTHKSHFY": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 1,
+    "week2_to_date": null
    },
    "B0DTHZ1JX5": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 3,
+    "week2_to_date": null
    },
    "B0DTPB2YC2": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B0DTY7H97T": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 2,
+    "week2_to_date": null
    },
    "B0F21TXF2F": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B0FTZFHVV1": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 2,
+    "week2_to_date": null
    },
    "B0FXFMGXK7": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B0GXB58114": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    },
    "B0GXB7RGZK": {
     "week1": null,
-    "week2": null
+    "week2": null,
+    "week1_to_date": 0,
+    "week2_to_date": null
    }
   }
  },

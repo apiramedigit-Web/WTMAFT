@@ -1,5 +1,5 @@
 {
- "run_at": "2026-10-05T10:16:01",
+ "run_at": "2026-10-06T08:48:42",
  "rule": "POST Accepted starts monitoring (common anchor 2026-09-29 for the 22 original submissions); Week 1 / Week 2; GET audit only; no e-mail (2026-10-05)",
  "mode": "deterministic: temp fixtures + temp ledger + fake Listing Management + temp dashboards; no network, no real POST, no e-mail",
  "passed": 30,
@@ -159,7 +159,7 @@
    "case": "M14",
    "test": "a Performance Decline creates no alert / e-mail state (monitoring fields only, no alerts written)",
    "result": "PASS",
-   "detail": "['asin', 'backend_keyword_status', 'computed_at', 'cycle_number', 'data_through', 'key', 'kind', 'latest', 'live_confirmed_at', 'live_update_date', 'live_update_source', 'monitoring_detail', 'monitoring_status', 'order_change', 'order_change_pct', 'other_listings_pending', 'performance_status', 'sku', 'skus', 'superseded_by', 'week1_complete', 'week1_days_loaded', 'week1_end', 'week1_orders', 'week1_orders_so_far', 'week1_start', 'week1_valid', 'week2_complete', 'week2_days_loaded', 'week2_end',"
+   "detail": "['asin', 'backend_keyword_status', 'computed_at', 'cycle_number', 'data_through', 'key', 'kind', 'latest', 'live_confirmed_at', 'live_update_date', 'live_update_source', 'monitoring_detail', 'monitoring_status', 'order_change', 'order_change_pct', 'other_listings_pending', 'performance_status', 'sku', 'skus', 'superseded_by', 'week1_complete', 'week1_days_loaded', 'week1_days_with_data', 'week1_end', 'week1_orders', 'week1_orders_so_far', 'week1_start', 'week1_valid', 'week2_complete', 'week2_da"
   },
   {
    "case": "M15",

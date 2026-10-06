@@ -959,6 +959,75 @@
    "cycle_before": "2026-09-20_2026-09-26",
    "cycle_after": "2026-09-20_2026-09-26",
    "note": "no new catalog week loaded yet: the same cycle was re-recorded (idempotent, not double counted)"
+  },
+  {
+   "run_id": "20261006T083616_076494",
+   "mode": "production",
+   "started_at": "2026-10-06T08:36:16",
+   "python": "C:\\Program Files\\Python313\\python.exe",
+   "cwd": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report",
+   "status": "SUCCESS",
+   "stages": [
+    {
+     "stage": "extract",
+     "command": "python scripts/extract.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20261006T083616_076494\\01_extract.log",
+     "exit_code": 0,
+     "seconds": 13.5,
+     "status": "OK",
+     "tail": "{'current_week': 2, 'previous_week': 2, 'weekly_orders': 33309, 'catalog': 37415, 'daily_totals': 28, 'listings': 16088, 'keywords': 44806, 'listing_issues': 433, 'ph_map': 8620, 'daily_orders': 15557, 'day_coverage': 78}\ncurrent ['2026-09-20', '2026-09-26'] previous ['2026-09-13', '2026-09-19']"
+    },
+    {
+     "stage": "weekly_keyword_check",
+     "command": "python scripts/optimization_cleanup.py --apply",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20261006T083616_076494\\02_weekly_keyword_check.log",
+     "exit_code": 0,
+     "seconds": 162.2,
+     "status": "OK",
+     "tail": "  B07RTY1TFK WCGEBNCR-A: POST Accepted — Monitoring -> POST Accepted — Monitoring [no POST] audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor\n  B0CCDKF18M WCB3B+RPR44WH: POST Accepted — Monitoring -> POST Accepted — Monitoring [no POST] audit: GET still shows the keywords from before the accepted POST; the accepted payload is NOT re-sent and monitoring continues from its anchor\n  B0DTTKL6KX WCVCBM3PK+RPR44WH3P BM: Awaiting first weekly check -> No backend keywords (nothing to clean) [no POST] the live"
+    },
+    {
+     "stage": "build_dataset",
+     "command": "python scripts/build_dataset.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20261006T083616_076494\\03_build_dataset.log",
+     "exit_code": 0,
+     "seconds": 0.6,
+     "status": "OK",
+     "tail": "}\nissue mix: Counter({'No Drop': 28, 'Conversion Drop': 11, 'Overall Performance Drop': 6, 'CTR Drop': 4, 'Impression Drop': 1})\nkw rows: 22 review: 22"
+    },
+    {
+     "stage": "performance_monitoring",
+     "command": "python scripts/performance_alert.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20261006T083616_076494\\04_performance_monitoring.log",
+     "exit_code": 0,
+     "seconds": 0.2,
+     "status": "OK",
+     "tail": "  B0FXFMZLWV live 2026-09-29: W1 2026-09-29..2026-10-05 6/7 days | W2 2026-10-06..2026-10-12 0/7 days | Monitoring — Week 1 | Monitoring in progress\n  B0GXB1RGJB live 2026-09-29: W1 2026-09-29..2026-10-05 6/7 days | W2 2026-10-06..2026-10-12 0/7 days | Monitoring — Week 1 | Monitoring in progress\n  B0GXB7RGZK live 2026-09-29: W1 2026-09-29..2026-10-05 6/7 days | W2 2026-10-06..2026-10-12 0/7 days | Monitoring — Week 1 | Monitoring in progress"
+    },
+    {
+     "stage": "render",
+     "command": "python scripts/render.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20261006T083616_076494\\05_render.log",
+     "exit_code": 0,
+     "seconds": 0.1,
+     "status": "OK",
+     "tail": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\output\\weekly_top_moving_asin_backend_keyword_fine_tuning_report.html 359930 bytes"
+    },
+    {
+     "stage": "validate",
+     "command": "python scripts/validate.py",
+     "log": "C:\\Users\\LED 222\\Weekly_Top_Moving_ASIN_Keyword_Report\\logs\\20261006T083616_076494\\06_validate.log",
+     "exit_code": 0,
+     "seconds": 7.9,
+     "status": "OK",
+     "tail": "PASS  No horizontal scrollbar (page or table) on any tab at 1920/1366/1024/800/390px\n\n52 PASS / 0 FAIL"
+    }
+   ],
+   "finished_at": "2026-10-06T08:39:20",
+   "failed_stage": null,
+   "cycle_before": "2026-09-20_2026-09-26",
+   "cycle_after": "2026-09-20_2026-09-26",
+   "note": "no new catalog week loaded yet: the same cycle was re-recorded (idempotent, not double counted)"
   }
  ]
 }

@@ -1,5 +1,5 @@
 {
- "validated_at": "2026-10-05T10:18:40",
+ "validated_at": "2026-10-06T08:47:45",
  "passed": 52,
  "failed": 0,
  "checks": [
@@ -111,7 +111,7 @@
   {
    "check": "17c. Loaded days are contiguous and cover both comparison weeks",
    "result": "PASS",
-   "detail": "2026-07-19 -> 2026-10-03 (77 days)"
+   "detail": "2026-07-19 -> 2026-10-04 (78 days)"
   },
   {
    "check": "20. No fabricated thresholds: drop rule is orders < previous (no numeric cut-off)",
@@ -119,9 +119,9 @@
    "detail": ""
   },
   {
-   "check": "Section 3 Week 1 / Week 2 Orders = real 7-day totals (29 Sep..5 Oct, 6..12 Oct) only when all 7 days are loaded, else '—'",
+   "check": "Section 3 Week 1 / Week 2 Orders = final 7-day totals (29 Sep..5 Oct, 6..12 Oct) only when all 7 days are loaded; before that the actual DB orders to date of the days with data (labelled, missing days listed, never estimated)",
    "result": "PASS",
-   "detail": "Week 1 5/7 days, Week 2 0/7 days; 0 Week 1 totals, 0 Week 2 totals"
+   "detail": "Week 1 6/7 days loaded (6 with data, missing ['2026-10-05']), Week 2 0/7; 0 final Week 1 totals, 50 Week 1 to-date values"
   },
   {
    "check": "Monitoring continuity: every change-record / ledger ASIN has weekly metrics (in or outside the top 50)",
@@ -146,7 +146,7 @@
   {
    "check": "Week orders only for complete 7-day windows (= daily series); no Week 2 comparison / verdict before Week 2 is complete",
    "result": "PASS",
-   "detail": "{'Monitoring — Week 1': 21}"
+   "detail": "{'Monitoring — Week 1': 21, 'Backend Keyword Update Pending': 1}"
   },
   {
    "check": "No e-mail state in the monitoring ledger output (monitoring entries carry no alert / Gmail fields)",
@@ -166,7 +166,7 @@
   {
    "check": "1. HTML file exists",
    "result": "PASS",
-   "detail": "314765 bytes"
+   "detail": "366366 bytes"
   },
   {
    "check": "9/10/11. No external CSS/JS/network references",
@@ -241,7 +241,7 @@
   {
    "check": "Section 12: weekly keyword rows = ledger keyword_rows (scope listings, status per ASIN-SKU; not hard-coded)",
    "result": "PASS",
-   "detail": "{'shown': [('B07RTY1TFK', 'WCGEBNCR-A', 'POST Accepted — Monitoring'), ('B084RL7K8J', 'LSBLP4BSR', 'POST Accepted — Monitoring'), ('B08VGPPCY1', 'WCDTBM+RPR44WH R', 'POST Accepted — Monitoring'), ('B09MQSJ72N', 'WCB4BC+RPR44WH', 'POST Accepted — Monitoring'), ('B0C43L42DK', 'WCDTRE+RPR44WH', 'Live Verified'), ('B0C43LY8DB', 'WCDTYE+RPR44WH', 'POST Accepted — Monitoring'), ('B0C43N2F3D', 'WCDTWH+RPR44WH', 'POST Accepted — Monitoring'), ('B0CBLWLZ4W', 'WCWDBM2PK+RPR44WH2PK', 'Awaiting first weekly check'), ('B0CBLWLZ4W', 'WCWDBM2PK+RPR44WH2PK_AMD', 'Awaiting first weekly check'), ('B0CBLWLZ4W', "
+   "detail": "{'shown': [('B07RTY1TFK', 'WCGEBNCR-A', 'POST Accepted — Monitoring'), ('B084RL7K8J', 'LSBLP4BSR', 'POST Accepted — Monitoring'), ('B08VGPPCY1', 'WCDTBM+RPR44WH R', 'POST Accepted — Monitoring'), ('B09MQSJ72N', 'WCB4BC+RPR44WH', 'POST Accepted — Monitoring'), ('B0C43L42DK', 'WCDTRE+RPR44WH', 'Live Verified'), ('B0C43LY8DB', 'WCDTYE+RPR44WH', 'POST Accepted — Monitoring'), ('B0C43N2F3D', 'WCDTWH+RPR44WH', 'POST Accepted — Monitoring'), ('B0CBLWLZ4W', 'WCWDBM2PK+RPR44WH2PK', 'No backend keywords (nothing to clean)'), ('B0CBLWLZ4W', 'WCWDBM2PK+RPR44WH2PK_AMD', 'No backend keywords (nothing to cle"
   },
   {
    "check": "Section 12: monitoring cycle history rows = ledger cycles (ASIN, live update date, status)",

@@ -1,5 +1,5 @@
 {
- "run_at": "2026-10-05T10:15:58",
+ "run_at": "2026-10-06T08:48:45",
  "mode": "deterministic: temp ledgers, fake Listing Management GET/POST, temp dashboards; no real POST, no e-mail, no network",
  "passed": 30,
  "failed": 0,

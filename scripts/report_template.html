@@ -281,6 +281,8 @@ function persist(){ if(!storageOk) throw new Error("Browser storage is not avail
    (Performance Decline / Improved / Stable) only when Week 2 is complete. When performance_alert.py has the
    same cycle in the ledger (D.keyword_monitoring), its figures are used, so page and ledger always agree. */
 var AVAIL = {}; MD.available_dates.forEach(function(d){ AVAIL[d]=1; });
+/* dates with Business Report rows for at least one account: the "to date" orders use the actual DB data of these days */
+var DATA = {}; (MD.data_dates || MD.available_dates).forEach(function(d){ DATA[d]=1; });
 var KM = D.keyword_monitoring || {monitoring:[], keyword_rows:{}}, MON = KM.monitoring || [];
 var W1 = "Monitoring — Week 1", W2 = "Monitoring — Week 2";
 function addDays(iso, n){ var d=new Date(iso+"T00:00:00Z"); d.setUTCDate(d.getUTCDate()+n); return d.toISOString().slice(0,10); }
@@ -305,6 +307,10 @@ function monitor(rec){
   }
   m.w1_complete = m.w1_days===7; m.complete = m.w1_complete && m.w2_days===7;
   if(m.w1_complete) m.w1_orders = c ? c.week1_orders : sum(w1);
+  /* actual DB orders of the days with data so far ("to date", never a 7-day total) while a week is incomplete */
+  [[1,w1],[2,w2]].forEach(function(p){ var n=p[0], ds=p[1].filter(function(d){ return DATA[d]; });
+    m["w"+n+"_data_days"] = c && c["week"+n+"_days_with_data"]!=null ? c["week"+n+"_days_with_data"] : ds.length;
+    m["w"+n+"_so_far"] = m["w"+n+"_days"]===7 ? null : (c ? (c["week"+n+"_orders_so_far"]!=null ? c["week"+n+"_orders_so_far"] : null) : (ds.length ? sum(ds) : null)); });
   if(m.complete){
     m.w2_orders = c ? c.week2_orders : sum(w2);
     m.order_chg = m.w1_orders>0 ? Math.round((m.w2_orders-m.w1_orders)/m.w1_orders*1000)/10 : null;
@@ -451,19 +457,29 @@ function bindSearch(inputId, table, fields, extra){
 /* Monitoring-period orders (build_dataset.py -> monitoring_week_orders): a 7-day total only when all 7 days are loaded */
 var MWO = D.monitoring_week_orders || null;
 document.getElementById("s3lead").innerHTML = "Current 7D <b>"+range(M.current_7d)+"</b> vs Previous 7D <b>"+range(M.previous_7d)+"</b> (Sunday to Saturday, the Amazon Search Catalog Performance week). Orders are Amazon Business Report order items summed across both UK accounts. Impressions and clicks are the ASIN's Amazon search-results figures. The small grey line under each change % shows Previous 7D → Current 7D (impressions, clicks, CTR, CVR). “"+DASH+"” means the value cannot be calculated (for example, previous value 0 or no catalog row)."
-  +(MWO ? " <b>Week 1 Orders</b> ("+range(MWO.week1)+") and <b>Week 2 Orders</b> ("+range(MWO.week2)+") are the monitoring-period order totals (both accounts), shown only when all 7 days of the week are loaded." : "");
+  +(MWO ? " <b>Week 1 Orders</b> ("+range(MWO.week1)+") and <b>Week 2 Orders</b> ("+range(MWO.week2)+") are the monitoring-period orders (both accounts). Once all 7 days are loaded the value is the final 7-day total; before that it is the actual orders <b>to date</b> from the days the database has, marked “to date” with the days not yet loaded — not a 7-day total." : "");
 /* Only the 10 required columns. Supporting figures sit as a small second line in the same cell
    (Previous → Current), so all data is visible without horizontal scrolling. */
 function sub(html){ return '<div class="sub2">'+html+"</div>"; }
 function chgWithBase(prevKey, currKey, f){ return function(v,row){ return fmtPct(v)+sub(f(row[prevKey])+" → "+f(row[currKey])); }; }
-P.forEach(function(r){ var o = MWO && MWO.orders[r.asin]; r.w1_orders = o ? o.week1 : null; r.w2_orders = o ? o.week2 : null; });
+/* final 7-day total when complete, else the actual orders to date (flagged w<n>_to_date) */
+P.forEach(function(r){ var o = MWO && MWO.orders[r.asin];
+  [1,2].forEach(function(n){ var fin = o ? o["week"+n] : null, td = o && o["week"+n+"_to_date"]!=null ? o["week"+n+"_to_date"] : null;
+    r["w"+n+"_orders"] = fin!=null ? fin : td; r["w"+n+"_to_date"] = fin==null && td!=null; }); });
+function s3Week(n){ return function(v,row){
+  if(!row["w"+n+"_to_date"]) return fmtInt(v);
+  var miss = MWO["week"+n+"_missing_days"] || [], one = MWO["week"+n+"_one_account_days"] || [];
+  function short(d){ return fmtDate(d).replace(/ \d{4}$/, ""); }
+  return fmtInt(v)+sub("to date · "+MWO["week"+n+"_days_with_data"]+"/7 days")
+    +(miss.length ? sub("missing: "+miss.map(short).join(", ")) : "")
+    +(one.length ? sub("1 account: "+one.map(short).join(", ")) : ""); }; }
 var t3 = new Table("t3", [
   {key:"asin",label:"ASIN",cls:"mono",fmt:function(v,row){ return esc(v)+sub("Rank #"+row.rank)+'<div class="sub2 ph">PH: '+(row.ph_name ? esc(row.ph_name)+" · "+esc(row.ph_category) : "not mapped")+"</div>"; }},
   {key:"sku",label:"SKU",cls:"mono sku",fmt:function(v,row){ return fmtSku(v)+sub(esc(String(row.account||"").replace(/amazon /g,""))); }},
   {key:"prev_orders",label:"Previous 7D Orders",num:1,fmt:fmtInt}, {key:"curr_orders",label:"Current 7D Orders",num:1,fmt:fmtInt},
   {key:"order_chg",label:"Order Change %",num:1,fmt:fmtPct},
-  {key:"w1_orders",label:"Week 1 Orders",num:1,fmt:fmtInt},
-  {key:"w2_orders",label:"Week 2 Orders",num:1,fmt:fmtInt},
+  {key:"w1_orders",label:"Week 1 Orders",num:1,fmt:s3Week(1)},
+  {key:"w2_orders",label:"Week 2 Orders",num:1,fmt:s3Week(2)},
   {key:"impression_chg",label:"Impression Change %",num:1,fmt:chgWithBase("prev_impressions","curr_impressions",fmtInt)},
   {key:"click_chg",label:"Click Change %",num:1,fmt:chgWithBase("prev_clicks","curr_clicks",fmtInt)},
   {key:"ctr_chg",label:"CTR Change %",num:1,fmt:chgWithBase("prev_ctr","curr_ctr",fmtRate)},
@@ -666,13 +682,15 @@ document.getElementById("crImport").addEventListener("change", function(e){
 
 /* ---------- 8. 7-Day Monitoring Report (from saved Change Records) ---------- */
 function renderMonitoring(rows){
-  document.getElementById("s8lead").innerHTML = "One row per POST Accepted change (or a change saved as Monitoring / Completed in Section 7). Monitoring starts on the update date <b>D</b>: Week 1 = <b>D → D+6</b>, Week 2 = <b>D+7 → D+13</b>; the Result shows Performance Decline / Improved / Stable only after Week 2 is complete. Orders are ASIN-level daily Business Report orders (both accounts). Daily data in this build: "+fmtDate(MD.daily_from)+" → <b>"+fmtDate(MD.available_through)+"</b>.";
+  document.getElementById("s8lead").innerHTML = "One row per POST Accepted change (or a change saved as Monitoring / Completed in Section 7). Monitoring starts on the update date <b>D</b>: Week 1 = <b>D → D+6</b>, Week 2 = <b>D+7 → D+13</b>; the Result shows Performance Decline / Improved / Stable only after Week 2 is complete. While a week is not complete, its orders are the actual orders <b>to date</b> from the days the database has (“to date · n/7 days”), not a 7-day total. Orders are ASIN-level daily Business Report orders (both accounts). Daily data in this build: "+fmtDate(MD.daily_from)+" → <b>"+fmtDate(MD.available_through)+"</b>.";
   var mrows = rows.filter(function(r){ return isMonitored(r.status) && r.date_changed; }).map(function(r){
     var m = r.mon; return {key:r.key, asin:r.asin, sku:r.sku, status:r.status, date_changed:r.date_changed, m:m,
       w1_orders:m.w1_orders, w2_orders:m.w2_orders, order_chg:m.order_chg,
       w1_impressions:m.w1_impressions, w2_impressions:m.w2_impressions, impression_chg:m.impression_chg, result:m.result}; });
   function impCell(){ return '<span class="na">'+DASH+'</span>'+sub("weekly data only"); }
-  function weekCell(n){ return function(v,r){ var days = r.m["w"+n+"_days"];
+  function weekCell(n){ return function(v,r){ var days = r.m["w"+n+"_days"], sf = r.m["w"+n+"_so_far"];
+    if(days<7 && sf!=null) return fmtInt(sf)+sub(fmtDate(r.m["w"+n+"_from"])+" → "+fmtDate(r.m["w"+n+"_to"]))
+      +sub("to date · "+r.m["w"+n+"_data_days"]+"/7 days");
     return fmtInt(v)+sub(fmtDate(r.m["w"+n+"_from"])+" → "+fmtDate(r.m["w"+n+"_to"]))+(days<7 ? sub(n===1 ? "Week 1 monitoring" : days+"/7 days loaded") : ""); }; }
   new Table("t8", [
     {key:"asin",label:"ASIN",cls:"mono",fmt:function(v,r){ return esc(v)+sub(esc(r.sku)+" · changed "+fmtDate(r.date_changed)); }},
@@ -802,7 +820,9 @@ function weekRange(c, i){ return fmtDate(c["week"+i+"_start"])+" → "+fmtDate(c
 function weekOrders(c, i){
   var w = function(k){ return c["week"+i+"_"+k]; };
   if(!w("valid")) return "not used: a newer update started a new cycle";
-  return w("complete") ? fmtInt(w("orders"))+" orders (7/7 days)" : DASH+" ("+w("days_loaded")+"/7 days loaded)";
+  if(w("complete")) return fmtInt(w("orders"))+" orders (7/7 days)";
+  return w("orders_so_far")!=null ? fmtInt(w("orders_so_far"))+" orders to date ("+w("days_with_data")+"/7 days with data; not a 7-day total)"
+                                  : DASH+" ("+w("days_loaded")+"/7 days loaded)";
 }
 function renderKeywordCheck(){
   var KR = KM.keyword_rows || {}, orows = [];

@@ -68,6 +68,7 @@ def fixture(through, orders, extra_updates=None):
     last = dt.date.fromisoformat(MD["available_through"])
     ext = days((last + dt.timedelta(1)).isoformat(), max(0, (dt.date.fromisoformat(through) - last).days))
     md["available_dates"] = [d for d in MD["available_dates"] if d <= through] + ext
+    md["data_dates"] = list(md["available_dates"])   # synthetic days: both accounts loaded through `through`
     md["available_through"] = through
     for asin, s in orders.items():
         md["orders"].setdefault(asin, {}).update(s)
@@ -176,10 +177,17 @@ with sync_playwright() as p:
                   and "changed 29 Sept 2026" in v["ASIN"] for v in s8.values()), (heads, len(s8)))
     loaded_w1 = sum(1 for d in days(ANCHOR, 7) if d in set(MD["available_dates"]))
     exp_res = "Monitoring — Week 1" if loaded_w1 < 7 else "Monitoring — Week 2"
-    check(f"T1c Real data ({loaded_w1}/7 Week 1 days loaded): Result '{exp_res}', Week 1 orders '—' + 'Week 1 monitoring' until 7/7, no verdict",
+    def w1_ok(key, v):   # before 7/7: the actual DB orders to date (ledger), labelled "to date", or '—' if no data yet
+        c = LEDGER["monitoring"][f"{key.split('|')[0]}|{ANCHOR}"]   # row key = ASIN|SKU; the cycle is per ASIN
+        if c.get("week1_orders_so_far") is None:
+            return v["Week 1 Orders"].startswith("—") and "Week 1 monitoring" in v["Week 1 Orders"]
+        return (v["Week 1 Orders"].startswith(str(c["week1_orders_so_far"]) + chr(10))
+                and f'to date · {c["week1_days_with_data"]}/7 days' in v["Week 1 Orders"])
+    check(f"T1c Real data ({loaded_w1}/7 Week 1 days loaded): Result '{exp_res}', Week 1 orders = actual DB orders 'to date' "
+          "(labelled, not a 7-day total) until 7/7, no verdict",
           all(v["result"] == exp_res for v in s8.values())
-          and all(v["Week 1 Orders"].startswith("—") and "Week 1 monitoring" in v["Week 1 Orders"] and "days loaded" not in v["Week 1 Orders"]
-                  and v["Result"] == "Monitoring — Week 1" + chr(10) + "Week 1 monitoring" for v in s8.values() if loaded_w1 < 7)
+          and all(w1_ok(k, v) and v["Result"] == "Monitoring — Week 1" + chr(10) + "Week 1 monitoring"
+                  for k, v in s8.items() if loaded_w1 < 7)
           and not [v for v in s8.values() if v["result"].startswith("Performance")], next(iter(s8.values())))
     k0 = kpis(pg)
     check("T1d KPI cards: Completed 0, Live Verification Pending 0, Under Monitoring 22, POSTs Accepted 22",
@@ -283,13 +291,17 @@ with sync_playwright() as p:
     pg.click('nav.toc a[href="#s7"]')
     still_disabled = row(pg, KEY[A1]).locator('select.cr-status option[value="Completed"]').is_disabled()
     ctx.close()
-    check("T9a Week 1 in progress (5/7 internally): Result 'Monitoring — Week 1', Week 1 orders '—' with 'Week 1 monitoring' (no 7/7, no total)",
+    check("T9a Week 1 in progress (5/7): Result 'Monitoring — Week 1', Week 1 orders = 10 to date (5 days x 2), "
+          "labelled 'to date · 5/7 days', no 7-day total",
           all(v["result"] == "Monitoring — Week 1" for v in f2.values())
-          and f2[KEY[A1]]["Week 1 Orders"].startswith("—") and "Week 1 monitoring" in f2[KEY[A1]]["Week 1 Orders"]
-          and led2["monitoring"][f"{A1}|{ANCHOR}"]["week1_days_loaded"] == 5, f2[KEY[A1]])
-    check("T9b Week 2 in progress (5/7): Result 'Monitoring — Week 2', Week 1 = 14 shown, Week 2 '—', NO verdict, Completed disabled",
+          and f2[KEY[A1]]["Week 1 Orders"].startswith("10" + chr(10)) and "to date · 5/7 days" in f2[KEY[A1]]["Week 1 Orders"]
+          and led2["monitoring"][f"{A1}|{ANCHOR}"]["week1_days_loaded"] == 5
+          and led2["monitoring"][f"{A1}|{ANCHOR}"]["week1_orders"] is None
+          and led2["monitoring"][f"{A1}|{ANCHOR}"]["week1_orders_so_far"] == 10, f2[KEY[A1]])
+    check("T9b Week 2 in progress (5/7): Result 'Monitoring — Week 2', Week 1 = 14 shown, Week 2 = 5 to date, NO verdict, Completed disabled",
           all(v["result"] == "Monitoring — Week 2" for v in f3.values()) and f3[KEY[A1]]["Week 1 Orders"].startswith("14")
-          and f3[KEY[A1]]["Week 2 Orders"].startswith("—") and "5/7 days loaded" in f3[KEY[A1]]["Week 2 Orders"]
+          and "to date" not in f3[KEY[A1]]["Week 1 Orders"]
+          and f3[KEY[A1]]["Week 2 Orders"].startswith("5" + chr(10)) and "to date · 5/7 days" in f3[KEY[A1]]["Week 2 Orders"]
           and f3[KEY[A1]]["Order Change %"] == "—" and still_disabled, f3[KEY[A1]])
     check("T9c KPI while monitoring: Completed 0, Under Monitoring 22", k2["Backend Keyword Fine-Tuning Completed"] == "0"
           and k2["ASINs Under Monitoring"] == "22" and k3["Backend Keyword Fine-Tuning Completed"] == "0"

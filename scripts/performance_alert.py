@@ -9,7 +9,8 @@ Business rule (2026-10-05, replaces the 2-consecutive-decline Full Optimization 
   * Week 1 = anchor .. anchor+6, Week 2 = anchor+7 .. anchor+13 (7 days each, the anchor day included).
   * Metric = ORDERS: ASIN-level daily Amazon Business Report order items, both UK accounts summed
     (build_dataset.py -> monitoring_data, the same source as the weekly figures). A window is complete only
-    when all 7 days are loaded for both accounts; its orders are shown only then (orders so far = partial).
+    when all 7 days are loaded for both accounts; only then is its 7-day total final (week<n>_orders). Before that,
+    week<n>_orders_so_far = the actual DB orders of the days with data so far, shown as "to date" (2026-10-06).
   * Week 2 is never evaluated before it is complete: Week 2 orders < Week 1 -> Performance Decline,
     > -> Performance Improved, = -> Performance Stable.
   * A newer update of the same ASIN (e.g. the user's manual change) starts a NEW cycle; a window
@@ -70,14 +71,18 @@ def windows(anchor):
             ((a + dt.timedelta(7)).isoformat(), (a + dt.timedelta(13)).isoformat()))
 
 
-def window(series, available, start, end, valid=True):
-    """Orders in one 7-day window. orders is set only when all 7 days are loaded (never a partial total)."""
+def window(series, available, start, end, valid=True, data=None):
+    """Orders in one 7-day window. orders (the final 7-day total) is set only when all 7 days are loaded for both
+    accounts; orders_so_far = the actual DB orders of the days with data so far (data = dates with rows for at least
+    one account, default: available), shown as "to date", never as a 7-day total."""
     days = [(_d(start) + dt.timedelta(i)).isoformat() for i in range(7)]
     loaded = [x for x in days if x in available] if valid else []
+    with_data = [x for x in days if x in (available if data is None else data)] if valid else []
     complete = valid and len(loaded) == 7
     return {"start": start, "end": end, "valid": valid, "days_loaded": len(loaded), "complete": complete,
+            "days_with_data": len(with_data),
             "orders": sum(series.get(x, 0) for x in days) if complete else None,
-            "orders_so_far": sum(series.get(x, 0) for x in loaded) if loaded and not complete else None}
+            "orders_so_far": sum(series.get(x, 0) for x in with_data) if with_data and not complete else None}
 
 
 def anchors(rows):
@@ -96,12 +101,12 @@ def anchors(rows):
     return {k: [v[d] for d in sorted(v)] for k, v in out.items()}
 
 
-def cycle(asin, anc, next_anchor, series, available, as_of=None):
+def cycle(asin, anc, next_anchor, series, available, as_of=None, data=None):
     """One monitoring cycle from a confirmed live update. Pure."""
     (s1, e1), (s2, e2) = windows(anc["date"])
     superseded = next_anchor is not None and next_anchor <= e2
-    w1 = window(series, available, s1, e1, valid=not (superseded and next_anchor <= e1))
-    w2 = window(series, available, s2, e2, valid=not superseded)
+    w1 = window(series, available, s1, e1, valid=not (superseded and next_anchor <= e1), data=data)
+    w2 = window(series, available, s2, e2, valid=not superseded, data=data)
     if superseded:
         status = S_SUPERSEDED
     elif w1["days_loaded"] == 0:
@@ -117,8 +122,10 @@ def cycle(asin, anc, next_anchor, series, available, as_of=None):
          "live_update_source": "; ".join(anc["sources"]), "monitoring_status": status,
          "week1_start": s1, "week1_end": e1, "week1_valid": w1["valid"], "week1_days_loaded": w1["days_loaded"],
          "week1_complete": w1["complete"], "week1_orders": w1["orders"], "week1_orders_so_far": w1["orders_so_far"],
+         "week1_days_with_data": w1["days_with_data"],
          "week2_start": s2, "week2_end": e2, "week2_valid": w2["valid"], "week2_days_loaded": w2["days_loaded"],
          "week2_complete": w2["complete"], "week2_orders": w2["orders"], "week2_orders_so_far": w2["orders_so_far"],
+         "week2_days_with_data": w2["days_with_data"],
          "order_change": None, "order_change_pct": None, "superseded_by": next_anchor if superseded else None,
          "data_through": as_of}
     if w1["complete"] and w2["complete"]:
@@ -148,6 +155,7 @@ def update(ledger, ds, now=None):
     """Recomputes ledger["monitoring"] from the keyword rows' live updates and the dataset's daily orders."""
     md = ds["monitoring_data"]
     available, as_of = set(md["available_dates"]), md.get("available_through")
+    data = set(md.get("data_dates", md["available_dates"]))
     rows = ledger.get("keyword_rows", {})
     old = ledger.get("monitoring", {})
     new = {}
@@ -156,7 +164,7 @@ def update(ledger, ds, now=None):
     for asin, lst in anc.items():
         series = md["orders"].get(asin, {})
         for i, a in enumerate(lst):
-            c = cycle(asin, a, lst[i + 1]["date"] if i + 1 < len(lst) else None, series, available, as_of)
+            c = cycle(asin, a, lst[i + 1]["date"] if i + 1 < len(lst) else None, series, available, as_of, data)
             if c["key"] in old and frozen(old[c["key"]]) and old[c["key"]].get("superseded_by") == c["superseded_by"]:
                 c = old[c["key"]]
             else:
@@ -180,7 +188,8 @@ def update(ledger, ds, now=None):
 
 COLS = ["asin", "sku", "kind", "cycle_number", "latest", "backend_keyword_status", "live_update_date", "live_confirmed_at",
         "live_update_source", "monitoring_status", "monitoring_detail", "week1_start", "week1_end", "week1_days_loaded",
-        "week1_orders", "week2_start", "week2_end", "week2_days_loaded", "week2_orders", "order_change",
+        "week1_orders", "week1_days_with_data", "week1_orders_so_far", "week2_start", "week2_end", "week2_days_loaded",
+        "week2_orders", "week2_days_with_data", "week2_orders_so_far", "order_change",
         "order_change_pct", "performance_status", "superseded_by", "other_listings_pending", "data_through", "computed_at"]
 
 
@@ -222,7 +231,8 @@ def main(argv=None):
     for c in sorted(mon.values(), key=lambda c: (c["asin"], c.get("live_update_date") or "")):
         if c["kind"] == "cycle":
             print(f'  {c["asin"]} live {c["live_update_date"]}: W1 {c["week1_start"]}..{c["week1_end"]} '
-                  f'{c["week1_orders"] if c["week1_complete"] else str(c["week1_days_loaded"]) + "/7 days"} | '
+                  f'{c["week1_orders"] if c["week1_complete"] else str(c["week1_days_loaded"]) + "/7 days"}'
+                  f'{"" if c["week1_complete"] or c.get("week1_orders_so_far") is None else " (" + str(c["week1_orders_so_far"]) + " orders to date)"} | '
                   f'W2 {c["week2_start"]}..{c["week2_end"]} '
                   f'{c["week2_orders"] if c["week2_complete"] else str(c["week2_days_loaded"]) + "/7 days"} | '
                   f'{c["monitoring_status"]} | {c["performance_status"]}')
