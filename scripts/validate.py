@@ -231,6 +231,52 @@ check("Section 3 Week 1 / Week 2 Orders = final 7-day totals (29 Sep..5 Oct, 6..
       f'Week 2 {MWO["week2_days_loaded"]}/7; {sum(v["week1"] is not None for v in exp_mwo.values())} final Week 1 totals, '
       f'{sum(v["week1_to_date"] is not None for v in exp_mwo.values())} Week 1 to-date values')
 
+# ---- Section 3 Issue Detected: category stays primary; monitoring info separate (independent recompute) --------
+acc = {c["asin"] for c in DS["change_record"] if c["status"] in ("Monitoring", "Completed")}
+
+
+def w1_orders(w):
+    return w["week1"] if w["week1"] is not None else w["week1_to_date"]
+
+
+def exp_status(base, w):   # base = Current 7D Orders
+    o = w1_orders(w)
+    if w["week1"] is not None and w["week2"] is not None:
+        return ("Performance Decline" if w["week2"] < w["week1"] else
+                "Performance Improved" if w["week2"] > w["week1"] else "Performance Stable"), True
+    if w["week1"] is not None:
+        return ("Week 1 recovered" if o > base else "Week 1 below baseline" if o < base else "Monitoring — Week 2"), False
+    return ("Recovery to date" if o is not None and o > base else "Monitoring — Week 1"), False
+
+
+def exp_category(r, w):    # existing classification; Week 1 > Current 7D -> No Drop; complete Week 1 < Current 7D
+    o = w1_orders(w)       # on an original No Drop -> Overall Performance Drop (final monitoring rule 2026-10-08)
+    if o is not None and o > r["curr_orders"]:
+        return "No Drop"
+    if w["week1"] is not None and w["week1"] < r["curr_orders"] and r["issue_detected"] == "No Drop":
+        return "Overall Performance Drop"
+    return r["issue_detected"]
+
+
+MON_STATUSES = {"Recovery to date", "Week 1 recovered", "Week 1 below baseline", "Monitoring — Week 1",
+                "Monitoring — Week 2", "Performance Decline", "Performance Improved", "Performance Stable"}
+# a category that the original classification did not give: No Drop (Week 1 recovery) or Overall Performance Drop
+# (completed Week 1 decline)
+CHANGED_OK = {"No Drop", "Overall Performance Drop"}
+st_bad = [r["asin"] for r in P if (r["asin"] in acc) != (r.get("monitoring") is not None)
+          or (r["asin"] in acc and (r["monitoring"]["status"], r["monitoring"]["final"])
+              != exp_status(r["curr_orders"], MWO["orders"][r["asin"]]))
+          or r["issue_current"] != exp_category(r, MWO["orders"][r["asin"]])]
+check("Section 3 Issue Detected: always a performance category - Week 1 orders vs Current 7D for every top-moving "
+      "ASIN: the existing classification; Week 1 higher than Current 7D -> 'No Drop'; completed (7/7) Week 1 lower on "
+      "an original No Drop -> 'Overall Performance Drop'; "
+      "monitoring info separate, never the category",
+      not st_bad and not [r for r in P if r["issue_detected"] in MON_STATUSES or r["issue_current"] in MON_STATUSES]
+      and not [r for r in P if r["issue_current"] != r["issue_detected"] and r["issue_current"] not in CHANGED_OK]
+      and not any(r["monitoring"]["final"] for r in P if r.get("monitoring") and MWO["orders"][r["asin"]]["week2"] is None),
+      st_bad[:3] or {"categories": dict(collections.Counter(r["issue_current"] for r in P)),
+                     "monitoring": dict(collections.Counter(r["monitoring"]["status"] for r in P if r.get("monitoring")))})
+
 # ---- monitored ASINs (Full Optimization Review monitoring, Section 12) ------------------------
 MP = {r["asin"]: r for r in DS["monitoring_performance"]}
 LEDGER_PATH = BASE / "data" / "monitoring_cycles.json"
@@ -344,8 +390,9 @@ REQUIRED = {
     "t13o": ["ASIN / SKU", "Status / Weekly Check", "Latest Live Backend Keywords", "Duplicates · Live → Cleaned",
              "POST Attempts", "Monitoring · Audit"],
     "t13h": ["ASIN", "Update Date", "Week 1", "Week 2", "State"],
-    "t3": ["ASIN", "SKU", "Previous 7D Orders", "Current 7D Orders", "Order Change %", "Week 1 Orders", "Week 2 Orders", "Impression Change %",
-           "Click Change %", "CTR Change %", "CVR Change %", "Issue Detected"],
+    # Section 3 Week 2 Orders column always present; cells empty until all 7 Week 2 days load (2026-10-08)
+    "t3": ["ASIN", "SKU", "Previous 7D Orders", "Current 7D Orders", "Order Change %", "Week 1 Orders", "Week 2 Orders",
+           "Impression Change %", "Click Change %", "CTR Change %", "CVR Change %", "Issue Detected"],
     "t4": ["ASIN", "Content Status", "Backend Keyword Status", "Issue Found", "Action Taken"],
     "t5": ["ASIN", "Original Backend Keywords", "Issue", "Fine-Tuning Action", "Final Status"],
     "t6": ["Change Type", "Applied?", "Description"],
@@ -378,7 +425,8 @@ with sync_playwright() as pw_:
     check("3. Required sections present", all(any(s in h for h in h2) for s in REQUIRED["sections"]), h2)
     missing = {}
     for t in ["t3", "t4", "t5", "t6", "t7", "t8", "t13o", "t13h"]:
-        heads = pg.eval_on_selector_all(f"#{t} thead th", "e => e.map(x => x.textContent.trim())")
+        # header label only (a header may carry a second line, e.g. the report period, in .thsub)
+        heads = pg.eval_on_selector_all(f"#{t} thead th", "e => e.map(x => (x.querySelector('.thl') || x).textContent.trim())")
         miss = [c for c in REQUIRED[t] if c not in heads]
         if miss:
             missing[t] = miss
@@ -398,7 +446,9 @@ with sync_playwright() as pw_:
 
     n = lambda sel: pg.locator(sel).count()
     drops = kpi["performance_drop"]
-    counts = {"t3 (drop filter)": (n("#t3 tbody tr"), drops), "t4": (n("#t4 tbody tr"), len(K)),
+    # the drop filter lists the rows whose SHOWN category (issue_current) is a drop - recovered ASINs show No Drop
+    shown_drops = sum(1 for r in P if r["issue_current"] != "No Drop")
+    counts = {"t3 (drop filter)": (n("#t3 tbody tr"), shown_drops), "t4": (n("#t4 tbody tr"), len(K)),
               "t5": (n("#t5 tbody tr"), len(SUBM)), "t6": (n("#t6 tbody tr"), 9),
               "t7": (n("#t7 tbody tr"), len(DS["change_record"])),
               "t8 (one row per monitoring change record)": (n("#t8 tbody tr:not(:has(td.empty))"), sum(1 for c in CRS if c["status"] == "Monitoring"))}

@@ -23,6 +23,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from keyword_finetune import finetune  # noqa: E402
 from keyword_live_verify import latest_states  # noqa: E402  (read-only helper, no I/O at import)
 from optimization_cleanup import ORIGINAL_ANCHOR, SRC_ORIGINAL as ORIGINAL_SOURCE  # noqa: E402  (constants only)
+from performance_alert import P_DECLINE, P_IMPROVED, P_STABLE  # noqa: E402  (verdict wording only)
 
 BASE = pathlib.Path(__file__).resolve().parent.parent
 SRC = BASE / "data" / "extract.json"
@@ -68,6 +69,10 @@ def ratio(num, den):
     return num / den * 100
 
 
+# classify() categories that name a weak search metric (the generic "Order Drop ..." results do not)
+SEARCH_DROPS = ("Overall Performance Drop", "Impression Drop", "CTR Drop", "Conversion Drop")
+
+
 def classify(imp_chg, ctr_chg, cvr_chg):
     comps = {"Impression Drop": imp_chg, "CTR Drop": ctr_chg, "Conversion Drop": cvr_chg}
     known = {k: v for k, v in comps.items() if v is not None}
@@ -78,6 +83,37 @@ def classify(imp_chg, ctr_chg, cvr_chg):
         return min(neg, key=neg.get)
     return ("Order Drop (traffic stable)" if known
             else "Order Drop (no search data)")
+
+
+def monitoring_status(baseline, w):
+    """Post-change MONITORING status of a monitored ASIN (supporting information - never the performance category),
+    from its POST-CHANGE monitoring orders only. baseline = the row's Current 7D Orders (the last week before the
+    change); w = monitoring_week_orders["orders"][asin] (week<n> = final 7-day total or None; week<n>_to_date = actual
+    orders so far or None). Business rule 2026-10-06: Week 1 orders HIGHER than Current 7D = increased (No Drop),
+    LOWER = declined (drop), equal = unchanged.
+      Week 2 complete            -> final verdict, existing rule: Week 2 < Week 1 Decline, > Improved, = Stable
+      Week 1 complete            -> "Week 1 recovered" (> baseline) / "Week 1 below baseline" (<) / "Monitoring — Week 2"
+                                    (=); verdict pending
+      Week 1 incomplete, data    -> "Recovery to date" (> baseline) / "Monitoring — Week 1"; never final
+      no Week 1 data yet         -> "Monitoring — Week 1"
+    recovered / declined = Week 1 orders (final, else to date) > / < baseline - drive the Section 3 category.
+    The original detection label (issue_detected) is never changed."""
+    w1, w2, td = w.get("week1"), w.get("week2"), w.get("week1_to_date")
+    orders = w1 if w1 is not None else td
+    out = {"week1_orders": orders, "baseline": baseline,
+           "recovered": orders is not None and orders > baseline,
+           "declined": orders is not None and orders < baseline}
+    if w1 is not None and w2 is not None:
+        status = P_DECLINE if w2 < w1 else P_IMPROVED if w2 > w1 else P_STABLE
+        return {"status": status, "stage": "final", "final": True, **out}
+    if w1 is not None:
+        status = ("Week 1 recovered" if out["recovered"] else
+                  "Week 1 below baseline" if out["declined"] else "Monitoring — Week 2")
+        return {"status": status, "stage": "week1_complete", "final": False, **out}
+    if out["recovered"]:
+        return {"status": "Recovery to date", "stage": "week1_to_date", "final": False, **out}
+    return {"status": "Monitoring — Week 1", "stage": "week1_to_date" if td is not None else "not_started",
+            "final": False, **out}
 
 
 def anchor_of(key):
@@ -358,6 +394,28 @@ def main():
                        **{f"week{n}_to_date": (sum(p_daily[a].get(x, 0) for x in data_days[n])
                                                if data_days[n] and week_days[n] < 7 else None) for n in (1, 2)}}
                    for a in sorted(p_asins)}}
+
+    # Post-change monitoring information of an ASIN with an accepted backend keyword change (monitoring) is
+    # supporting detail; a monitoring status is never shown as the performance category. Section 3 category
+    # (issue_current, business instruction 2026-10-08, final monitoring rule), for EVERY top-moving ASIN: the EXISTING
+    # performance classification (issue_detected, Previous 7D -> Current 7D), then the post-change comparison Current 7D
+    # -> Week 1 orders (29 Sep..5 Oct, actual DB orders):
+    #   Week 1 HIGHER (final, or to date) -> recovery confirmed -> "No Drop"
+    #   Week 1 COMPLETE (7/7) and LOWER, original No Drop -> "Overall Performance Drop" (Week 1 has no impression /
+    #     click data of its own, so no more specific search-metric category applies; never "Order Drop ...")
+    #   otherwise (equal, not yet complete, or already a drop) -> the existing classification.
+    # Monitoring statuses (Recovery to date, Monitoring — Week 1, ...) live only in row["monitoring"].
+    # issue_detected stays the original classification (audit).
+    accepted = {c["asin"] for c in change_record if c["status"] in ("Monitoring", "Completed")}
+    for row in perf_rows:
+        week1 = monitoring_status(row["curr_orders"], monitoring_week_orders["orders"][row["asin"]])
+        row["week1_recovered"], row["week1_declined"] = week1["recovered"], week1["declined"]
+        row["monitoring"] = week1 if row["asin"] in accepted else None
+        w1_complete = monitoring_week_orders["orders"][row["asin"]]["week1"] is not None
+        row["issue_current"] = ("No Drop" if week1["recovered"] else
+                                "Overall Performance Drop" if (w1_complete and week1["declined"]
+                                                               and row["issue_detected"] == "No Drop")
+                                else row["issue_detected"])
 
     # Monitored ASINs = change-record ASINs + ASINs already in the monitoring-cycle ledger, so an
     # ASIN keeps being measured after it leaves the top 50. Same metric code as Section 3.

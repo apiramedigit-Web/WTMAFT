@@ -1,0 +1,334 @@
+{
+ "results": [
+  {
+   "test": "A Current 7D 0 -> Week 1 3 to date: increased, 'Recovery to date', not final",
+   "pass": true,
+   "detail": {
+    "status": "Recovery to date",
+    "stage": "week1_to_date",
+    "final": false,
+    "week1_orders": 3,
+    "baseline": 0,
+    "recovered": true,
+    "declined": false
+   }
+  },
+  {
+   "test": "B Current 7D 3 -> Week 1 2 to date: declined, no recovery, 'Monitoring — Week 1', not final",
+   "pass": true,
+   "detail": {
+    "status": "Monitoring — Week 1",
+    "stage": "week1_to_date",
+    "final": false,
+    "week1_orders": 2,
+    "baseline": 3,
+    "recovered": false,
+    "declined": true
+   }
+  },
+  {
+   "test": "B2 equal (Current 7D 1 -> Week 1 1): neither increased nor declined (category unchanged)",
+   "pass": true,
+   "detail": {
+    "status": "Monitoring — Week 1",
+    "stage": "week1_to_date",
+    "final": false,
+    "week1_orders": 1,
+    "baseline": 1,
+    "recovered": false,
+    "declined": false
+   }
+  },
+  {
+   "test": "B3 0 -> 0: neither increased nor declined; no data yet -> stage not_started, nothing invented",
+   "pass": true,
+   "detail": {
+    "status": "Monitoring — Week 1",
+    "stage": "week1_to_date",
+    "final": false,
+    "week1_orders": 0,
+    "baseline": 0,
+    "recovered": false,
+    "declined": false
+   }
+  },
+  {
+   "test": "C Week 1 incomplete: never a final verdict and never a Performance Decline/Improved/Stable label",
+   "pass": true,
+   "detail": [
+    "Monitoring — Week 1",
+    "Recovery to date",
+    "Recovery to date",
+    "Recovery to date",
+    "Monitoring — Week 1",
+    "Monitoring — Week 1",
+    "Recovery to date",
+    "Recovery to date",
+    "Monitoring — Week 1",
+    "Monitoring — Week 1",
+    "Monitoring — Week 1",
+    "Recovery to date",
+    "Monitoring — Week 1",
+    "Monitoring — Week 1",
+    "Monitoring — Week 1",
+    "Recovery to date"
+   ]
+  },
+  {
+   "test": "D Week 1 complete vs Current 7D 3: 4 'Week 1 recovered' / 2 'Week 1 below baseline' / 3 'Monitoring — Week 2'",
+   "pass": true,
+   "detail": [
+    {
+     "status": "Week 1 recovered",
+     "stage": "week1_complete",
+     "final": false,
+     "week1_orders": 4,
+     "baseline": 3,
+     "recovered": true,
+     "declined": false
+    },
+    {
+     "status": "Week 1 below baseline",
+     "stage": "week1_complete",
+     "final": false,
+     "week1_orders": 2,
+     "baseline": 3,
+     "recovered": false,
+     "declined": true
+    },
+    {
+     "status": "Monitoring — Week 2",
+     "stage": "week1_complete",
+     "final": false,
+     "week1_orders": 3,
+     "baseline": 3,
+     "recovered": false,
+     "declined": false
+    }
+   ]
+  },
+  {
+   "test": "E Week 2 incomplete (even with more orders to date): no final verdict",
+   "pass": true,
+   "detail": {
+    "status": "Week 1 recovered",
+    "stage": "week1_complete",
+    "final": false,
+    "week1_orders": 4,
+    "baseline": 3,
+    "recovered": true,
+    "declined": false
+   }
+  },
+  {
+   "test": "E2 Week 2 complete: Performance Decline (14 -> 7) / Improved (7 -> 14) / Stable (7 -> 7), final",
+   "pass": true,
+   "detail": {
+    "14->7": "Performance Decline",
+    "7->14": "Performance Improved",
+    "7->7": "Performance Stable"
+   }
+  },
+  {
+   "test": "F every top-moving ASIN: category = existing classification, Week 1 > Current 7D -> No Drop, completed Week 1 < Current 7D on No Drop -> Overall Performance Drop",
+   "pass": true,
+   "detail": []
+  },
+  {
+   "test": "F1 no category in the dataset is a monitoring status; original classification kept in issue_detected",
+   "pass": true,
+   "detail": null
+  },
+  {
+   "test": "F1b a category differs from the existing classification only as 'No Drop' (Week 1 recovery) or 'Overall Performance Drop' (completed Week 1 decline)",
+   "pass": true,
+   "detail": [
+    "No Drop",
+    "Overall Performance Drop"
+   ]
+  },
+  {
+   "test": "F2 all 50 rendered; every primary label = the shown category, never a monitoring status; a changed category shows 'Original category' underneath",
+   "pass": true,
+   "detail": {
+    "rows": 50,
+    "primary": [
+     "CTR Drop",
+     "Conversion Drop",
+     "Impression Drop",
+     "No Drop",
+     "Overall Performance Drop"
+    ]
+   }
+  },
+  {
+   "test": "F3 screenshot rows (Current 7D 3 -> Week 1 2 / 0 / 2, 7/7): 'Overall Performance Drop', original No Drop underneath",
+   "pass": true,
+   "detail": {
+    "B084R7QN2X": [
+     [
+      3,
+      2
+     ],
+     "Overall Performance Drop"
+    ],
+    "B0C43LY8DB": [
+     [
+      3,
+      0
+     ],
+     "Overall Performance Drop"
+    ],
+    "B08XWSBPHW": [
+     [
+      3,
+      2
+     ],
+     "Overall Performance Drop"
+    ]
+   }
+  },
+  {
+   "test": "F4 B0DTHZ1JX5 (Current 7D 0 -> Week 1 3): 'No Drop', original 'Conversion Drop' underneath",
+   "pass": true,
+   "detail": "No Drop\nOriginal category: Conversion Drop\nWeek 1 monitoring: 3\nBaseline (Current 7D): 0\nMonitoring status: Week 1 recovered (not final)"
+  },
+  {
+   "test": "F5 B0D59MHSXN (Current 7D 1 -> Week 1 1, equal): keeps its original category",
+   "pass": true,
+   "detail": [
+    1,
+    1,
+    "Overall Performance Drop"
+   ]
+  },
+  {
+   "test": "F6 filter views: 'Performance drop only' = exactly the rows shown with a drop category, 'No Drop only' = exactly the No Drop rows, together all 50, no overlap",
+   "pass": true,
+   "detail": {
+    "drop": 36,
+    "nodrop": 14,
+    "all": 50
+   }
+  },
+  {
+   "test": "R1 B0C8NJDTJS (Previous 7D 3, Current 7D 13, Week 1 4): primary 'Overall Performance Drop', never 'No Drop'",
+   "pass": true,
+   "detail": {
+    "shown": "Overall Performance Drop",
+    "issue_detected": "No Drop",
+    "monitoring": null
+   }
+  },
+  {
+   "test": "R1b B0D59PP6PC (Previous 7D 0, Current 7D 1, Week 1 0): primary 'Overall Performance Drop', never 'Order Drop (traffic stable)'",
+   "pass": true,
+   "detail": {
+    "shown": "Overall Performance Drop",
+    "issue_detected": "No Drop",
+    "monitoring": {
+     "status": "Week 1 below baseline",
+     "stage": "week1_complete",
+     "final": false,
+     "week1_orders": 0,
+     "baseline": 1,
+     "recovered": false,
+     "declined": true
+    }
+   }
+  },
+  {
+   "test": "R1c B0C43LY8DB (Previous 7D 3, Current 7D 3, Week 1 0): primary 'Overall Performance Drop', never 'No Drop'",
+   "pass": true,
+   "detail": {
+    "shown": "Overall Performance Drop",
+    "issue_detected": "No Drop",
+    "monitoring": {
+     "status": "Week 1 below baseline",
+     "stage": "week1_complete",
+     "final": false,
+     "week1_orders": 0,
+     "baseline": 3,
+     "recovered": false,
+     "declined": true
+    }
+   }
+  },
+  {
+   "test": "R2 B0DTHZ1JX5 (Previous 7D 3, Current 7D 0, Week 1 3): primary 'No Drop', never 'Recovery to date'",
+   "pass": true,
+   "detail": {
+    "shown": "No Drop",
+    "issue_detected": "Conversion Drop",
+    "monitoring": {
+     "status": "Week 1 recovered",
+     "stage": "week1_complete",
+     "final": false,
+     "week1_orders": 3,
+     "baseline": 0,
+     "recovered": true,
+     "declined": false
+    }
+   }
+  },
+  {
+   "test": "R3 B0D7944QDY (Previous 7D 1, Current 7D 0, Week 1 0): primary 'Conversion Drop', never 'Monitoring — Week 1'",
+   "pass": true,
+   "detail": {
+    "shown": "Conversion Drop",
+    "issue_detected": "Conversion Drop",
+    "monitoring": {
+     "status": "Monitoring — Week 2",
+     "stage": "week1_complete",
+     "final": false,
+     "week1_orders": 0,
+     "baseline": 0,
+     "recovered": false,
+     "declined": false
+    }
+   }
+  },
+  {
+   "test": "R4 B0D59MHSXN (Previous 7D 3, Current 7D 1, Week 1 1): primary 'Overall Performance Drop', never 'Monitoring — Week 1'",
+   "pass": true,
+   "detail": {
+    "shown": "Overall Performance Drop",
+    "issue_detected": "Overall Performance Drop",
+    "monitoring": {
+     "status": "Monitoring — Week 2",
+     "stage": "week1_complete",
+     "final": false,
+     "week1_orders": 1,
+     "baseline": 1,
+     "recovered": false,
+     "declined": false
+    }
+   }
+  },
+  {
+   "test": "R5 no monitoring status or generic 'Order Drop' value is ever a primary category (dataset + all 50 rendered)",
+   "pass": true,
+   "detail": [
+    "CTR Drop",
+    "Conversion Drop",
+    "Impression Drop",
+    "No Drop",
+    "Overall Performance Drop"
+   ]
+  },
+  {
+   "test": "R6 'Performance drop only' lists only rows whose current category is a drop (none shows 'No Drop'): includes B0D7944QDY / B0D59PP6PC / B0C43LY8DB, excludes B0DTHZ1JX5",
+   "pass": true,
+   "detail": {
+    "drop rows": 36
+   }
+  },
+  {
+   "test": "R7 'All top-moving ASINs' lists all 50 rows",
+   "pass": true,
+   "detail": 50
+  }
+ ],
+ "passed": 25,
+ "failed": 0
+}

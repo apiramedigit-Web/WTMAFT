@@ -14,7 +14,7 @@
    "2026-09-13",
    "2026-09-19"
   ],
-  "extracted_at": "2026-10-06T08:46:43",
+  "extracted_at": "2026-10-08T08:55:02",
   "top_moving_n": 50,
   "top_moving_candidates": 163,
   "ph_scope": {
@@ -270,7 +270,19 @@
    ],
    "sku": "WCDTBM2PK+RPR44WH2PK, WCDTBM2PK+RPR44WH2PK_AML",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": true,
+   "week1_declined": false,
+   "monitoring": {
+    "status": "Week 1 recovered",
+    "stage": "week1_complete",
+    "final": false,
+    "week1_orders": 26,
+    "baseline": 18,
+    "recovered": true,
+    "declined": false
+   },
+   "issue_current": "No Drop"
   },
   {
    "rank": 2,
@@ -311,7 +323,11 @@
    ],
    "sku": "LSBLP3BCR, WCB6BC+RPR44WH M",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": true,
+   "monitoring": null,
+   "issue_current": "Overall Performance Drop"
   },
   {
    "rank": 3,
@@ -351,7 +367,19 @@
    ],
    "sku": "WCDTYE+RPR44WH",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": true,
+   "monitoring": {
+    "status": "Week 1 below baseline",
+    "stage": "week1_complete",
+    "final": false,
+    "week1_orders": 0,
+    "baseline": 3,
+    "recovered": false,
+    "declined": true
+   },
+   "issue_current": "Overall Performance Drop"
   },
   {
    "rank": 4,
@@ -392,7 +420,11 @@
    ],
    "sku": "WCB1BM+RPR44WH C, WCB1BM+RPR44WH_AMD",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": true,
+   "monitoring": null,
+   "issue_current": "Overall Performance Drop"
   },
   {
    "rank": 5,
@@ -432,7 +464,11 @@
    ],
    "sku": "WCBSF120FG2PK+RPR44WH2PK",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": true,
+   "monitoring": null,
+   "issue_current": "Conversion Drop"
   },
   {
    "rank": 6,
@@ -478,7 +514,19 @@
    ],
    "sku": "WCB3WH2PK+RPR44WH2PK VD, WCB3WH2PK+RPR44WH2PK VD_DCVV, WCB3WH2PK+RPR44WH2PK_AMD",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": false,
+   "monitoring": {
+    "status": "Monitoring — Week 2",
+    "stage": "week1_complete",
+    "final": false,
+    "week1_orders": 1,
+    "baseline": 1,
+    "recovered": false,
+    "declined": false
+   },
+   "issue_current": "Overall Performance Drop"
   },
   {
    "rank": 7,
@@ -518,7 +566,19 @@
    ],
    "sku": "WCDTBM3PK+RPR44WH3PK AM",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": true,
+   "week1_declined": false,
+   "monitoring": {
+    "status": "Week 1 recovered",
+    "stage": "week1_complete",
+    "final": false,
+    "week1_orders": 3,
+    "baseline": 0,
+    "recovered": true,
+    "declined": false
+   },
+   "issue_current": "No Drop"
   },
   {
    "rank": 8,
@@ -558,7 +618,19 @@
    ],
    "sku": "WCBSF90FG2PK+RPR44WH2PK",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": true,
+   "monitoring": {
+    "status": "Week 1 below baseline",
+    "stage": "week1_complete",
+    "final": false,
+    "week1_orders": 0,
+    "baseline": 5,
+    "recovered": false,
+    "declined": true
+   },
+   "issue_current": "Overall Performance Drop"
   },
   {
    "rank": 9,
@@ -604,7 +676,11 @@
    ],
    "sku": "WCDTBM3PK+RPR44WH3PK, WCDTBM3PK+RPR44WH3PK_AMD, WCDTBM3PK+RPR44WH3PK_DCVV",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": true,
+   "monitoring": null,
+   "issue_current": "Overall Performance Drop"
   },
   {
    "rank": 10,
@@ -649,7 +725,11 @@
    ],
    "sku": "WCB6WH+RPR44WH WH, WCB6WH+RPR44WH WH_DCVV",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": true,
+   "monitoring": null,
+   "issue_current": "Overall Performance Drop"
   },
   {
    "rank": 11,
@@ -691,7 +771,11 @@
    ],
    "sku": "WCWDBM2PK+RPR44WH2PK, WCWDBM2PK+RPR44WH2PK_AMD, WCWDBM2PK+RPR44WH2PK_DCVV",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": true,
+   "monitoring": null,
+   "issue_current": "Overall Performance Drop"
   },
   {
    "rank": 12,
@@ -731,7 +815,19 @@
    ],
    "sku": "WCB6BM2PK",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": false,
+   "monitoring": {
+    "status": "Monitoring — Week 2",
+    "stage": "week1_complete",
+    "final": false,
+    "week1_orders": 0,
+    "baseline": 0,
+    "recovered": false,
+    "declined": false
+   },
+   "issue_current": "Conversion Drop"
   },
   {
    "rank": 13,
@@ -771,7 +867,11 @@
    ],
    "sku": "WCDTWH3PK+RPR44WH3PK M",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": false,
+   "monitoring": null,
+   "issue_current": "Conversion Drop"
   },
   {
    "rank": 14,
@@ -811,7 +911,19 @@
    ],
    "sku": "WCB2BM3PK+RPR44WH3PK BM_",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": false,
+   "monitoring": {
+    "status": "Monitoring — Week 2",
+    "stage": "week1_complete",
+    "final": false,
+    "week1_orders": 0,
+    "baseline": 0,
+    "recovered": false,
+    "declined": false
+   },
+   "issue_current": "Overall Performance Drop"
   },
   {
    "rank": 15,
@@ -856,7 +968,11 @@
    ],
    "sku": "WCB7WH, WCB7WH_DCVV",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": true,
+   "monitoring": null,
+   "issue_current": "Overall Performance Drop"
   },
   {
    "rank": 16,
@@ -897,7 +1013,19 @@
    ],
    "sku": "WCDCBM3PK+RPR44WH3PK M, WCDCBM3PK+RPR44WH3PK_AB",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": true,
+   "monitoring": {
+    "status": "Week 1 below baseline",
+    "stage": "week1_complete",
+    "final": false,
+    "week1_orders": 1,
+    "baseline": 3,
+    "recovered": false,
+    "declined": true
+   },
+   "issue_current": "Overall Performance Drop"
   },
   {
    "rank": 17,
@@ -937,7 +1065,19 @@
    ],
    "sku": "WCDTWH+RPR44WH",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": true,
+   "monitoring": {
+    "status": "Week 1 below baseline",
+    "stage": "week1_complete",
+    "final": false,
+    "week1_orders": 0,
+    "baseline": 2,
+    "recovered": false,
+    "declined": true
+   },
+   "issue_current": "Overall Performance Drop"
   },
   {
    "rank": 18,
@@ -977,7 +1117,11 @@
    ],
    "sku": "WCDTBM+RPR44WH",
    "listing_issue_count": 1,
-   "content_status": "1 listing issue(s) reported: WARNING"
+   "content_status": "1 listing issue(s) reported: WARNING",
+   "week1_recovered": false,
+   "week1_declined": true,
+   "monitoring": null,
+   "issue_current": "Overall Performance Drop"
   },
   {
    "rank": 19,
@@ -1018,7 +1162,11 @@
    ],
    "sku": "WCFL180RO, WCFL180RO_AML",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": true,
+   "monitoring": null,
+   "issue_current": "Overall Performance Drop"
   },
   {
    "rank": 20,
@@ -1059,7 +1207,11 @@
    ],
    "sku": "WCWYBM2PK, WCWYBM2PK AMN",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": false,
+   "monitoring": null,
+   "issue_current": "Conversion Drop"
   },
   {
    "rank": 21,
@@ -1099,7 +1251,11 @@
    ],
    "sku": "WCB6BC2PK+RPR44WH2PK - VD",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": true,
+   "monitoring": null,
+   "issue_current": "Overall Performance Drop"
   },
   {
    "rank": 22,
@@ -1139,7 +1295,19 @@
    ],
    "sku": "WCDTRE+RPR44WH",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": true,
+   "week1_declined": false,
+   "monitoring": {
+    "status": "Week 1 recovered",
+    "stage": "week1_complete",
+    "final": false,
+    "week1_orders": 4,
+    "baseline": 1,
+    "recovered": true,
+    "declined": false
+   },
+   "issue_current": "No Drop"
   },
   {
    "rank": 23,
@@ -1179,7 +1347,11 @@
    ],
    "sku": "WCDTWH2PK+RPR44WH2PK C",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": false,
+   "monitoring": null,
+   "issue_current": "Overall Performance Drop"
   },
   {
    "rank": 24,
@@ -1220,7 +1392,11 @@
    ],
    "sku": "WCB6BM3PK+RPR44WH3PK, WCB6BM3PK+RPR44WH3PK_AML",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": true,
+   "monitoring": null,
+   "issue_current": "Overall Performance Drop"
   },
   {
    "rank": 25,
@@ -1260,7 +1436,19 @@
    ],
    "sku": "WCB3BS+RPR44WH C",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": false,
+   "monitoring": {
+    "status": "Monitoring — Week 2",
+    "stage": "week1_complete",
+    "final": false,
+    "week1_orders": 0,
+    "baseline": 0,
+    "recovered": false,
+    "declined": false
+   },
+   "issue_current": "No Drop"
   },
   {
    "rank": 26,
@@ -1300,7 +1488,19 @@
    ],
    "sku": "WCB4BC+RPR44WH",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": false,
+   "monitoring": {
+    "status": "Monitoring — Week 2",
+    "stage": "week1_complete",
+    "final": false,
+    "week1_orders": 0,
+    "baseline": 0,
+    "recovered": false,
+    "declined": false
+   },
+   "issue_current": "No Drop"
   },
   {
    "rank": 27,
@@ -1340,7 +1540,11 @@
    ],
    "sku": "WCB2BS2PK+RPR44WH2PK VD",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": false,
+   "monitoring": null,
+   "issue_current": "Conversion Drop"
   },
   {
    "rank": 28,
@@ -1380,7 +1584,11 @@
    ],
    "sku": "WCB7BS2PK+RPR44WH2PK - VD",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": false,
+   "monitoring": null,
+   "issue_current": "Conversion Drop"
   },
   {
    "rank": 29,
@@ -1424,7 +1632,11 @@
    ],
    "sku": "WCB6BM+RPR44WH A",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": true,
+   "monitoring": null,
+   "issue_current": "CTR Drop"
   },
   {
    "rank": 30,
@@ -1464,7 +1676,11 @@
    ],
    "sku": "WCB7BS+RPR44WH K",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": true,
+   "monitoring": null,
+   "issue_current": "CTR Drop"
   },
   {
    "rank": 31,
@@ -1505,7 +1721,11 @@
    ],
    "sku": "WCB4WH2PK+RPR44WH2PK, WCB4WH2PK+RPR44WH2PK_DCVV",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": false,
+   "monitoring": null,
+   "issue_current": "CTR Drop"
   },
   {
    "rank": 32,
@@ -1545,7 +1765,11 @@
    ],
    "sku": "WCVCBC3PK+RPR44WH3PK  RR",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": true,
+   "week1_declined": false,
+   "monitoring": null,
+   "issue_current": "No Drop"
   },
   {
    "rank": 33,
@@ -1585,7 +1809,11 @@
    ],
    "sku": "WCB6RR+RPR44WH",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": false,
+   "monitoring": null,
+   "issue_current": "Impression Drop"
   },
   {
    "rank": 34,
@@ -1629,7 +1857,11 @@
    ],
    "sku": "WCB7WH2PK+RPR44WH2PK - VD",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": true,
+   "monitoring": null,
+   "issue_current": "Overall Performance Drop"
   },
   {
    "rank": 35,
@@ -1670,7 +1902,11 @@
    ],
    "sku": "WCB6BM2PK+RPR44WH2PK - VD, WCB6BM2PK+RPR44WH2PK AMD",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": true,
+   "week1_declined": false,
+   "monitoring": null,
+   "issue_current": "No Drop"
   },
   {
    "rank": 36,
@@ -1711,7 +1947,11 @@
    ],
    "sku": "WCB2WH2PK+RPR44WH2PK, WCB2WH2PK+RPR44WH2PK_DCVV",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": false,
+   "monitoring": null,
+   "issue_current": "No Drop"
   },
   {
    "rank": 37,
@@ -1751,7 +1991,11 @@
    ],
    "sku": "WCVCBC2PK+RPR44WH2PK",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": false,
+   "monitoring": null,
+   "issue_current": "No Drop"
   },
   {
    "rank": 38,
@@ -1791,7 +2035,11 @@
    ],
    "sku": "WCB3BM2PK+RPR44WH2PK j",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": false,
+   "monitoring": null,
+   "issue_current": "Conversion Drop"
   },
   {
    "rank": 39,
@@ -1831,7 +2079,19 @@
    ],
    "sku": "WCVCBS2PK+RPR44WH2PK",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": false,
+   "monitoring": {
+    "status": "Monitoring — Week 2",
+    "stage": "week1_complete",
+    "final": false,
+    "week1_orders": 0,
+    "baseline": 0,
+    "recovered": false,
+    "declined": false
+   },
+   "issue_current": "Overall Performance Drop"
   },
   {
    "rank": 40,
@@ -1871,7 +2131,19 @@
    ],
    "sku": "WCDTGR2PK+RPR44WH2PK",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": false,
+   "monitoring": {
+    "status": "Monitoring — Week 2",
+    "stage": "week1_complete",
+    "final": false,
+    "week1_orders": 0,
+    "baseline": 0,
+    "recovered": false,
+    "declined": false
+   },
+   "issue_current": "Overall Performance Drop"
   },
   {
    "rank": 41,
@@ -1916,7 +2188,11 @@
    ],
    "sku": "WCB2WH, WCB2WH_DCVV",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": true,
+   "monitoring": null,
+   "issue_current": "Overall Performance Drop"
   },
   {
    "rank": 42,
@@ -1956,7 +2232,11 @@
    ],
    "sku": "WCB1BM+RPR44WH M",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": false,
+   "monitoring": null,
+   "issue_current": "No Drop"
   },
   {
    "rank": 43,
@@ -1996,7 +2276,11 @@
    ],
    "sku": "WCDTBM3PK+RPR44WH3PK",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": true,
+   "week1_declined": false,
+   "monitoring": null,
+   "issue_current": "No Drop"
   },
   {
    "rank": 44,
@@ -2037,7 +2321,11 @@
    ],
    "sku": "WCB7BS3PK+RPR44WH3PK BS, WCB7BS3PK+RPR44WH3PK_AMD",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": true,
+   "monitoring": null,
+   "issue_current": "Overall Performance Drop"
   },
   {
    "rank": 45,
@@ -2077,7 +2365,19 @@
    ],
    "sku": "WCB1BM2PK+RPR44WH2PK VD",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": true,
+   "monitoring": {
+    "status": "Week 1 below baseline",
+    "stage": "week1_complete",
+    "final": false,
+    "week1_orders": 0,
+    "baseline": 1,
+    "recovered": false,
+    "declined": true
+   },
+   "issue_current": "Overall Performance Drop"
   },
   {
    "rank": 46,
@@ -2117,7 +2417,19 @@
    ],
    "sku": "LSBLP4BSR",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": false,
+   "monitoring": {
+    "status": "Monitoring — Week 2",
+    "stage": "week1_complete",
+    "final": false,
+    "week1_orders": 0,
+    "baseline": 0,
+    "recovered": false,
+    "declined": false
+   },
+   "issue_current": "No Drop"
   },
   {
    "rank": 47,
@@ -2157,7 +2469,11 @@
    ],
    "sku": "LSBLP3BK",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": true,
+   "monitoring": null,
+   "issue_current": "Overall Performance Drop"
   },
   {
    "rank": 48,
@@ -2197,7 +2513,11 @@
    ],
    "sku": "WCB6BM2PK+RPR44WH2PK",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": true,
+   "week1_declined": false,
+   "monitoring": null,
+   "issue_current": "No Drop"
   },
   {
    "rank": 49,
@@ -2237,7 +2557,11 @@
    ],
    "sku": "WCB2BC2PK+RPR44WH2PK VD",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": true,
+   "week1_declined": false,
+   "monitoring": null,
+   "issue_current": "No Drop"
   },
   {
    "rank": 50,
@@ -2277,7 +2601,11 @@
    ],
    "sku": "WCBCFRO2PK",
    "listing_issue_count": 0,
-   "content_status": "No listing issues reported"
+   "content_status": "No listing issues reported",
+   "week1_recovered": false,
+   "week1_declined": false,
+   "monitoring": null,
+   "issue_current": "Overall Performance Drop"
   }
  ],
  "keyword_analysis": [
@@ -5039,7 +5367,9 @@
    "2026-10-01",
    "2026-10-02",
    "2026-10-03",
-   "2026-10-04"
+   "2026-10-04",
+   "2026-10-05",
+   "2026-10-06"
   ],
   "data_dates": [
    "2026-07-19",
@@ -5119,9 +5449,11 @@
    "2026-10-01",
    "2026-10-02",
    "2026-10-03",
-   "2026-10-04"
+   "2026-10-04",
+   "2026-10-05",
+   "2026-10-06"
   ],
-  "available_through": "2026-10-04",
+  "available_through": "2026-10-06",
   "orders": {
    "B07RTY1TFK": {
     "2026-07-26": 1,
@@ -5293,6 +5625,7 @@
     "2026-09-22": 1,
     "2026-08-29": 1,
     "2026-08-26": 1,
+    "2026-10-06": 1,
     "2026-07-30": 1,
     "2026-09-25": 1,
     "2026-07-21": 1,
@@ -5310,6 +5643,7 @@
     "2026-08-21": 2,
     "2026-08-06": 2,
     "2026-08-08": 3,
+    "2026-10-06": 4,
     "2026-08-23": 2,
     "2026-08-03": 4,
     "2026-09-12": 3,
@@ -5346,6 +5680,7 @@
     "2026-08-10": 4,
     "2026-08-31": 2,
     "2026-09-26": 3,
+    "2026-10-05": 5,
     "2026-08-12": 1,
     "2026-09-06": 1,
     "2026-07-30": 1,
@@ -5387,6 +5722,7 @@
     "2026-09-11": 1,
     "2026-10-04": 1,
     "2026-08-19": 1,
+    "2026-10-06": 1,
     "2026-09-10": 1,
     "2026-09-29": 1,
     "2026-08-07": 1,
@@ -5450,15 +5786,12 @@
    "2026-10-06",
    "2026-10-12"
   ],
-  "week1_days_loaded": 6,
-  "week2_days_loaded": 0,
-  "week1_days_with_data": 6,
-  "week2_days_with_data": 0,
-  "week1_missing_days": [
-   "2026-10-05"
-  ],
+  "week1_days_loaded": 7,
+  "week2_days_loaded": 1,
+  "week1_days_with_data": 7,
+  "week2_days_with_data": 1,
+  "week1_missing_days": [],
   "week2_missing_days": [
-   "2026-10-06",
    "2026-10-07",
    "2026-10-08",
    "2026-10-09",
@@ -5470,304 +5803,304 @@
   "week2_one_account_days": [],
   "orders": {
    "B084R7QN2X": {
-    "week1": null,
+    "week1": 2,
     "week2": null,
-    "week1_to_date": 2,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 2
    },
    "B084RL7K8J": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B084RNS6JW": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 1
    },
    "B08V8GXTQ1": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B08XVT2VKW": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B08XWSBPHW": {
-    "week1": null,
+    "week1": 2,
     "week2": null,
-    "week1_to_date": 2,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 1
    },
    "B09MQSJ72N": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B09MQTBVVQ": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0C43L42DK": {
-    "week1": null,
+    "week1": 4,
     "week2": null,
-    "week1_to_date": 4,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0C43LY8DB": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0C43N2F3D": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0C8NJDTJS": {
-    "week1": null,
+    "week1": 4,
     "week2": null,
-    "week1_to_date": 4,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 1
    },
    "B0CBLWLZ4W": {
-    "week1": null,
+    "week1": 1,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 2
    },
    "B0CBLXL9R1": {
-    "week1": null,
+    "week1": 1,
     "week2": null,
-    "week1_to_date": 1,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0CBPQG9G7": {
-    "week1": null,
+    "week1": 2,
     "week2": null,
-    "week1_to_date": 2,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0CBPQVC6K": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0CCDR7C3Y": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0CCJSK84F": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0CDBYNK9B": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0CMX4P499": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0CNJSDYVG": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0CNJX1DV8": {
-    "week1": null,
+    "week1": 1,
     "week2": null,
-    "week1_to_date": 1,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0CS3LSTMS": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0CV55T6YK": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0D53FZ8GS": {
-    "week1": null,
+    "week1": 1,
     "week2": null,
-    "week1_to_date": 1,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0D56WV9GR": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0D56YL7CS": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0D56ZN8NP": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 2
    },
    "B0D5711PRY": {
-    "week1": null,
+    "week1": 1,
     "week2": null,
-    "week1_to_date": 1,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0D59MHSXN": {
-    "week1": null,
+    "week1": 1,
     "week2": null,
-    "week1_to_date": 1,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0D59PJ89M": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0D59PP6PC": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0D59Q2DL8": {
-    "week1": null,
+    "week1": 2,
     "week2": null,
-    "week1_to_date": 2,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0D7944QDY": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0D83PFMTP": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0D93PN1ZS": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0D94627RM": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0D9RQQZYB": {
-    "week1": null,
+    "week1": 1,
     "week2": null,
-    "week1_to_date": 1,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 1
    },
    "B0D9RVLLF7": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0DH4KYFPD": {
-    "week1": null,
+    "week1": 26,
     "week2": null,
-    "week1_to_date": 21,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 4
    },
    "B0DH4LFC25": {
-    "week1": null,
+    "week1": 3,
     "week2": null,
-    "week1_to_date": 2,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0DTHKSHFY": {
-    "week1": null,
+    "week1": 1,
     "week2": null,
-    "week1_to_date": 1,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 1
    },
    "B0DTHZ1JX5": {
-    "week1": null,
+    "week1": 3,
     "week2": null,
-    "week1_to_date": 3,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 1
    },
    "B0DTPB2YC2": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0DTY7H97T": {
-    "week1": null,
+    "week1": 2,
     "week2": null,
-    "week1_to_date": 2,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0F21TXF2F": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 1
    },
    "B0FTZFHVV1": {
-    "week1": null,
+    "week1": 2,
     "week2": null,
-    "week1_to_date": 2,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 1
    },
    "B0FXFMGXK7": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0GXB58114": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    },
    "B0GXB7RGZK": {
-    "week1": null,
+    "week1": 0,
     "week2": null,
-    "week1_to_date": 0,
-    "week2_to_date": null
+    "week1_to_date": null,
+    "week2_to_date": 0
    }
   }
  },

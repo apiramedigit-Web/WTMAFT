@@ -1,5 +1,5 @@
 {
- "run_at": "2026-10-06T08:48:45",
+ "run_at": "2026-10-08T09:14:20",
  "mode": "fake DB/Listing Management reads, temp evidence copies; read-only path",
  "passed": 15,
  "failed": 0,
@@ -80,7 +80,7 @@
    "id": "P13",
    "test": "monitoring anchored on 2026-09-29 (not the 2 Oct GET date): Week 1 = 29 Sep..5 Oct, Week 2 = 6..12 Oct; status follows the loaded days, no Week 1 total before 7/7 days",
    "result": "PASS",
-   "detail": "{'key': 'B0D7944QDY|2026-09-29', 'kind': 'cycle', 'asin': 'B0D7944QDY', 'skus': ['WCB6BM2PK'], 'sku': 'WCB6BM2PK', 'backend_keyword_status': 'Live-verified', 'live_update_date': '2026-09-29', 'live_confirmed_at': '2026-09-28T17:21:17', 'live_update_source': 'original submission POST Accepted (common monitoring anchor)', 'monitoring_status': 'Monitoring — Week 1', 'week1_start': '2026-09-29', 'week"
+   "detail": "{'key': 'B0D7944QDY|2026-09-29', 'kind': 'cycle', 'asin': 'B0D7944QDY', 'skus': ['WCB6BM2PK'], 'sku': 'WCB6BM2PK', 'backend_keyword_status': 'Live-verified', 'live_update_date': '2026-09-29', 'live_confirmed_at': '2026-09-28T17:21:17', 'live_update_source': 'original submission POST Accepted (common monitoring anchor)', 'monitoring_status': 'Monitoring — Week 2', 'week1_start': '2026-09-29', 'week"
   },
   {
    "id": "P14",

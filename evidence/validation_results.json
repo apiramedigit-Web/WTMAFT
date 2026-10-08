@@ -1,6 +1,6 @@
 {
- "validated_at": "2026-10-06T08:47:45",
- "passed": 52,
+ "validated_at": "2026-10-08T09:14:07",
+ "passed": 53,
  "failed": 0,
  "checks": [
   {
@@ -111,7 +111,7 @@
   {
    "check": "17c. Loaded days are contiguous and cover both comparison weeks",
    "result": "PASS",
-   "detail": "2026-07-19 -> 2026-10-04 (78 days)"
+   "detail": "2026-07-19 -> 2026-10-06 (80 days)"
   },
   {
    "check": "20. No fabricated thresholds: drop rule is orders < previous (no numeric cut-off)",
@@ -121,7 +121,12 @@
   {
    "check": "Section 3 Week 1 / Week 2 Orders = final 7-day totals (29 Sep..5 Oct, 6..12 Oct) only when all 7 days are loaded; before that the actual DB orders to date of the days with data (labelled, missing days listed, never estimated)",
    "result": "PASS",
-   "detail": "Week 1 6/7 days loaded (6 with data, missing ['2026-10-05']), Week 2 0/7; 0 final Week 1 totals, 50 Week 1 to-date values"
+   "detail": "Week 1 7/7 days loaded (7 with data, missing []), Week 2 1/7; 50 final Week 1 totals, 0 Week 1 to-date values"
+  },
+  {
+   "check": "Section 3 Issue Detected: always a performance category - Week 1 orders vs Current 7D for every top-moving ASIN: the existing classification; Week 1 higher than Current 7D -> 'No Drop'; completed (7/7) Week 1 lower on an original No Drop -> 'Overall Performance Drop'; monitoring info separate, never the category",
+   "result": "PASS",
+   "detail": "{'categories': {'No Drop': 14, 'Overall Performance Drop': 25, 'Conversion Drop': 7, 'CTR Drop': 3, 'Impression Drop': 1}, 'monitoring': {'Week 1 recovered': 3, 'Week 1 below baseline': 5, 'Monitoring — Week 2': 8}}"
   },
   {
    "check": "Monitoring continuity: every change-record / ledger ASIN has weekly metrics (in or outside the top 50)",
@@ -146,7 +151,7 @@
   {
    "check": "Week orders only for complete 7-day windows (= daily series); no Week 2 comparison / verdict before Week 2 is complete",
    "result": "PASS",
-   "detail": "{'Monitoring — Week 1': 21, 'Backend Keyword Update Pending': 1}"
+   "detail": "{'Monitoring — Week 2': 21, 'Backend Keyword Update Pending': 1}"
   },
   {
    "check": "No e-mail state in the monitoring ledger output (monitoring entries carry no alert / Gmail fields)",
@@ -166,7 +171,7 @@
   {
    "check": "1. HTML file exists",
    "result": "PASS",
-   "detail": "366366 bytes"
+   "detail": "377549 bytes"
   },
   {
    "check": "9/10/11. No external CSS/JS/network references",
@@ -206,7 +211,7 @@
   {
    "check": "Displayed row counts = dataset row counts",
    "result": "PASS",
-   "detail": "{'t3 (drop filter)': (22, 22), 't4': (22, 22), 't5': (22, 22), 't6': (9, 9), 't7': (22, 22), 't8 (one row per monitoring change record)': (22, 22)}"
+   "detail": "{'t3 (drop filter)': (36, 36), 't4': (22, 22), 't5': (22, 22), 't6': (9, 9), 't7': (22, 22), 't8 (one row per monitoring change record)': (22, 22)}"
   },
   {
    "check": "Page: every POST Accepted submission is 'Live-verified — monitoring' (Sections 5 / 7), no 'Live Verification Pending'; KPI cards: Completed = complete Week 2 cycles, Pending 0, Under Monitoring = accepted - completed",

@@ -18,7 +18,7 @@ BASE = pathlib.Path(__file__).resolve().parent.parent
 REPORT = BASE / "output" / "weekly_top_moving_asin_backend_keyword_fine_tuning_report.html"
 DS = json.loads((BASE / "data" / "report_dataset.json").read_text(encoding="utf-8"))
 T = "tech_team_outputs.ph_task"
-USER, TEAM, CODE, VERSION = "paulr", "ph_priors", "WTMA", 5
+USER, TEAM, CODE, VERSION = "paulr", "ph_priors", "WTMA", 8
 
 
 def main():

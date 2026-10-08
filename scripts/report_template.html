@@ -57,6 +57,7 @@ table{border-collapse:collapse;width:auto;min-width:100%;font-size:13px}
 th,td{padding:8px 10px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
 th{background:var(--surface-2);font-weight:600;font-size:12px;position:sticky;top:0;vertical-align:bottom;white-space:normal;min-width:72px}
 th.sort{cursor:pointer;user-select:none}
+th .thsub{display:block;font-weight:400;font-size:11px;color:var(--muted)}   /* header second line: the report period */
 th.sort:after{content:" \2195";color:var(--muted);font-weight:400}
 th.asc:after{content:" \2191";color:var(--accent)}
 th.desc:after{content:" \2193";color:var(--accent)}
@@ -94,6 +95,7 @@ tr.is-dirty td{background:var(--warn-soft)}
 .sub2{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:11.5px;color:var(--muted);margin-top:2px;white-space:nowrap}
 .sub2.ph{white-space:normal;max-width:110px}
 .sub2.sub2-wrap{white-space:normal;min-width:160px;max-width:230px}
+.sub2.sub2-iss{white-space:normal;min-width:120px;max-width:170px}   /* Section 3 Issue Detected: monitoring detail lines */
 .fo td .pill{white-space:normal}
 .fo-banner{border-left:3px solid var(--bad);background:var(--bad-soft);color:var(--bad);font-weight:650;padding:10px 12px;border-radius:0 8px 8px 0;margin:10px 0}
 @media (max-width:1199px){.tbl .sub2{white-space:normal;min-width:0;max-width:none}}
@@ -162,7 +164,7 @@ footer{color:var(--muted);font-size:12px;margin-top:24px}
 <section id="s3"><h2><span class="n">3.</span> ASIN Performance Comparison</h2>
   <p class="lead" id="s3lead"></p>
   <div class="tools"><input type="search" id="q3" placeholder="Search ASIN, SKU or PH" aria-label="Search ASIN, SKU or PH">
-    <select id="f3" aria-label="Filter"><option value="drop">Performance drop only</option><option value="all">All top-moving ASINs</option></select>
+    <select id="f3" aria-label="Filter"><option value="drop">Performance drop only</option><option value="nodrop">No Drop only</option><option value="all">All top-moving ASINs</option></select>
     <span class="count" id="c3"></span></div>
   <div class="tbl"><table id="t3"></table></div>
 </section>
@@ -248,6 +250,7 @@ function fmtRate(v){ return isNum(v) ? v.toFixed(2)+"%" : '<span class="na">'+DA
 function fmtPct(v){ if(!isNum(v)) return '<span class="na">'+DASH+'</span>'; var c=v>0?"up":(v<0?"down":""); return '<span class="'+c+'">'+(v>0?"+":"")+v.toFixed(1)+"%</span>"; }
 function fmtDate(s){ var d=new Date(s+"T00:00:00Z"); return d.toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric",timeZone:"UTC"}); }
 function range(r){ return fmtDate(r[0])+" → "+fmtDate(r[1]); }
+function shortRange(r){ return [r[0], r[1]].map(function(d){ return fmtDate(d).replace(/ \d{4}$/, ""); }).join(" → "); }
 function fmtSku(v){ return v==null ? '<span class="na">'+DASH+'</span>' : "<span>"+String(v).split(", ").map(esc).join("<br>")+"</span>"; }
 function issuePill(s){ var c = s==="No Drop" ? "good" : (s.indexOf("Order Drop")===0 ? "warn" : "bad"); return '<span class="pill '+c+'">'+esc(s)+"</span>"; }
 
@@ -418,7 +421,8 @@ function Table(id, cols, rows, opts){
   this.rows = rows; this.filtered = rows;
   var thead = el("thead"), tr = el("tr");
   cols.forEach(function(c){
-    var th = el("th", {"class":(c.num?"num ":"")+(c.sort!==false?"sort":""), "scope":"col"}, esc(c.label));
+    var th = el("th", {"class":(c.num?"num ":"")+(c.sort!==false?"sort":""), "scope":"col"},
+                c.sub ? '<span class="thl">'+esc(c.label)+'</span><span class="thsub">'+esc(c.sub)+"</span>" : esc(c.label));
     if(c.sort!==false){ th.addEventListener("click", function(){
       state.dir = (state.key===c.key) ? -state.dir : (c.num?-1:1); state.key=c.key;
       Array.prototype.forEach.call(tr.children,function(x){x.classList.remove("asc","desc");});
@@ -457,7 +461,9 @@ function bindSearch(inputId, table, fields, extra){
 /* Monitoring-period orders (build_dataset.py -> monitoring_week_orders): a 7-day total only when all 7 days are loaded */
 var MWO = D.monitoring_week_orders || null;
 document.getElementById("s3lead").innerHTML = "Current 7D <b>"+range(M.current_7d)+"</b> vs Previous 7D <b>"+range(M.previous_7d)+"</b> (Sunday to Saturday, the Amazon Search Catalog Performance week). Orders are Amazon Business Report order items summed across both UK accounts. Impressions and clicks are the ASIN's Amazon search-results figures. The small grey line under each change % shows Previous 7D → Current 7D (impressions, clicks, CTR, CVR). “"+DASH+"” means the value cannot be calculated (for example, previous value 0 or no catalog row)."
-  +(MWO ? " <b>Week 1 Orders</b> ("+range(MWO.week1)+") and <b>Week 2 Orders</b> ("+range(MWO.week2)+") are the monitoring-period orders (both accounts). Once all 7 days are loaded the value is the final 7-day total; before that it is the actual orders <b>to date</b> from the days the database has, marked “to date” with the days not yet loaded — not a 7-day total." : "");
+  +(MWO ? " <b>Week 1 Orders</b> = the ASIN's orders from "+range(MWO.week1)+" only (both accounts). Once all 7 days are loaded the value is the final 7-day total; before that it is the actual orders <b>to date</b> from the days the database has, marked “to date” with the days not yet loaded — not a 7-day total."
+    +(MWO.week2_days_loaded===7 ? " <b>Week 2 Orders</b> = the orders from "+range(MWO.week2)+"." : " <b>Week 2 Orders</b> ("+range(MWO.week2)+") is left empty until all 7 days are loaded.") : "")
+  +" <b>Issue Detected</b>: the coloured label is the performance category (Current 7D vs Previous 7D). It then reflects the post-change comparison Current 7D → Week 1 Orders: Week 1 <b>higher</b> (recovery confirmed) → <b>No Drop</b>; Week 1 complete (7/7 days) and <b>lower</b> on an ASIN that was No Drop → <b>Overall Performance Drop</b> (Week 1 has no impression / click data of its own); otherwise the existing performance category stays. Week 1 / Week 2 monitoring statuses are only shown in the grey lines, never as the category. When the category changes, the original one is shown underneath. For an ASIN whose backend keyword change was accepted, the grey lines also show the post-change monitoring information; the final Week 1 vs Week 2 result is given only after Week 2 is complete.";
 /* Only the 10 required columns. Supporting figures sit as a small second line in the same cell
    (Previous → Current), so all data is visible without horizontal scrolling. */
 function sub(html){ return '<div class="sub2">'+html+"</div>"; }
@@ -466,28 +472,59 @@ function chgWithBase(prevKey, currKey, f){ return function(v,row){ return fmtPct
 P.forEach(function(r){ var o = MWO && MWO.orders[r.asin];
   [1,2].forEach(function(n){ var fin = o ? o["week"+n] : null, td = o && o["week"+n+"_to_date"]!=null ? o["week"+n+"_to_date"] : null;
     r["w"+n+"_orders"] = fin!=null ? fin : td; r["w"+n+"_to_date"] = fin==null && td!=null; }); });
+/* Issue Detected: the PRIMARY label is always a performance category (issue_current, build_dataset.py: the existing
+   classification issue_detected; Week 1 orders higher than Current 7D -> No Drop; completed Week 1 lower on a No Drop
+   ASIN -> Overall Performance Drop).
+   Post-change monitoring information (build_dataset.py monitoring_status) is shown underneath as supporting grey
+   lines - a monitoring status is never the category. */
+function s3Issue(v, row){
+  var s = row.monitoring;
+  var orig = v!==row.issue_detected ? '<div class="sub2 sub2-iss">Original category: '+esc(row.issue_detected)+"</div>" : "";
+  if(!s){
+    if(!orig) return issuePill(v);
+    /* no accepted keyword change, but the Week 1 orders changed the category: show the evidence underneath */
+    var o = MWO.orders[row.asin], wk = o.week1!=null ? fmtInt(o.week1) : fmtInt(o.week1_to_date)+" to date ("+MWO.week1_days_loaded+"/7 days)";
+    return issuePill(v) + orig + '<div class="sub2 sub2-iss">Week 1: '+wk+" vs Current 7D "+fmtInt(row.curr_orders)+"</div>";
+  }
+  function short(d){ return fmtDate(d).replace(/ \d{4}$/, ""); }
+  function line(h){ return '<div class="sub2 sub2-iss">'+h+"</div>"; }
+  var w1 = s.week1_orders==null ? "no data yet"
+         : fmtInt(s.week1_orders)+(s.stage==="week1_to_date" ? " to date ("+MWO.week1_days_loaded+"/7 days)" : "");
+  var miss = s.stage==="week1_to_date" ? (MWO.week1_missing_days || []) : [];
+  return issuePill(v) + orig
+    +line("Week 1 monitoring: "+w1)
+    +line("Baseline (Current 7D): "+fmtInt(s.baseline))
+    +(miss.length ? line("Missing: "+miss.map(short).join(", ")) : "")
+    +line("Monitoring status: "+esc(s.status)+(s.final ? "" : " (not final)")); }
 function s3Week(n){ return function(v,row){
   if(!row["w"+n+"_to_date"]) return fmtInt(v);
   var miss = MWO["week"+n+"_missing_days"] || [], one = MWO["week"+n+"_one_account_days"] || [];
   function short(d){ return fmtDate(d).replace(/ \d{4}$/, ""); }
   return fmtInt(v)+sub("to date · "+MWO["week"+n+"_days_with_data"]+"/7 days")
-    +(miss.length ? sub("missing: "+miss.map(short).join(", ")) : "")
+    +(miss.length ? '<div class="sub2 sub2-iss" style="min-width:0;max-width:110px">missing: '+miss.map(short).join(", ")+"</div>" : "")
     +(one.length ? sub("1 account: "+one.map(short).join(", ")) : ""); }; }
 var t3 = new Table("t3", [
   {key:"asin",label:"ASIN",cls:"mono",fmt:function(v,row){ return esc(v)+sub("Rank #"+row.rank)+'<div class="sub2 ph">PH: '+(row.ph_name ? esc(row.ph_name)+" · "+esc(row.ph_category) : "not mapped")+"</div>"; }},
   {key:"sku",label:"SKU",cls:"mono sku",fmt:function(v,row){ return fmtSku(v)+sub(esc(String(row.account||"").replace(/amazon /g,""))); }},
-  {key:"prev_orders",label:"Previous 7D Orders",num:1,fmt:fmtInt}, {key:"curr_orders",label:"Current 7D Orders",num:1,fmt:fmtInt},
+  {key:"prev_orders",label:"Previous 7D Orders",sub:shortRange(M.previous_7d),num:1,fmt:fmtInt},
+  {key:"curr_orders",label:"Current 7D Orders",sub:shortRange(M.current_7d),num:1,fmt:fmtInt},
   {key:"order_chg",label:"Order Change %",num:1,fmt:fmtPct},
-  {key:"w1_orders",label:"Week 1 Orders",num:1,fmt:s3Week(1)},
-  {key:"w2_orders",label:"Week 2 Orders",num:1,fmt:s3Week(2)},
+  {key:"w1_orders",label:"Week 1 Orders",sub:MWO ? shortRange(MWO.week1) : null,num:1,fmt:s3Week(1)}
+].concat([   /* business instruction 2026-10-08: Week 2 column kept, cells left empty until all 7 days load */
+  {key:"w2_orders",label:"Week 2 Orders",sub:MWO ? shortRange(MWO.week2) : null,num:1,
+   fmt:function(v,row){ return MWO && MWO.week2_days_loaded===7 ? s3Week(2)(v,row) : ""; }}]).concat([
   {key:"impression_chg",label:"Impression Change %",num:1,fmt:chgWithBase("prev_impressions","curr_impressions",fmtInt)},
   {key:"click_chg",label:"Click Change %",num:1,fmt:chgWithBase("prev_clicks","curr_clicks",fmtInt)},
   {key:"ctr_chg",label:"CTR Change %",num:1,fmt:chgWithBase("prev_ctr","curr_ctr",fmtRate)},
   {key:"cvr_chg",label:"CVR Change %",num:1,fmt:chgWithBase("prev_cvr","curr_cvr",fmtRate)},
-  {key:"issue_detected",label:"Issue Detected",fmt:function(v){return issuePill(v);}}
-], P, {counter:"c3"});
+  {key:"issue_current",label:"Issue Detected",fmt:s3Issue}
+]), P, {counter:"c3"});
 var f3 = document.getElementById("f3");
-var run3 = bindSearch("q3", t3, ["asin","sku","ph_name","ph_category"], function(r){ return f3.value==="all" || r.curr_orders < r.prev_orders; });
+/* filter on the category shown in Issue Detected (issue_current), so a recovered ASIN ("No Drop") is never listed
+   under "Performance drop only" and every listed row carries the category the filter names */
+var run3 = bindSearch("q3", t3, ["asin","sku","ph_name","ph_category"], function(r){
+  var cat = r.issue_current || r.issue_detected;
+  return f3.value==="all" || (f3.value==="nodrop" ? cat==="No Drop" : cat!=="No Drop"); });
 f3.addEventListener("change", run3); run3();
 
 /* ---------- 4. Backend Keyword Analysis ---------- */
